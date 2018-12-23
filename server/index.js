@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const path = require('path');
+
 const express = require('express'),
     Promise = require('bluebird');
 
@@ -16,10 +18,7 @@ const SERVER_PORT = process.env.SERVER_PORT || '8989',
 
 app.use('/api', apiRouter);
 
-app.all('/', (req, res) => {
-    // not found page
-    res.sendStatus(404);
-});
+app.use(express.static(path.join(__dirname, '/build')));
 
 return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
     .then(() => {
