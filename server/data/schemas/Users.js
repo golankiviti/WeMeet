@@ -1,3 +1,5 @@
+// define the users schema
+
 const mongoose = require('mongoose');
 
 let schema = mongoose.Schema({
