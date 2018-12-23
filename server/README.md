@@ -15,7 +15,7 @@ run `npm i` to install dependencies.
 
 ## start server
 
-run `npm start`.
+run `node index.js`, if you want to copy the build client side to the server and start the server, run `npm start`.
 
 ## configuration
 
