@@ -138,7 +138,7 @@ module.exports.login = (req, res, next) => {
 
 module.exports.isUserExist = (req, res, next) => {
     return userModel.count({
-            'local.email': email
+            'local.email': req.body.email
         })
         .then((users) => {
             if (users > 0) {

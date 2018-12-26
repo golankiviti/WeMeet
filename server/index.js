@@ -48,7 +48,7 @@ app.post('/register', authenticationService.register);
 
 app.post('/login', authenticationService.login);
 
-app.get('/checkUser', authenticationService.isUserExist);
+app.post('/checkUser', authenticationService.isUserExist);
 
 
 // export /api route
