@@ -1,0 +1,17 @@
+:local .container {
+    background-color: #b4d0e7ff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+:local .logo {
+    color: white;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 16px;
+}
