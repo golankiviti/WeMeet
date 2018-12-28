@@ -57,6 +57,10 @@ app.use('/api', isLoggedIn, apiRouter);
 // export production client side
 app.use(express.static(path.join(__dirname, '/build')));
 
+app.use('*', (req, res) => {
+    res.sendFile(path(__dirname, '/build/index.html'));
+});
+
 // connet to mongo
 return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
     .then(() => {
