@@ -11,7 +11,8 @@ const express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     passport = require('passport'),
-    morgan = require('morgan');
+    morgan = require('morgan'),
+    cors = require('cors');
 
 // relative paths
 const apiRouter = require('./api'),
@@ -44,6 +45,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// allow cors for development
+app.use(cors());
+
 app.post('/register', authenticationService.register);
 
 app.post('/login', authenticationService.login);
@@ -58,7 +62,7 @@ app.use('/api', isLoggedIn, apiRouter);
 app.use(express.static(path.join(__dirname, '/build')));
 
 app.use('*', (req, res) => {
-    res.sendFile(path(__dirname, '/build/index.html'));
+    res.sendFile(path.join(__dirname, '/build/index.html'));
 });
 
 // connet to mongo
