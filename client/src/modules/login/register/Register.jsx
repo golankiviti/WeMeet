@@ -18,6 +18,10 @@ const propTypes = {
 }
 
 class Register extends Component {
+    handleCancel = () => {
+        this.props.history.push('/')
+    }
+
     render() {
         const { handleSubmit, valid } = this.props;
 
@@ -50,10 +54,12 @@ class Register extends Component {
                 </CardContent>
                 <CardActions className={styles.cardActions}>
                     <Button className={submitButtonClasses}
-                        disabled={!valid}>
+                        disabled={!valid}
+                        type='submit'>
                         הירשם
                     </Button>
-                    <Button className={styles.button}>
+                    <Button className={styles.button}
+                        onClick={this.handleCancel}>
                         ביטול
                     </Button>
                 </CardActions>
@@ -68,6 +74,7 @@ export default reduxForm({
     form: 'register',
     validate,
     asyncValidate,
+    asyncBlurFields: ['email'],
     initialValues: {
         sex: 'female'
     }

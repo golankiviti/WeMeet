@@ -19,11 +19,10 @@ const validate = values => {
     return errors
 }
 const asyncValidate = values => {
-    debugger
     return checkUser(values.email)
+        .then(res => res.json())
         .then(res => {
-            debugger
-            if (!res) {
+            if (res) {
                 throw { email: 'כתובת מייל קיימת כבר במערכת' }
             }
         })

@@ -5,11 +5,16 @@ import { bindActionCreators } from 'redux';
 import { updateUser } from '../../../redux/user/actionCreators';
 import styles from './loginContainer.module.scss';
 import LoginPanel from './LoginPanel';
+import { login } from '../../../clientManager/loginManager';
 
 class LoginContainer extends Component {
     handleSubmit = values => {
         console.log(values)
-        //fetching user details
+        login(values)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+            })
         const user = Map({ username: 'golan' })
         this.props.updateUser(user)
     }
