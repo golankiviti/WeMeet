@@ -147,6 +147,11 @@ module.exports.login = (req, res, next) => {
     })(req, res, next);
 };
 
+module.export.logout = (req, res, next) => {
+    req.logout();
+    res.status(200).send(true);
+};
+
 module.exports.isUserExist = (req, res, next) => {
     return userModel.count({
             'local.email': req.body.email
