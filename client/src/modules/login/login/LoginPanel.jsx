@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,7 +11,7 @@ import styles from './loginPanel.module.scss';
 
 const propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired // from redux-form
+    handleSubmit: PropTypes.func // from redux-form
 }
 
 class LoginPanel extends Component {
@@ -36,10 +35,10 @@ class LoginPanel extends Component {
             <Card raised>
                 <div className={styles.header}>התחברות</div>
                 <CardContent className={styles.cardContent}>
-                    <Field name='username'
+                    <Field name='email'
                         component={TextField}
                         type='text'
-                        label='שם משתמש' />
+                        label='מייל' />
                     <Field name='password'
                         component={TextField}
                         type='password'
@@ -62,10 +61,14 @@ class LoginPanel extends Component {
     }
 }
 
+LoginPanel.propTypes = propTypes;
+
 const validate = values => {
     const errors = {}
-    if (!values.username) {
-      errors.username = 'חובה להזין שם משתמש'
+    if (!values.email) {
+      errors.email = 'חובה להזין כתובת מייל'
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'כתובת מייל לא חוקית'
     }
 
     if (!values.password) {
@@ -73,7 +76,7 @@ const validate = values => {
     }
 
     return errors
-  }
+}
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
