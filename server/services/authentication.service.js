@@ -111,7 +111,12 @@ module.exports.register = (req, res, next) => {
                 console.log(loginErr);
                 return res.status(500).send(false);
             }
-            return res.status(200).send(true);
+            let {
+                email
+            } = user.local;
+            return res.status(200).send({
+                email
+            });
         })
     })(req, res, next);
 };
@@ -131,7 +136,12 @@ module.exports.login = (req, res, next) => {
                 console.log(loginErr);
                 return res.status(500).send(false);
             }
-            return res.status(200).send(true);
+            let {
+                email
+            } = user.local;
+            return res.status(200).send({
+                email
+            });
         })
     })(req, res, next);
 };
