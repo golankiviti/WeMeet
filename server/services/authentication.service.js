@@ -7,7 +7,7 @@
  */
 
 // load all the things we need
-var LocalStrategy = require('passport-local').Strategy;
+let LocalStrategy = require('passport-local').Strategy;
 
 // get userservice for the db access
 const userModel = require('../data/schemas/Users');
@@ -47,7 +47,18 @@ module.exports = function (passport) {
                     }
                     // if there is no user with that email
                     // create the user
-                    var newUser = new userModel();
+                    let {
+                        address,
+                        gender,
+                        firstName,
+                        lastName
+                    } = req.body;
+                    let newUser = new userModel({
+                        address,
+                        gender,
+                        firstName,
+                        lastName
+                    });
 
                     // set the user's local credentials
                     newUser.local.email = email;
@@ -111,12 +122,7 @@ module.exports.register = (req, res, next) => {
                 console.log(loginErr);
                 return res.status(500).send(false);
             }
-            let {
-                email
-            } = user.local;
-            return res.status(200).send({
-                email
-            });
+            return res.status(200).send(userResponse(user));
         })
     })(req, res, next);
 };
@@ -136,12 +142,7 @@ module.exports.login = (req, res, next) => {
                 console.log(loginErr);
                 return res.status(500).send(false);
             }
-            let {
-                email
-            } = user.local;
-            return res.status(200).send({
-                email
-            });
+            return res.status(200).send(userResponse(user));
         })
     })(req, res, next);
 };
@@ -160,4 +161,20 @@ module.exports.isUserExist = (req, res, next) => {
             console.log(err);
             return res.status(500).send(false);
         })
-}
+};
+
+function userResponse(mongoUser) {
+    let {
+        email
+    } = mongoUser.local, {
+        _id,
+        firstName,
+        lastName
+    } = mongoUser;
+    return {
+        _id,
+        email,
+        firstName,
+        lastName
+    }
+};
