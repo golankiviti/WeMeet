@@ -135,7 +135,7 @@ module.exports.login = (req, res, next) => {
         }
         // case couldn't login the user
         if (user === false) {
-            return res.status(400).send(false);
+            return res.status(200).send(false);
         }
         req.login(user, (loginErr) => {
             if (loginErr) {
