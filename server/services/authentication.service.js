@@ -147,7 +147,7 @@ module.exports.login = (req, res, next) => {
     })(req, res, next);
 };
 
-module.export.logout = (req, res, next) => {
+module.exports.logout = (req, res, next) => {
     req.logout();
     res.status(200).send(true);
 };
