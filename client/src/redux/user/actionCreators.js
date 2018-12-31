@@ -1,4 +1,8 @@
-import { UPDATE_USER, REMOVE_USER } from './actions';
+import {
+    UPDATE_USER,
+    REMOVE_USER,
+    CREATE_USER
+} from './actions';
 
 export const updateUser = user => ({
     type: UPDATE_USER,
@@ -7,4 +11,9 @@ export const updateUser = user => ({
 
 export const removeUser = () => ({
     type: REMOVE_USER
+});
+
+export const createUser = user => ({
+    type: CREATE_USER,
+    user
 });
