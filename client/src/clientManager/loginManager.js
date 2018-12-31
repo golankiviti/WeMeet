@@ -20,10 +20,7 @@ export function createUser(user) {
         headers: {
             'content-type': 'application/json'
         },
-        body: JSON.stringify({
-            email: user.email,
-            password: user.password
-        })
+        body: JSON.stringify(user)
     });
 }
 

@@ -16,6 +16,14 @@ const validate = values => {
         errors.address = 'חובה להזין כתובת'
     }
 
+    if (!values.firstName) {
+        errors.firstName = 'חובה להזין שם פרטי'
+    }
+
+    if (!values.lastName) {
+        errors.lastName = 'חובה להזין שם משפחה'
+    }
+    
     return errors
 }
 const asyncValidate = values => {

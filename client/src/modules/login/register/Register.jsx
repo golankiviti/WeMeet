@@ -35,9 +35,17 @@ class Register extends Component {
                 <div className={styles.header}>הרשמה</div>
                 <CardContent className={styles.cardContent}>
                     <Field name='email'
-                    component={TextField}
-                    type='text'
-                    label='אימייל'/>
+                        component={TextField}
+                        type='text'
+                        label='אימייל'/>
+                    <Field name='firstName'
+                        component={TextField}
+                        type='text'
+                        label='שם פרטי' />
+                    <Field name='lastName'
+                        component={TextField}
+                        type='text'
+                        label='שם משפחה' />
                     <Field name='password'
                         component={TextField}
                         type='password'
@@ -46,10 +54,10 @@ class Register extends Component {
                         component={TextField}
                         type='text'
                         label='כתובת' />
-                    <Field name='sex'
+                    <Field name='gender'
                         component={RadioButton}>
-                        <FormControlLabel control={<Radio />} value='male' label='זכר' />
                         <FormControlLabel control={<Radio />} value='female' label='נקבה' />
+                        <FormControlLabel control={<Radio />} value='male' label='זכר' />
                     </Field>
                 </CardContent>
                 <CardActions className={styles.cardActions}>
@@ -74,8 +82,7 @@ export default reduxForm({
     form: 'register',
     validate,
     asyncValidate,
-    asyncBlurFields: ['email'],
     initialValues: {
-        sex: 'female'
+        gender: 'female'
     }
 })(Register);

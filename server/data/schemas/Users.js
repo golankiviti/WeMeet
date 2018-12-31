@@ -15,7 +15,7 @@ let schema = mongoose.Schema({
         name: String
     },
     address: String,
-    gender: Boolean,
+    gender: String,
     firstName: String,
     lastName: String
 });
