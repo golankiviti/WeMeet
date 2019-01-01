@@ -43,3 +43,26 @@ const SOME_ENV = process.env.SOME_ENV || 'default_value' // it is good to define
 ```
 
 ***note: the envs are always string, so if you want to insert boolean or int, make sure to convert them***
+
+## logs
+
+To use our custom logger on the server side you need to use the logger object in the `utils` folder:  
+
+```javascript
+const logger = require('./path/to/utils/logger');
+
+// this is the levels you can use for logs (every level have differnt color)
+
+logger.info('info');
+logger.debug('debug');
+logger.warn('warn');
+logger.error('error');
+logger.fatal('fatal');
+
+// you can also attach to log object, usage: logger.level(object,string)
+// attach object can be on any level
+logger.info(myobject,'this is log of my object');
+
+```
+
+***note*** if you debug in vscode, add the next line to your launch.json run object: `"outputCapture": "std"`
