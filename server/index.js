@@ -12,12 +12,14 @@ const express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     morgan = require('morgan'),
-    cors = require('cors');
+    cors = require('cors'),
+    _ = require('lodash');
 
 // relative paths
 const apiRouter = require('./api'),
     connectToMongo = require('./data'),
-    authenticationService = require('./services/authentication.service');
+    authenticationService = require('./services/authentication.service'),
+    logger = require('./utils/logger');
 
 const app = express();
 
@@ -31,12 +33,12 @@ const SERVER_PORT = process.env.SERVER_PORT || '8989',
 // init passport with strategies
 authenticationService(passport);
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use(cookieParser());
 
 // middleware to get body in POST requests
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 // passport middlewares
 app.use(session({
@@ -48,6 +50,24 @@ app.use(passport.session());
 // allow cors for development
 app.use(cors());
 
+// this middleware is for logging every request the server get
+app.use((req, res, next) => {
+    let reqInfo = {};
+    // case we have body log it
+    if (!_.isEmpty(req.body)) reqInfo.body = req.body;
+    // case we have params log it
+    if (!_.isEmpty(req.params)) reqInfo.params = req.params;
+    // case we have query log it
+    if (!_.isEmpty(req.query)) reqInfo.query = req.query;
+
+
+    (!_.isEmpty(reqInfo)) ?
+    logger.info(reqInfo, `${req.method} ${req.originalUrl}`):
+        logger.info(`${req.method} ${req.originalUrl}`);
+
+    next();
+});
+
 app.post('/register', authenticationService.register);
 
 app.post('/login', authenticationService.login);
@@ -58,7 +78,7 @@ app.post('/checkUser', authenticationService.isUserExist);
 
 
 // export /api route
-app.use('/api', isLoggedIn, apiRouter);
+app.use('/api', authenticationService.isLoggedIn, apiRouter);
 
 // export production client side
 app.use(express.static(path.join(__dirname, '/build')));
@@ -67,25 +87,20 @@ app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/build/index.html'));
 });
 
+
+logger.debug('connect to mongo');
 // connet to mongo
 return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
     .then(() => {
+        logger.debug('connected to mongo');
+        logger.debug('start express server');
         // start express server
         app.listen(parseInt(SERVER_PORT), () => {
-            console.log(`server is up on port ${SERVER_PORT}`);
+            logger.info(`server is up on port ${SERVER_PORT}`);
         });
     })
     .catch((err) => {
-        console.log('could not connect to mongo');
-        console.log(err);
+        logger.warn('could not connect to mongo');
+        logger.error(err);
         process.exit(1);
     });
-
-function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.status(401).send();
-}
