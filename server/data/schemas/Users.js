@@ -13,7 +13,11 @@ let schema = mongoose.Schema({
         token: String,
         email: String,
         name: String
-    }
+    },
+    address: String,
+    gender: String,
+    firstName: String,
+    lastName: String
 });
 
 schema.methods.generateHash = function (password) {

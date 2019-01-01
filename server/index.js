@@ -52,6 +52,8 @@ app.post('/register', authenticationService.register);
 
 app.post('/login', authenticationService.login);
 
+app.post('/logout', authenticationService.logout);
+
 app.post('/checkUser', authenticationService.isUserExist);
 
 
