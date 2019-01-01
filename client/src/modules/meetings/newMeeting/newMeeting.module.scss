@@ -1,0 +1,34 @@
+@import '../../../global.scss';
+
+:local .form {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+:local .cardContent {
+    display: flex;
+    flex-direction: column;
+}
+
+:local .cardActions {
+    display: flex;
+    justify-content: space-between;
+}
+
+:local .button {
+    color: white !important;
+    background-color: $primary !important;
+
+    &.disabled {
+        background-color: grey !important;
+    }
+}
+
+:local .header {
+    background-color: $secondary;
+    width: 100%;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+}

@@ -8,13 +8,13 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '../../../common/TextField';
 import classNames from 'classnames';
-import styles from './loginPanel.module.scss';
+import styles from './newMeeting.module.scss';
 import DateTimePicker from '../../../common/DateTimePicker';
-import CheckboxList from '../../../common/CheckboxList';
+import SelectBox from '../../../common/SelectBox';
 
 const propTypes = {
-    locations: ImmutablePropTypes.List.isRequired,
-    users: ImmutablePropTypes.List.isRequired,
+    // locations: ImmutablePropTypes.List.isRequired,
+    // users: ImmutablePropTypes.List.isRequired,
     onSubmit: PropTypes.func.isRequired
 }
 
@@ -42,13 +42,15 @@ class NewMeeting extends Component {
                         component={DateTimePicker}
                         label='עד תאריך' />
                     <Field name='participants'
-                        component={CheckboxList}
+                        component={SelectBox}
                         items={users}
-                        label='משתתפים' />
+                        label='משתתפים'
+                        multiple />
                     <Field name='locations'
-                        component={CheckboxList}
+                        component={SelectBox}
                         items={locations}
-                        label='מיקומים' />
+                        label='מיקומים'
+                        multiple />
                 </CardContent>
                 <CardActions className={styles.cardActions}>
                     <Button className={submitButtonClasses}
@@ -62,9 +64,10 @@ class NewMeeting extends Component {
     }
 }
 
-NewMeeting.PropTypes = propTypes;
+NewMeeting.propTypes = propTypes;
 
 const validate = values => {
+    debugger;
     const errors = {}
     if (!values.name) {
         errors.username = 'חובה להזין שם לפגישה'
