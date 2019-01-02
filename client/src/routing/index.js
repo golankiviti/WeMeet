@@ -5,6 +5,7 @@ import RegisterContainer from '../modules/login/register/RegisterContainer';
 import HomeContainer from '../modules/home/HomeContainer';
 import PersonalZoneContainer from '../modules/personalZone/PersonalZoneContainer';
 import NewMeetingContainer from '../modules/meetings/newMeeting/NewMeetingContainer';
+import MyMeetingsContainer from '../modules/meetings/myMeetings/MyMeetingsContainer';
 
 class WeMeetRouting extends Component {
     render() {
@@ -15,6 +16,7 @@ class WeMeetRouting extends Component {
             <Route path="/home/" component={HomeContainer} />
             <Route path="/personalzone/" component={PersonalZoneContainer} />
             <Route path="/newMeeting/" component={NewMeetingContainer} />
+            <Route path="/myMeetings/" component={MyMeetingsContainer} />
         </div>
     </Router>
     }
