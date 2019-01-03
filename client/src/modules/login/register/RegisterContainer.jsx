@@ -21,7 +21,6 @@ class RegisterContainer extends Component {
 
     render() {
         return <div className={styles.container}>
-            <div className={styles.logo}>WeMeet</div>
             <Register onSubmit={this.handleSubmit} {...this.props} />
         </div>
     }

@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import './index.css';
 import RTL from './rtl';
-import WeMeetRouting from './routing';
+import { Routing } from './routing';
 import * as serviceWorker from './serviceWorker';
 import rootReducer from './redux';
 import theme from './theme'
@@ -20,7 +20,7 @@ const store = createStore(rootReducer, composeEnhancers(
 ReactDOM.render(<RTL>
     <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-            <WeMeetRouting />
+            <Routing />
         </MuiThemeProvider>
     </Provider>
 </RTL>, document.getElementById('root'));
