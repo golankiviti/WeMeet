@@ -3,7 +3,12 @@ const util = require('util');
 
 // npm modules
 const mongoose = require('mongoose'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    mongooseDeletePlugin = require('mongoose-delete');
+
+mongoose.plugin(mongooseDeletePlugin, {
+    overrideMethods: 'all'
+});
 
 // here we require all our schemas from the schemas dir
 const users = require('./schemas/Users');
