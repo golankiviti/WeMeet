@@ -19,11 +19,10 @@ code {
     monospace;
 }
 
-#root {
-  height: 100%;
-}
-
 #router {
   height: 100%;
 }
 
+#root {
+  height: 100%;
+}

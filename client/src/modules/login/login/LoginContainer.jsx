@@ -21,7 +21,6 @@ class LoginContainer extends Component {
         const { updateUser, ...otherProps } = this.props;
 
         return <div className={styles.container}>
-            <div className={styles.logo}>WeMeet</div>
             <LoginPanel onSubmit={this.handleSubmit}
                 {...otherProps}/>
         </div>
