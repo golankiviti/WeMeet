@@ -9,7 +9,6 @@ import { withRouter } from 'react-router-dom';
 const propTypes = {
     removeUser: PropTypes.func, // from redux
     loggedIn: PropTypes.bool, // from redux
-    history: PropTypes.obj // from react-router-dom
 };
 
 class AppBarContainer extends Component {

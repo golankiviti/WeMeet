@@ -16,10 +16,13 @@ class Location extends Component {
             <div>{name}</div>
             <div className={styles.buttons}>
                 <IconButton>
-                    <Icon font-size='small'>remove</Icon>
+                    <Icon fontSize='small'>create</Icon>
                 </IconButton>
                 <IconButton>
-                    <Icon font-size='small'>remove_red_eye</Icon>
+                    <Icon fontSize='small'>remove_red_eye</Icon>
+                </IconButton>
+                <IconButton>
+                    <Icon fontSize='small'>remove</Icon>
                 </IconButton>
             </div>
         </div>

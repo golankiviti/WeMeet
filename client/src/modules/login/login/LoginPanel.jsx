@@ -78,17 +78,8 @@ const validate = values => {
     return errors
 }
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-const asyncValidate = (values /*, dispatch */) => {
-  return sleep(1000).then(() => {
-    // simulate server latency
-    //throw {username: 'That username is taken'}
-  })
-}
 
 export default reduxForm({
     form: 'login',
-    validate,
-    asyncValidate   
+    validate
 })(LoginPanel);
