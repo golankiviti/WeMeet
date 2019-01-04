@@ -76,8 +76,8 @@ const deletePreference = (req, res) => {
 
 const getAllRestrictions = (req, res) => {
     return userService.getAllRestrictions()
-        .then((preferences) => {
-            res.json(preferences);
+        .then((restrictions) => {
+            res.json(restrictions);
         })
         .catch((err) => {
             res.status(500).send(err);
@@ -86,8 +86,8 @@ const getAllRestrictions = (req, res) => {
 
 const getRestriction = (req, res) => {
     return userService.getRestriction(req.params.resId)
-        .then((preference) => {
-            res.json(preference);
+        .then((restriction) => {
+            res.json(restriction);
         })
         .catch((err) => {
             res.status(500).send(err);
@@ -95,15 +95,15 @@ const getRestriction = (req, res) => {
 }
 
 const addRestriction = (req, res) => {
-    let res = {
+    let restriction = {
         name,
         startDate,
         endDate
     } = req.body;
-    res.user = req.params.id;
-    return userService.addRestriction(pref)
-        .then((preference) => {
-            res.json(preference);
+    restriction.user = req.params.id;
+    return userService.addRestriction(restriction)
+        .then((restriction) => {
+            res.json(restriction);
         })
         .catch((err) => {
             res.status(500).send(err);
@@ -111,15 +111,15 @@ const addRestriction = (req, res) => {
 }
 
 const updateRestriction = (req, res) => {
-    let res = {
+    let restriction = {
         name,
         startDate,
         endDate
     } = req.body;
-    res.user = req.params.userId;
-    return userService.updateRestriction(pref, req.params.resId)
-        .then((preference) => {
-            res.json(preference);
+    restriction.user = req.params.userId;
+    return userService.updateRestriction(restriction, req.params.resId)
+        .then((restriction) => {
+            res.json(restriction);
         })
         .catch((err) => {
             res.status(500).send(err);
@@ -128,8 +128,8 @@ const updateRestriction = (req, res) => {
 
 const deleteRestriction = (req, res) => {
     return userService.deleteRestriction(req.body.resId)
-        .then((preference) => {
-            res.json(preference);
+        .then((restriction) => {
+            res.json(restriction);
         })
         .catch((err) => {
             res.status(500).send(err);
