@@ -1,0 +1,25 @@
+:local .container {
+    background-color: #b4d0e7ff;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+:local .meetingItem{
+    direction: ltr;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+:local .meetingTitle{
+    padding-right: 12px;
+    margin-top: 2vh;
+}
+
+:local .confirmButton{
+    color:#76ff03
+}
