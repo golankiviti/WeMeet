@@ -10,6 +10,8 @@ const getAllUsers = (req, res) => {
         });
 }
 
+/* ------------------------------ user's Preferences ------------------------------ */
+
 const getAllPreferences = (req, res) => {
     return userService.getAllPreferences()
         .then((preferences) => {
@@ -70,6 +72,70 @@ const deletePreference = (req, res) => {
         });
 }
 
+/* ------------------------------ user's Restrictions ------------------------------ */
+
+const getAllRestrictions = (req, res) => {
+    return userService.getAllRestrictions()
+        .then((preferences) => {
+            res.json(preferences);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+
+const getRestriction = (req, res) => {
+    return userService.getRestriction(req.params.resId)
+        .then((preference) => {
+            res.json(preference);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+
+const addRestriction = (req, res) => {
+    let res = {
+        name,
+        startDate,
+        endDate
+    } = req.body;
+    res.user = req.params.id;
+    return userService.addRestriction(pref)
+        .then((preference) => {
+            res.json(preference);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+
+const updateRestriction = (req, res) => {
+    let res = {
+        name,
+        startDate,
+        endDate
+    } = req.body;
+    res.user = req.params.userId;
+    return userService.updateRestriction(pref, req.params.resId)
+        .then((preference) => {
+            res.json(preference);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+
+const deleteRestriction = (req, res) => {
+    return userService.deleteRestriction(req.body.resId)
+        .then((preference) => {
+            res.json(preference);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+
 
 module.exports = {
     getAllUsers,
@@ -77,5 +143,10 @@ module.exports = {
     getPreference,
     addPreference,
     updatePreference,
-    deletePreference
+    deletePreference,
+    getAllRestrictions,
+    getRestriction,
+    addRestriction,
+    updateRestriction,
+    deleteRestriction
 }
