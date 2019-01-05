@@ -22,9 +22,9 @@ class LocationDialog extends Component {
         const { title, valid, handleSubmit, onClose } = this.props;
         return <Dialog onClose={onClose}
             open={true}>
-            <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
-            <DialogContent>
-                <form className={styles.form} onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
+                <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
+                <DialogContent className={styles.dialogContent}>
                     <Field name='name'
                         component={TextField}
                         type='text'
@@ -33,18 +33,18 @@ class LocationDialog extends Component {
                         component={TextField}
                         type='text'
                         label='כתובת' />
-                </form>
-            </DialogContent>
-            <DialogActions className={styles.dialogActions}>
-                <Button color='primary'
-                    disabled={!valid}
-                    type='submit'>
-                    אישור
-                </Button>
-                <Button onClick={onClose}>
-                    ביטול
-                </Button>
-            </DialogActions>
+                </DialogContent>
+                <DialogActions className={styles.dialogActions}>
+                    <Button color='primary'
+                        disabled={!valid}
+                        type='submit'>
+                        אישור
+                    </Button>
+                    <Button onClick={onClose}>
+                        ביטול
+                    </Button>
+                </DialogActions>
+            </form>
         </Dialog>
     }
 }

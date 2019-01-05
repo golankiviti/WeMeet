@@ -6,16 +6,21 @@ import styles from './location.module.scss';
 
 const propTypes = {
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    onEdit: PropTypes.func.isRequired
 };
 
 class Location extends Component {
+    handleEdit = () => {
+        this.props.onEdit(this.props.id);
+    }
+
     render() {
         const { name } = this.props;
         return <div className={styles.container}>
             <div>{name}</div>
             <div className={styles.buttons}>
-                <IconButton>
+                <IconButton onClick={this.handleEdit}>
                     <Icon fontSize='small'>create</Icon>
                 </IconButton>
                 <IconButton>

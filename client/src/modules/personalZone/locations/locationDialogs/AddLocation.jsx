@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LocationDialog from './LocationDialog';
+import { addLocation } from '../../../../clientManager/userManager';
 
 const propTypes = {
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired
 };
 
 class AddLocation extends Component {
     handleSubmit = values => {
-        console.log(values);
+        addLocation(this.props.userId, values)
+            .then(() => this.props.onClose())
     }
 
 
