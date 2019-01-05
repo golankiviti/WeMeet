@@ -25,10 +25,10 @@ export class MyMeetingsContainer extends Component {
     }
 
     getMeetings() {
-        getMeetings(this.props.user.get('_id'))
-            .then(res =>
-                this.setState({ meetings: fromJS(res) })
-            );
+        // getMeetings(this.props.user.get('_id'))
+        //     .then(res =>
+        //         this.setState({ meetings: fromJS(res) })
+        //     );
         this.setState({
             meetings: fromJS([
                 {
