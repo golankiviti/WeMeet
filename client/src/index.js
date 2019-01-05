@@ -1,27 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import './index.css';
 import RTL from './rtl';
 import { Routing } from './routing';
 import * as serviceWorker from './serviceWorker';
-import rootReducer from './redux';
 import theme from './theme'
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(rootReducer, composeEnhancers(
-    applyMiddleware(thunk)
-));
+import { store, persistor } from './redux';
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 ReactDOM.render(<RTL>
     <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-            <Routing />
-        </MuiThemeProvider>
+        <PersistGate loading={null} persistor={persistor}>
+            <MuiThemeProvider theme={theme}>
+                <Routing />
+            </MuiThemeProvider>
+        </PersistGate>
     </Provider>
 </RTL>, document.getElementById('root'));
 
