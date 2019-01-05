@@ -6,8 +6,9 @@ var ObjectId = Schema.Types.ObjectId;
 
 let schema = mongoose.Schema({
     name: String,
-    address: String,
-    user: {type: ObjectId, ref: "User"},
+    user: { type: ObjectId, ref: "User" },
+    startDate: Date,
+    endDate: Date
 });
 
-module.exports = mongoose.model('preference', schema);
+module.exports = mongoose.model('restriction', schema);
