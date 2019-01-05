@@ -11,7 +11,8 @@ import styles from './locationList.module.scss';
 
 const propTypes = {
     locations: ImmutablePropTypes.list.isRequired,
-    userId: PropTypes.string.isRequired
+    userId: PropTypes.string.isRequired,
+    refresh: PropTypes.func.isRequired
 };
 
 class LocationList extends Component {
@@ -27,7 +28,7 @@ class LocationList extends Component {
     handleCloseAddDialog = () => {
         this.setState({
             addDialogOpen: false
-        });
+        }, this.props.refresh);
     }
 
     handleOpenAddDialog = () => {
@@ -45,7 +46,7 @@ class LocationList extends Component {
     handleCloseEditDialog = () => {
         this.setState({
             editLocatonId: undefined
-        })
+        }, this.props.refresh)
     }
 
     render() {

@@ -16,7 +16,7 @@ class Routing extends Component {
                     <AlreadyLoggedRoute path="/" exact component={LoginContainer} />
                     <Route path="/register/" component={RegisterContainer} />
                     <AuthRoute path="/home/" component={HomeContainer} />
-                    <AuthRoute path="/personalzone/" component={PersonalZoneContainer} />
+                    <AuthRoute path="/personalzone/" component={PersonalZone} />
                 </Switch>
             </Shell>
         </Router>

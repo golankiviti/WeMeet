@@ -19,29 +19,22 @@ class LocationListContainer extends Component {
     }
 
     componentDidMount() {
+        this.fetchLocations();
+    }
+
+    fetchLocations = () => {
         userLocations(this.props.userId)
             .then(res => {
                 this.setState({
                     locations: fromJS(res)
                 });
             })
-        // this.setState({
-        //     locations: fromJS([
-        //         {
-        //             _id: '1',
-        //             name: 'גולן גולן גולן'
-        //         },
-        //         {
-        //             _id: '2',
-        //             name: 'גולן גולן גולן'
-        //         }
-        //     ])
-        // })
     }
 
     render() {
         return <LocationList locations={this.state.locations}
-            {...this.props} />
+            {...this.props}
+            refresh={this.fetchLocations} />
     }
 }
 
