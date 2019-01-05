@@ -1,4 +1,7 @@
-import { UPDATE_USER, REMOVE_USER } from './actions';
+import {
+    UPDATE_USER,
+    REMOVE_USER
+} from './actions';
 
 export const updateUser = user => ({
     type: UPDATE_USER,

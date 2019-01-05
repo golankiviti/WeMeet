@@ -1,0 +1,22 @@
+@import '../shell.module.scss';
+
+:local .appbar {
+    height: $appbar_height;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    padding: 16px;
+}
+
+:local .button {
+    margin-left: 16px;
+
+    &.logout {
+        margin-right: auto;
+    }
+
+    &:hover {
+        opacity: 0.5;
+        cursor: pointer;
+    }
+}

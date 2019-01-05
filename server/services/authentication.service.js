@@ -7,10 +7,11 @@
  */
 
 // load all the things we need
-var LocalStrategy = require('passport-local').Strategy;
+let LocalStrategy = require('passport-local').Strategy;
 
 // get userservice for the db access
-const userModel = require('../data/schemas/Users');
+const userModel = require('../data/schemas/Users'),
+    logger = require('../utils/logger');
 
 let _passport;
 
@@ -43,11 +44,22 @@ module.exports = function (passport) {
                 })
                 .then((user) => {
                     if (user) {
-                        return done(null, false);
+                        return Promise.resolve(false);
                     }
                     // if there is no user with that email
                     // create the user
-                    var newUser = new userModel();
+                    let {
+                        address,
+                        gender,
+                        firstName,
+                        lastName
+                    } = req.body;
+                    let newUser = new userModel({
+                        address,
+                        gender,
+                        firstName,
+                        lastName
+                    });
 
                     // set the user's local credentials
                     newUser.local.email = email;
@@ -56,8 +68,8 @@ module.exports = function (passport) {
                     // save the user
                     return newUser.save();
                 })
-                .then((newUser) => {
-                    return done(null, newUser);
+                .then((newUserOrFalse) => {
+                    return done(null, newUserOrFalse);
                 })
                 .catch((err) => {
                     return done(err);
@@ -97,47 +109,60 @@ module.exports = function (passport) {
 };
 
 module.exports.register = (req, res, next) => {
+    logger.debug('register user');
     _passport.authenticate('local-signup', (err, user) => {
         if (err) {
-            console.log(err);
+            logger.error(err);
             return res.status(500).send(err);
         }
         // case user is already exist in db and we dont want to register it again
         if (user === false) {
+            logger.warn('user already exist');
             return res.status(400).send('user already registered to WeMeet');
         }
+        logger.debug('login the user and open session');
         req.login(user, (loginErr) => {
             if (loginErr) {
-                console.log(loginErr);
+                logger.error(loginErr);
                 return res.status(500).send(false);
             }
-            return res.status(200).send(true);
+            return res.status(200).send(userResponse(user));
         })
     })(req, res, next);
 };
 
 module.exports.login = (req, res, next) => {
+    logger.debug('login user');
     _passport.authenticate('local-login', (err, user) => {
         if (err) {
-            console.log(err);
+            logger.error(err);
             return res.status(500).send(err);
         }
         // case couldn't login the user
         if (user === false) {
-            return res.status(400).send(false);
+            logger.warn('got incorrect email or password');
+            return res.status(200).send(false);
         }
+
+        logger.debug('login the user and open session');
         req.login(user, (loginErr) => {
             if (loginErr) {
-                console.log(loginErr);
+                logger.error(loginErr);
                 return res.status(500).send(false);
             }
-            return res.status(200).send(true);
+            return res.status(200).send(userResponse(user));
         })
     })(req, res, next);
 };
 
+module.exports.logout = (req, res, next) => {
+    req.logout();
+    res.status(200).send(true);
+};
+
 module.exports.isUserExist = (req, res, next) => {
-    return userModel.count({
+    logger.debug('check if email exist in db')
+    return userModel.countDocuments({
             'local.email': req.body.email
         })
         .then((users) => {
@@ -147,7 +172,33 @@ module.exports.isUserExist = (req, res, next) => {
             return res.status(200).send(false);
         })
         .catch((err) => {
-            console.log(err);
+            logger.error(err);
             return res.status(500).send(false);
         })
+};
+
+
+module.exports.isLoggedIn = (req, res, next) => {
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.status(401).send();
 }
+
+function userResponse(mongoUser) {
+    let {
+        email
+    } = mongoUser.local, {
+        _id,
+        firstName,
+        lastName
+    } = mongoUser;
+    return {
+        _id,
+        email,
+        firstName,
+        lastName
+    }
+};
