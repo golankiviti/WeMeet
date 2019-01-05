@@ -5,19 +5,19 @@ import RegisterContainer from '../modules/login/register/RegisterContainer';
 import HomeContainer from '../modules/home/HomeContainer';
 import PersonalZoneContainer from '../modules/personalZone/PersonalZoneContainer';
 import Shell from '../modules/shell/Shell';
-import history from './history';
+import PrivateRoute from './PrivateRoute';
 
 class Routing extends Component {
     render() {
         return <Router>
-        <Shell>
-        <Switch>
-                <Route path="/" exact component={LoginContainer} />
-                <Route path="/register/" component={RegisterContainer} />
-                <Route path="/home/" component={HomeContainer} />
-                <Route path="/personalzone/" component={PersonalZoneContainer} />
-            </Switch>
-        </Shell>
+            <Shell>
+                <Switch>
+                    <Route path="/" exact component={LoginContainer} />
+                    <Route path="/register/" component={RegisterContainer} />
+                    <PrivateRoute path="/home/" component={HomeContainer} />
+                    <PrivateRoute path="/personalzone/" component={PersonalZoneContainer} />
+                </Switch>
+            </Shell>
         </Router>
     }
 }
