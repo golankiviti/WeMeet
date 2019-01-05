@@ -1,4 +1,4 @@
-@import '../../../global.scss';
+@import '../../../../global.scss';
 
 :local .form {
     width: 400px;
@@ -31,4 +31,20 @@
     padding: 16px;
     color: white;
     font-weight: bold;
+}
+
+:local .dialogTitle {
+    background: $secondary;
+    color: white !important;
+}
+
+:local .form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+}
+
+:local .dialogActions {
+    display: flex;
+    justify-content: space-between !important;
 }

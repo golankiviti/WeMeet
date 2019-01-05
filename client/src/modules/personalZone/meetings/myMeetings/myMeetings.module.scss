@@ -1,4 +1,4 @@
-@import '../../../global.scss';
+@import '../../../../global.scss';
 
 :local .form {
     width: 400px;
@@ -31,4 +31,21 @@
     padding: 16px;
     color: white;
     font-weight: bold;
+}
+
+:local .card {
+    width: 20%;
+    margin-right: 14px;
+    margin-top: 14px;
+}
+
+:local .editIcon {
+    float: left;
+    color: #cfd8dc
+}
+
+:local .editIcon:hover {
+    float: left;
+    color: black;
+    cursor: pointer;
 }

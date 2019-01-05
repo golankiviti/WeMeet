@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import { List, fromJS } from 'immutable';
+import ImmutablePropTypes from 'immutable-prop-types';
+import { connect } from 'react-redux';
 import MyMeetings from './MyMeetings';
+import { getMeetings } from '../../../../clientManager/meetingsClientManager';
 
-export default class MyMeetingsContainer extends Component {
+const propTypes = {
+    // user: ImmutablePropTypes.map.isRequired //redux
+}
+
+export class MyMeetingsContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -18,7 +25,10 @@ export default class MyMeetingsContainer extends Component {
     }
 
     getMeetings() {
-        // TODO: meetingsClientManager.getMeetings -> state.meetings
+        getMeetings(this.props.user.get('_id'))
+            .then(res =>
+                this.setState({ meetings: fromJS(res) })
+            );
         this.setState({
             meetings: fromJS([
                 {
@@ -26,14 +36,16 @@ export default class MyMeetingsContainer extends Component {
                     name: 'פגישה 3 עם איגור',
                     participants: [{ id: 1, name: 'עידן' }, { id: 2, name: 'גיל' }],
                     locations: { id: 'colman', name: 'המכללה למנהל' },
-                    date: '2019-02-10T01:01'
+                    fromDate: '2019-02-10T01:01',
+                    toDate: '2019-02-10T03:01'
                 },
                 {
                     id: 2,
                     name: 'בירה עם גולן',
                     participants: [{ id: 1, name: 'עידן' }, { id: 3, name: 'גולן' }],
                     locations: { id: 'chouf', name: 'שוף' },
-                    date: '2019-01-10T01:01'
+                    fromDate: '2019-01-10T01:01',
+                    toDate: '2019-02-10T06:01'
                 }
             ])
         })
@@ -41,6 +53,14 @@ export default class MyMeetingsContainer extends Component {
 
     render() {
         const { meetings } = this.state;
-        return <MyMeetings meetings={meetings}/>
+        return <MyMeetings meetings={meetings} />
     }
 }
+
+MyMeetingsContainer.propTypes = propTypes;
+
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(MyMeetingsContainer);
