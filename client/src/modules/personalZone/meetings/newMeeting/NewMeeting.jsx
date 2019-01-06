@@ -29,7 +29,9 @@ class NewMeeting extends Component {
             this.props.initialize({
                 name: meeting.get('name'),
                 fromDate: meeting.get('fromDate'),
-                toDate: meeting.get('toDate')
+                toDate: meeting.get('toDate'),
+                participants: meeting.get('participants').map(x => x.get('name')).toJS(),
+                locations: [meeting.get('location').get('name')]
             });
         }
     }
@@ -56,12 +58,16 @@ class NewMeeting extends Component {
                         component={SelectBox}
                         items={users}
                         label='משתתפים'
-                        multiple />
+                        multiple 
+                         format={value => Array.isArray(value) ? value : []}
+                        />
                     <Field name='locations'
                         component={SelectBox}
                         items={locations}
                         label='מיקומים'
-                        multiple />
+                        multiple
+                         format={value => Array.isArray(value) ? value : []} 
+                        />
                 </form>
             </DialogContent>
             <DialogActions className={styles.dialogActions}>
@@ -87,7 +93,7 @@ NewMeeting.defaultProps = {
 const validate = values => {
     const errors = {}
     if (!values.name) {
-        errors.username = 'חובה להזין שם לפגישה'
+        errors.name = 'חובה להזין שם לפגישה'
     }
 
     if (!values.fromDate) {
@@ -98,13 +104,13 @@ const validate = values => {
         errors.toDate = 'חובה להזין תאריך מקסימום לפגישה'
     }
 
-    // if (!values.participants) {
-    //     errors.participants = 'חובה להזמין משתתפים לפגישה'
-    // }
+    if (!values.participants || (values.participants && values.participants.length === 0)) {
+        errors.participants = 'חובה להזמין משתתפים לפגישה'
+    }
 
-    // if (!values.locations) {
-    //     errors.locations = 'חובה להזין מיקומים אפשריים לפגישה'
-    // }
+    if (!values.locations || (values.locations && values.locations.length === 0)) {
+        errors.locations = 'חובה להזין מיקומים אפשריים לפגישה'
+    }
 
     return errors
 }

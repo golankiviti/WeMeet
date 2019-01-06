@@ -68,16 +68,15 @@ class SelectBox extends React.Component {
 
   render() {
     const { classes, items, label, multiple, input, meta: { touched, invalid, error }, ...custom } = this.props;
-
     return (
       <div className={classes.root}>
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="select-multiple-chip">{label}</InputLabel>
           <Select
             multiple={multiple}
-            value={this.state.name}
-            onChange={this.handleChange}
-            input={<Input id="select-multiple-chip" />}
+            //value={this.state.name}
+            //onChange={this.handleChange}
+            //input={<Input id="select-multiple-chip" />}
             renderValue={selected => (
               <div className={classes.chips}>
                 {selected.map(value => (
@@ -85,15 +84,15 @@ class SelectBox extends React.Component {
                 ))}
               </div>
             )}
-            // MenuProps={MenuProps}
-            // error={touched && invalid}
-            // helperText={touched && error}
-            //  {...input}
-            //  {...custom}
+            MenuProps={MenuProps}
+            error={touched && invalid}
+            helperText={touched && error}
+            {...input}
+            {...custom}
           >
             {items.map(item => (
               <MenuItem key={item.get('key')} value={item.get('name')}>
-                <Checkbox checked={this.state.name.indexOf(item.get('name')) > -1} />
+                <Checkbox checked={input.value.indexOf(item.get('name')) > -1} />
                 <ListItemText primary={item.get('name')} />
               </MenuItem>
             ))}
