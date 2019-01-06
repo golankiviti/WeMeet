@@ -3,15 +3,11 @@ const util = require('util');
 
 // npm modules
 const mongoose = require('mongoose'),
-    _ = require('lodash'),
-    mongooseDeletePlugin = require('mongoose-delete');
-
-mongoose.plugin(mongooseDeletePlugin, {
-    overrideMethods: 'all'
-});
+    _ = require('lodash');
 
 // here we require all our schemas from the schemas dir
 const users = require('./schemas/Users');
+const meetings = require('./schemas/meetings');
 
 // connect to mongo with specific options
 const connect = (url = 'localhost', port = '27017', username = null, password = null) => {
@@ -32,5 +28,6 @@ module.exports = connect;
 
 // export schemas to everyone
 module.exports.schemas = {
-    users
+    users, 
+	meetings
 };
