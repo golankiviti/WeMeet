@@ -23,6 +23,7 @@ export default class NewMeetingContainer extends Component {
         };
         this.getLocations = this.getLocations.bind(this);
         this.getUsers = this.getUsers.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -45,9 +46,11 @@ export default class NewMeetingContainer extends Component {
     }
 
     handleSubmit = values => {
-        debugger;
-        console.log(values)
-        //upsertMeeting(values);
+        const locations = values.locations.map(x => this.state.locations.find(y => y.name === x.name).get('id'));
+        const participants = values.participants.map(x => this.state.users.find(y => y.name === x.name).get('id'));
+        const meeting = Object.assign({}, values, { locations, participants });
+        console.log(meeting);
+        //upsertMeeting({name: values});
     }
 
     getUsers() {
