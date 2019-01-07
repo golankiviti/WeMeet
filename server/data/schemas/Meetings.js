@@ -7,12 +7,13 @@ let schema = mongoose.Schema({
         id: String,
 		name: String,
 		creater: String,
-		startDate: Date,
-		endDate: Date,
+		fromDate: Date,
+		toDate: Date,
 		invited: [String],
 		participants: [String],
-		MeetingLocation: String
+		locations: [String],
+		selectedLocation: String
 });
 
 
-module.exports = mongoose.model('meetings', schema);
+module.exports = mongoose.model('Meeting', schema);

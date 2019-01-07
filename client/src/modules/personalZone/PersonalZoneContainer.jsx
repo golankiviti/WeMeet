@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import MyMeetingsContainer from './meetings/myMeetings/MyMeetingsContainer';
 
 class PersonalZoneContainer extends Component {
     render() {
-        return <div>PersonalZone</div>
+        return <div><MyMeetingsContainer/></div>
     }
 }
 

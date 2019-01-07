@@ -1,7 +1,7 @@
 const meetingsService = require('./meeting.service');
 
 const getUserMeetings = (req, res) => {
-    return meetingsService.getUserMeetings()
+    return meetingsService.getUserMeetings(req.query.userId)
         .then((meetings) => {
             res.json(meetings);
         })
@@ -10,7 +10,16 @@ const getUserMeetings = (req, res) => {
         });
 }
 const creatNewMeeting = (req, res) => {
-    return meetingsService.creatNewMeeting(req)
+    return meetingsService.creatNewMeeting(req.params)
+        .then((meeting) => {
+            res.json(meeting);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+const updateMeeting = (req, res) => {
+    return meetingsService.updateMeeting(req.params)
         .then((meeting) => {
             res.json(meeting);
         })
@@ -22,5 +31,6 @@ const creatNewMeeting = (req, res) => {
 
 module.exports = {
     getUserMeetings,
-    creatNewMeeting
+    creatNewMeeting,
+    updateMeeting
 }

@@ -1,29 +1,24 @@
+const mongoose = require('mongoose');
+
 const meeting = require('../../../data').schemas.meetings;
 
-const getUserMeetings = (userName) => {
-    return  meeting.find({ $or: [ {"creater" : userName}, {"participants" : {$in: userName}}] });
+const getUserMeetings = (userId) => {
+    return  meeting.find({ $or: [ {"creater" : userId}, {"participants" : {$in:  userId}}] });
+   //return  meeting.find( {"creater" : userId});
 };
 
-const creatNewMeeting = (meeting) => {
-   var newMeeting = new meeting(meeting);
+const creatNewMeeting = (currentMeeting) => {
+
+   let newMeeting = new meeting(currentMeeting);
     return newMeeting.save();
 };
-
+const updateMeeting = (currentMeeting) => {
+    return meeting.findOneAndUpdate({ '_id': new mongoose.Types.ObjectId(currentMeeting._id) }, currentMeeting);
+ };
 
 module.exports = {
     getUserMeetings,
-    creatNewMeeting
+    creatNewMeeting,
+    updateMeeting
 
 };
-
-// function userResponse(mongoMeeting) {
-//     return
-//     id,
-//     name,
-//     creater,
-//     startDate,
-//     endDate,
-//     invited,
-//     participants,
-//     MeetingLocation
-// };
