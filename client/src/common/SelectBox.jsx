@@ -91,8 +91,8 @@ class SelectBox extends React.Component {
             {...custom}
           >
             {items.map(item => (
-              <MenuItem key={item.get('key')} value={item.get('name')}>
-                <Checkbox checked={input.value.indexOf(item.get('name')) > -1} />
+              <MenuItem key={item.get('key')} value={item.get('id')}>
+                <Checkbox checked={input.value.indexOf(item.get('id')) > -1} />
                 <ListItemText primary={item.get('name')} />
               </MenuItem>
             ))}
