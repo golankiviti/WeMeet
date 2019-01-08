@@ -9,7 +9,7 @@ const mongoose = require('mongoose'),
 const users = require('./schemas/Users');
 const meetings = require('./schemas/meetings');
 const preferences = require('./schemas/Preferences');
-const restrictions = require('./schemas/Preferences');
+const restrictions = require('./schemas/Restriction');
 
 // connect to mongo with specific options
 const connect = (url = 'localhost', port = '27017', username = null, password = null) => {
