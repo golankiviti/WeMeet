@@ -79,9 +79,10 @@ class SelectBox extends React.Component {
             //input={<Input id="select-multiple-chip" />}
             renderValue={selected => (
               <div className={classes.chips}>
-                {selected.map(value => (
-                  <Chip key={value} label={value} className={classes.chip} />
-                ))}
+                {selected.map(value => {
+                  const label = items ? items.find(x => x.get('id') === value).get('name') : '';
+                  return <Chip key={value} label={label} className={classes.chip} />
+                })}
               </div>
             )}
             MenuProps={MenuProps}
