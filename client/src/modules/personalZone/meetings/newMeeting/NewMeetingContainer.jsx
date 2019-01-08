@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'immutable-prop-types';
 //import { getLocations } from '../../../../clientManager/locationsClientManager';
 //import { getUsers } from '../../../../clientManager/usersClientManager';
 import { connect } from 'react-redux';
-import { upsertMeeting } from '../../../../clientManager/meetingsClientManager';
+import { createMeeting, updateMeeting } from '../../../../clientManager/meetingsClientManager';
 import PropTypes from 'prop-types';
 import NewMeeting from './NewMeeting';
 
@@ -13,7 +13,6 @@ const propTypes = {
     title: PropTypes.string,
     meeting: ImmutablePropTypes.map,
     // user: ImmutablePropTypes.map.isRequired //redux
-
 }
 
 export class NewMeetingContainer extends Component {
@@ -41,24 +40,24 @@ export class NewMeetingContainer extends Component {
         // .done();
         this.setState({
             locations: fromJS([
-                { id: 1, name: 'הבית של עידן' },
-                { id: 2, name: 'המכללה למנהל' },
-                { id: 3, name: 'שלישות רמת גן' }
+                { id: '1', name: 'הבית של עידן' },
+                { id: '2', name: 'המכללה למנהל' },
+                { id: '3', name: 'שלישות רמת גן' }
             ])
         })
     }
 
     handleSubmit = values => {
-
-        // const locations = values.locations.map(x => this.state.locations.find(y => y.name === x.name).get('id'));
-        // const participants = values.participants.map(x =>
-        //     this.state.users.find(y =>
-        //         y.name === x.name).get('email'));
-        const meeting = Object.assign({}, values, { creator: this.props.user.get('email') });
-        upsertMeeting(meeting).then((res) => {
-            console.log('a');
-        });
-        this.props.onClose();
+        const { user, meeting, onClose } = this.props;
+        const meetingToSend = Object.assign({}, values, { creator: user.get('email') });
+        if (meeting) {
+            meetingToSend['_id'] = meeting.get('_id');
+            updateMeeting(meetingToSend);
+        }
+        else {
+            createMeeting(meetingToSend);
+        }
+        onClose();
     }
 
     getUsers() {

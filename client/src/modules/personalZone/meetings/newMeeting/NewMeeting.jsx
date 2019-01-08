@@ -28,10 +28,10 @@ class NewMeeting extends Component {
         if (meeting) {
             this.props.initialize({
                 name: meeting.get('name'),
-                fromDate: meeting.get('fromDate'),
-                toDate: meeting.get('toDate'),
-                participants: meeting.get('participants').map(x => x.get('name')).toJS(),
-                locations: [meeting.get('location').get('name')]
+                fromDate: meeting.get('fromDate').substring(0, 16),
+                toDate: meeting.get('toDate').substring(0, 16),
+                participants: meeting.get('participants').toJS(),
+                locations: meeting.get('locations').toJS()
             });
         }
     }
@@ -58,16 +58,16 @@ class NewMeeting extends Component {
                         component={SelectBox}
                         items={users}
                         label='משתתפים'
-                        multiple 
-                         format={value => Array.isArray(value) ? value : []}
-                        />
+                        multiple
+                        format={value => Array.isArray(value) ? value : []}
+                    />
                     <Field name='locations'
                         component={SelectBox}
                         items={locations}
                         label='מיקומים'
                         multiple
-                         format={value => Array.isArray(value) ? value : []} 
-                        />
+                        format={value => Array.isArray(value) ? value : []}
+                    />
                 </form>
             </DialogContent>
             <DialogActions className={styles.dialogActions}>
