@@ -78,7 +78,7 @@ app.post('/checkUser', authenticationService.isUserExist);
 
 
 // export /api route
-app.use('/api', authenticationService.isLoggedIn, apiRouter);
+app.use('/api', apiRouter);
 
 // export production client side
 app.use(express.static(path.join(__dirname, '/build')));

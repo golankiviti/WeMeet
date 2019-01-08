@@ -1,7 +1,7 @@
 const meetingsService = require('./meeting.service');
 
 const getUserMeetings = (req, res) => {
-    return meetingsService.getUserMeetings(req.query.userId)
+    return meetingsService.getUserMeetings(req.params)
         .then((meetings) => {
             res.json(meetings);
         })
@@ -10,7 +10,7 @@ const getUserMeetings = (req, res) => {
         });
 }
 const creatNewMeeting = (req, res) => {
-    return meetingsService.creatNewMeeting(req.params)
+    return meetingsService.creatNewMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
@@ -19,7 +19,7 @@ const creatNewMeeting = (req, res) => {
         });
 }
 const updateMeeting = (req, res) => {
-    return meetingsService.updateMeeting(req.params)
+    return meetingsService.updateMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
