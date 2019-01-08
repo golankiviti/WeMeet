@@ -33,3 +33,10 @@ export function deleteLocation(locationId) {
         })
     }, false)
 }
+
+export function addRestriction(id, restriction) {
+    return fetch(`${BASE_URL}/${id}/restriction`, {
+        method: 'PUT',
+        body: JSON.stringify(restriction)
+    }, false);
+}
