@@ -24,3 +24,12 @@ export function editLocation(id, locationId, location) {
 export function getLocation(id, locationId) {
     return fetch(`${BASE_URL}/${id}/preferences/${locationId}`)
 }
+
+export function deleteLocation(locationId) {
+    return fetch(`${BASE_URL}/preference`, {
+        method: 'DELETE',
+        body: JSON.stringify({
+            prefId: locationId
+        })
+    }, false)
+}

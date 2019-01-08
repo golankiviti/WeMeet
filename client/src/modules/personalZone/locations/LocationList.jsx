@@ -12,7 +12,8 @@ import styles from './locationList.module.scss';
 const propTypes = {
     locations: ImmutablePropTypes.list.isRequired,
     userId: PropTypes.string.isRequired,
-    refresh: PropTypes.func.isRequired
+    refresh: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 };
 
 class LocationList extends Component {
@@ -50,7 +51,8 @@ class LocationList extends Component {
     }
 
     render() {
-        const { userId } = this.props;
+        const { userId, onDelete } = this.props;
+
         return <Card raised
             className={styles.container}>
             <div className={styles.header}>המיקומים שלי</div>
@@ -60,7 +62,8 @@ class LocationList extends Component {
                         <Location key={x.get('_id')}
                             id={x.get('_id')}
                             name={x.get('name')}
-                            onEdit={this.handleOpenEditDialog} />
+                            onEdit={this.handleOpenEditDialog}
+                            onDelete={onDelete} />
                     )
                 }
             </div>

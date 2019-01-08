@@ -7,12 +7,17 @@ import styles from './location.module.scss';
 const propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    onEdit: PropTypes.func.isRequired
+    onEdit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 };
 
 class Location extends Component {
     handleEdit = () => {
         this.props.onEdit(this.props.id);
+    }
+    
+    handleDelete = () => {
+        this.props.onDelete(this.props.id);
     }
 
     render() {
@@ -23,10 +28,7 @@ class Location extends Component {
                 <IconButton onClick={this.handleEdit}>
                     <Icon fontSize='small'>create</Icon>
                 </IconButton>
-                <IconButton>
-                    <Icon fontSize='small'>remove_red_eye</Icon>
-                </IconButton>
-                <IconButton>
+                <IconButton onClick={this.handleDelete}>
                     <Icon fontSize='small'>remove</Icon>
                 </IconButton>
             </div>

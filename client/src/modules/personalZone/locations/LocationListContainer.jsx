@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, fromJS } from 'immutable';
 import LocationList from './LocationList';
-import { userLocations } from '../../../clientManager/userManager';
+import { userLocations, deleteLocation } from '../../../clientManager/userManager';
 
 const propTypes = {
     userId: PropTypes.string // from redux
@@ -31,10 +31,16 @@ class LocationListContainer extends Component {
             })
     }
 
+    handleDelete = id => {
+        deleteLocation(id)
+            .then(this.fetchLocations)
+    }
+
     render() {
         return <LocationList locations={this.state.locations}
             {...this.props}
-            refresh={this.fetchLocations} />
+            refresh={this.fetchLocations}
+            onDelete={this.handleDelete} />
     }
 }
 
