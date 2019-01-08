@@ -3,6 +3,7 @@ import { List, fromJS } from 'immutable';
 import ImmutablePropTypes from 'immutable-prop-types';
 //import { getLocations } from '../../../../clientManager/locationsClientManager';
 //import { getUsers } from '../../../../clientManager/usersClientManager';
+import { connect } from 'react-redux';
 import { upsertMeeting } from '../../../../clientManager/meetingsClientManager';
 import PropTypes from 'prop-types';
 import NewMeeting from './NewMeeting';
@@ -10,10 +11,12 @@ import NewMeeting from './NewMeeting';
 const propTypes = {
     onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
-    meeting: ImmutablePropTypes.map
+    meeting: ImmutablePropTypes.map,
+    // user: ImmutablePropTypes.map.isRequired //redux
+
 }
 
-export default class NewMeetingContainer extends Component {
+export class NewMeetingContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -48,8 +51,10 @@ export default class NewMeetingContainer extends Component {
     handleSubmit = values => {
 
         const locations = values.locations.map(x => this.state.locations.find(y => y.name === x.name).get('id'));
-        const participants = values.participants.map(x => this.state.users.find(y => y.name === x.name).get('email'));
-        const meeting = Object.assign({}, values, { locations, participants });
+        const participants = values.participants.map(x =>
+            this.state.users.find(y =>
+                y.name === x.name).get('email'));
+        const meeting = Object.assign({}, values, { locations, participants, creator: this.props.user.get('email') });
         upsertMeeting(meeting).then((res) => {
             console.log('a');
         });
@@ -77,3 +82,9 @@ export default class NewMeetingContainer extends Component {
 }
 
 NewMeetingContainer.propTypes = propTypes;
+
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(NewMeetingContainer);
