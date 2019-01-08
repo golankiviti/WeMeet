@@ -1,7 +1,7 @@
 const meetingsService = require('./meeting.service');
 
 const getUserMeetings = (req, res) => {
-    return meetingsService.getUserMeetings(req.params.id)
+    tatureturn meetingsService.getUserMeetings(req.params.id)
         .then((meetings) => {
             res.json(meetings);
         })
