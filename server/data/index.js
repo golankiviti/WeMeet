@@ -3,15 +3,11 @@ const util = require('util');
 
 // npm modules
 const mongoose = require('mongoose'),
-    _ = require('lodash'),
-    mongooseDeletePlugin = require('mongoose-delete');
-
-mongoose.plugin(mongooseDeletePlugin, {
-    overrideMethods: 'all'
-});
+    _ = require('lodash');
 
 // here we require all our schemas from the schemas dir
 const users = require('./schemas/Users');
+const meetings = require('./schemas/meetings');
 const preferences = require('./schemas/Preferences');
 const restrictions = require('./schemas/Preferences');
 
@@ -36,5 +32,6 @@ module.exports = connect;
 module.exports.schemas = {
     users,
     preferences,
-    restrictions
+    restrictions,
+    meetings
 };
