@@ -48,10 +48,12 @@ export default class NewMeetingContainer extends Component {
     handleSubmit = values => {
 
         const locations = values.locations.map(x => this.state.locations.find(y => y.name === x.name).get('id'));
-        const participants = values.participants.map(x => this.state.users.find(y => y.name === x.name).get('id'));
+        const participants = values.participants.map(x => this.state.users.find(y => y.name === x.name).get('email'));
         const meeting = Object.assign({}, values, { locations, participants });
-        console.log(meeting);
-        upsertMeeting({name: values});
+        upsertMeeting(meeting).then((res) => {
+            console.log('a');
+        });
+        this.props.onClose();
     }
 
     getUsers() {
@@ -61,9 +63,9 @@ export default class NewMeetingContainer extends Component {
         // .done();
         this.setState({
             users: fromJS([
-                { id: 1, name: 'עידן' },
-                { id: 2, name: 'איגור' },
-                { id: 3, name: 'גיייייל' }
+                { email: 'aaa@aaa.com', name: 'עידן' },
+                { email: 'bbb@bbb.com', name: 'איגור' },
+                { email: 'ccc@ccc.com', name: 'גיייייל' }
             ])
         })
     }
