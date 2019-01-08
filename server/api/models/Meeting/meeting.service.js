@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const meeting = require('../../../data').schemas.meetings;
 
 const getUserMeetings = (userId) => {
-    return  meeting.find({ $or: [ {"creater" : userId}, {"participants" : {$in:  userId}}] });
-   //return  meeting.find( {"creater" : userId});
+    return  meeting.find({ $or: [ {"creator" : userId}, {"participants" : {$in:  userId}}] });
 };
 
 const creatNewMeeting = (currentMeeting) => {

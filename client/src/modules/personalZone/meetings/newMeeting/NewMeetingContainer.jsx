@@ -3,17 +3,19 @@ import { List, fromJS } from 'immutable';
 import ImmutablePropTypes from 'immutable-prop-types';
 //import { getLocations } from '../../../../clientManager/locationsClientManager';
 //import { getUsers } from '../../../../clientManager/usersClientManager';
-import { upsertMeeting } from '../../../../clientManager/meetingsClientManager';
+import { connect } from 'react-redux';
+import { createMeeting, updateMeeting } from '../../../../clientManager/meetingsClientManager';
 import PropTypes from 'prop-types';
 import NewMeeting from './NewMeeting';
 
 const propTypes = {
     onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
-    meeting: ImmutablePropTypes.map
+    meeting: ImmutablePropTypes.map,
+    // user: ImmutablePropTypes.map.isRequired //redux
 }
 
-export default class NewMeetingContainer extends Component {
+export class NewMeetingContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -38,20 +40,24 @@ export default class NewMeetingContainer extends Component {
         // .done();
         this.setState({
             locations: fromJS([
-                { id: 1, name: 'הבית של עידן' },
-                { id: 2, name: 'המכללה למנהל' },
-                { id: 3, name: 'שלישות רמת גן' }
+                { id: '1', name: 'הבית של עידן' },
+                { id: '2', name: 'המכללה למנהל' },
+                { id: '3', name: 'שלישות רמת גן' }
             ])
         })
     }
 
     handleSubmit = values => {
-
-        const locations = values.locations.map(x => this.state.locations.find(y => y.name === x.name).get('id'));
-        const participants = values.participants.map(x => this.state.users.find(y => y.name === x.name).get('id'));
-        const meeting = Object.assign({}, values, { locations, participants });
-        console.log(meeting);
-        upsertMeeting({name: values});
+        const { user, meeting, onClose } = this.props;
+        const meetingToSend = Object.assign({}, values, { creator: user.get('email') });
+        if (meeting) {
+            meetingToSend['_id'] = meeting.get('_id');
+            updateMeeting(meetingToSend);
+        }
+        else {
+            createMeeting(meetingToSend);
+        }
+        onClose();
     }
 
     getUsers() {
@@ -61,9 +67,9 @@ export default class NewMeetingContainer extends Component {
         // .done();
         this.setState({
             users: fromJS([
-                { id: 1, name: 'עידן' },
-                { id: 2, name: 'איגור' },
-                { id: 3, name: 'גיייייל' }
+                { id: 'ddd@aaa.com', name: 'עידן' },
+                { id: 'bbb@bbb.com', name: 'איגור' },
+                { id: 'ccc@ccc.com', name: 'גיייייל' }
             ])
         })
     }
@@ -75,3 +81,9 @@ export default class NewMeetingContainer extends Component {
 }
 
 NewMeetingContainer.propTypes = propTypes;
+
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(NewMeetingContainer);

@@ -6,7 +6,7 @@ const mongoose = require('mongoose'),
 let schema = mongoose.Schema({
         id: String,
 		name: String,
-		creater: String,
+		creator: String,
 		fromDate: Date,
 		toDate: Date,
 		invited: [String],

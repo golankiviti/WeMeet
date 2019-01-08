@@ -2,7 +2,17 @@ import {
     BASE_URL
 } from './constants';
 
-export function upsertMeeting(meeting) {
+export function createMeeting(meeting) {
+    return fetch(`${BASE_URL}/api/meeting`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(meeting)
+    });
+}
+
+export function updateMeeting(meeting) {
     return fetch(`${BASE_URL}/api/meeting`, {
         method: 'POST',
         headers: {
@@ -13,6 +23,6 @@ export function upsertMeeting(meeting) {
 }
 
 export function getMeetings(userId) {
-    return fetch(`${BASE_URL}/meeting/:${userId}`);
+    return fetch(`${BASE_URL}/api/meeting/${userId}`);
 }
 

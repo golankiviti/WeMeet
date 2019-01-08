@@ -4,7 +4,7 @@ const meetingController = require('./meeting.controller');
 
 const router = express.Router();
 
-router.get('/', meetingController.getUserMeetings);
-router.post('/', meetingController.creatNewMeeting);
-router.post('/update', meetingController.updateMeeting);
+router.get('/:id', meetingController.getUserMeetings);
+router.put('/', meetingController.creatNewMeeting);
+router.post('/', meetingController.updateMeeting);
 module.exports = router;
