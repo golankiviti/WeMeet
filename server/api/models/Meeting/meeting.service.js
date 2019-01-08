@@ -4,7 +4,6 @@ const meeting = require('../../../data').schemas.meetings;
 
 const getUserMeetings = (userId) => {
     return  meeting.find({ $or: [ {"creater" : userId}, {"participants" : {$in:  userId}}] });
-   //return  meeting.find( {"creater" : userId});
 };
 
 const creatNewMeeting = (currentMeeting) => {

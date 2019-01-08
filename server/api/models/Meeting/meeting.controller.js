@@ -19,7 +19,7 @@ const creatNewMeeting = (req, res) => {
         });
 }
 const updateMeeting = (req, res) => {
-    return meetingsService.updateMeeting(req.params.id)
+    return meetingsService.updateMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
