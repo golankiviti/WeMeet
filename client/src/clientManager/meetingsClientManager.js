@@ -13,6 +13,6 @@ export function upsertMeeting(meeting) {
 }
 
 export function getMeetings(userId) {
-    return fetch(`${BASE_URL}/api/meeting/:${userId}`);
+    return fetch(`${BASE_URL}/api/meeting/${userId}`);
 }
 
