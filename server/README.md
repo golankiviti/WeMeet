@@ -66,3 +66,10 @@ logger.info(myobject,'this is log of my object');
 ```
 
 ***note*** if you debug in vscode, add the next line to your launch.json run object: `"outputCapture": "std"`
+
+## test data
+
+if you want some test data to test your feature etc.  
+run the script under the scripts folder: `node scripts/initDB.js`  
+
+wait for it to finish and you have some test data in the db, even if your db has no collections at all, it will create all from nothing.
