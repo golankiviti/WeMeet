@@ -4,6 +4,11 @@ const meetingsService = require('./meeting.service');
 
 const logger = require('../../../utils/logger');
 
+const MEETING_RESPONSE = {
+    ACCPET_MEETING: 'accept',
+    REJECT_MEETING: 'reject'
+};
+
 const getUserMeetings = (req, res) => {
     return meetingsService.getUserMeetings(req.params.id)
         .then((meetings) => {
@@ -75,7 +80,8 @@ const acceptOrRejectMeeting = (req, res) => {
     }
     if (_.isNil(response) ||
         !_.isString(response) ||
-        (response.toLowerCase() !== 'accept' && response.toLocaleLowerCase() !== 'reject')) {
+        (response.toLowerCase() !== MEETING_RESPONSE.ACCPET_MEETING &&
+            response.toLocaleLowerCase() !== MEETING_RESPONSE.REJECT_MEETING)) {
         logger.warn('response param is not valid');
         return res.status(400).send('response should exist and be string with values of "accept" or "reject"');
     }
@@ -84,12 +90,15 @@ const acceptOrRejectMeeting = (req, res) => {
     return Promise.resolve()
         .then(() => {
             logger.debug('check if the response param is "accept" or "reject"');
-            if (response === 'accept') {
+            if (response === MEETING_RESPONSE.ACCPET_MEETING) {
                 logger.debug('accept meeting');
                 return meetingsService.acceptMeeting(userId, meetingId);
             }
-            logger.debug('reject meeting');
-            return meetingsService.rejectMeeting(userId, meetingId);
+            if (response === MEETING_RESPONSE.REJECT_MEETING) {
+                logger.debug('reject meeting');
+                return meetingsService.rejectMeeting(userId, meetingId);
+            }
+            return Promise.resolve();
         })
         .then(() => {
             return res.json(true);
