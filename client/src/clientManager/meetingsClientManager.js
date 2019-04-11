@@ -29,12 +29,12 @@ export function getMeetings(userId) {
 }
 
 export function getMeetingsForApproval(userId) {
-    return customFetch(`${BASE_API_URL}/meeting/waitingMeetings/${userId}`);
+    return customFetch(`${BASE_API_URL}/meeting/waitingMeetings/${userId}`,);
 }
 
 export function responseToMeeting(response) {
     return customFetch(`${BASE_API_URL}/meeting/meetingResponse`, {
         method: 'POST',
         body: JSON.stringify(response)
-    })
+    }, false)
 }

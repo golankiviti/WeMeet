@@ -1,4 +1,4 @@
-import React, { useCallBack } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
@@ -13,10 +13,10 @@ const propTypes = {
 }
 
 function MeetingForApproval({id, name, date, onApprove, onDecline}) {
-    const handleApprove = useCallBack(() => {
+    const handleApprove = useCallback(() => {
         onApprove(id);
     }, [id, onApprove]);
-    const handleDecline = useCallBack(() => {
+    const handleDecline = useCallback(() => {
         onDecline(id)
     }, [id, onDecline]);
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Card from '@material-ui/core/Card'
 import MeetingForApproval from './MeetingForApproval';
+import styles from './meetingsForApproval.module.scss';
 
 const propTypes = {
     meetings: ImmutablePropTypes.list.isRequired,
@@ -10,7 +12,10 @@ const propTypes = {
 };
 
 function MeetingsForApproval({meetings, onApprove, onDecline}) {
-    return <div>
+    return <Card raised
+        className={styles.container}>
+        <div className={styles.header}>פגישות ממתינות לאישור</div>
+        <div className={styles.content}>
         {
             meetings.map(x => <MeetingForApproval key={x.get('_id')}
                 id={x.get('_id')}
@@ -20,7 +25,8 @@ function MeetingsForApproval({meetings, onApprove, onDecline}) {
                 onDecline={onDecline} />
             )
         }
-    </div>
+        </div>
+    </Card>
 }
 
 MeetingsForApproval.propTypes = propTypes;

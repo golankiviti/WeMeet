@@ -1,4 +1,3 @@
-import { Map } from 'immutable';
 import { UPDATE_USER, REMOVE_USER } from './actions';
 
 export default function reducer(state = null, action) {
