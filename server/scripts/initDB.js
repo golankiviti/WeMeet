@@ -143,6 +143,7 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
         console.log('init some users');
         return Promise.map(usersTmp, (usr, index) => {
             let tmp = new users(usr);
+            tmp.local.password = tmp.generateHash(tmp.local.password);
             return tmp.save()
                 .then((savedUsr) => {
                     if (index === 0) {
