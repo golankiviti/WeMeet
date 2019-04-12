@@ -13,7 +13,7 @@ const getAllUsers = (req, res) => {
 /* ------------------------------ user's Preferences ------------------------------ */
 
 const getAllPreferences = (req, res) => {
-    return userService.getAllPreferences()
+    return userService.getAllPreferences(req.params.id)
         .then((preferences) => {
             res.json(preferences);
         })
@@ -75,7 +75,7 @@ const deletePreference = (req, res) => {
 /* ------------------------------ user's Restrictions ------------------------------ */
 
 const getAllRestrictions = (req, res) => {
-    return userService.getAllRestrictions()
+    return userService.getAllRestrictions(req.params.id)
         .then((restrictions) => {
             res.json(restrictions);
         })

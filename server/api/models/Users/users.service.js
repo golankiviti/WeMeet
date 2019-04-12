@@ -10,8 +10,8 @@ const getAllUsers = () => {
 
 /* ---------------------------------------- user's Preferences ---------------------------------------- */
 
-const getAllPreferences = () => {
-    return preferences.find({});
+const getAllPreferences = (userId) => {
+    return preferences.find({ 'user': new mongoose.Types.ObjectId(userId)});
 };
 
 const getPreference = (id) => {
@@ -36,8 +36,8 @@ const deletePreference = (prefId) => {
 
 /* ---------------------------------------- user's Restrictions ---------------------------------------- */
 
-const getAllRestrictions = () => {
-    return restrictions.find({});
+const getAllRestrictions = (userId) => {
+    return restrictions.find({ 'user': new mongoose.Types.ObjectId(userId) });
 };
 
 const getRestriction = (id) => {
