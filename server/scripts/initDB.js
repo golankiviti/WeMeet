@@ -118,6 +118,8 @@ let restrictionsTmp = [{
 
 let meetingsTmp = [{
     name: 'meet A',
+    isDetermined: true,
+    desiredDate: moment().add(6, 'd').toDate(),
     fromDate: moment().add(5, 'd').toDate(),
     toDate: moment().add(5, 'd').add(5, 'h').toDate(),
     participants: [],
@@ -127,6 +129,8 @@ let meetingsTmp = [{
     rejected: []
 }, {
     name: 'meet B',
+    isDetermined: true,
+    desiredDate: moment().add(7, 'd').toDate(),
     fromDate: moment().add(6, 'd').toDate(),
     toDate: moment().add(6, 'd').add(3, 'h').toDate(),
     participants: [],
