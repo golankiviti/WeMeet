@@ -25,7 +25,7 @@ export function updateMeeting(meeting) {
 }
 
 export function getMeetings(userId) {
-    return fetch(`${BASE_API_URL}/meeting/${userId}`);
+    return customFetch(`${BASE_API_URL}/meeting/${userId}`);
 }
 
 export function getMeetingsForApproval(userId) {
