@@ -10,7 +10,6 @@ import styles from './loginContainer.module.scss';
 class LoginContainer extends Component {
     handleSubmit = values => {
         login(values)
-            .then(res => res.json())
             .then(res => {
                 this.props.updateUser(fromJS(res));
                 this.props.history.push('/home');
@@ -22,7 +21,7 @@ class LoginContainer extends Component {
 
         return <div className={styles.container}>
             <LoginPanel onSubmit={this.handleSubmit}
-                {...otherProps}/>
+                {...otherProps} />
         </div>
     }
 }
