@@ -10,7 +10,6 @@ import styles from './registerContainer.module.scss';
 class RegisterContainer extends Component {
     handleSubmit = values => {
         register(values)
-            .then(res => res.json())
             .then(res => {
                 if (res) {
                     this.props.updateUser(fromJS(res));

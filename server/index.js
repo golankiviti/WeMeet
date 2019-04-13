@@ -30,10 +30,10 @@ const SERVER_PORT = process.env.SERVER_PORT || '8989',
     MONGO_USERNAME = process.env.MONGO_USERNAME || null,
     MONGO_PASSWORD = process.env.MONGO_PASSWORD || null;
 
+// app.use(morgan('dev'));
+
 // init passport with strategies
 authenticationService(passport);
-
-// app.use(morgan('dev'));
 
 app.use(cookieParser());
 
@@ -78,7 +78,7 @@ app.post('/checkUser', authenticationService.isUserExist);
 
 
 // export /api route
-app.use('/api', apiRouter);
+app.use('/api', authenticationService.isLoggedIn, apiRouter);
 
 // export production client side
 app.use(express.static(path.join(__dirname, '/build')));
