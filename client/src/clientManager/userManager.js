@@ -7,6 +7,10 @@ export function userLocations(id) {
     return fetch(`${BASE_URL}/${id}/preferences`);
 }
 
+export function getAllUsers(id) {
+    return fetch(BASE_URL);
+}
+
 export function addLocation(id, location) {
     return fetch(`${BASE_URL}/${id}/preference`, {
         method: 'PUT',
