@@ -1,30 +1,36 @@
-const jwt = require('express-jwt');
+// this service is responsible for the tokens check from the client
 
-const getTokenFromHeaders = (req) => {
-    const {
-        headers: {
-            authorization
-        }
-    } = req;
+const Users = require('../data/index').schemas.users;
 
-    if (authorization && authorization.split(' ')[0] === 'Token') {
-        return authorization.split(' ')[1];
-    }
-    return null;
+const {
+    Strategy,
+    ExtractJwt
+} = require('passport-jwt');
+
+const secret = 'weMeet';
+
+const opts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: secret
+};
+//this sets how we handle tokens coming from the requests that come
+// and also defines the key to be used when verifying the token.
+module.exports = passport => {
+    passport.use(
+        new Strategy(opts, (payload, done) => {
+            // get id from the payload token
+            Users.findById(payload.id)
+                .then(user => {
+                    if (user) {
+                        return done(null, {
+                            id: user.id,
+                            email: user.local.email,
+                        });
+                    }
+                    return done(null, false);
+                }).catch(err => done(err));
+        })
+    );
 };
 
-const auth = {
-    required: jwt({
-        secret: 'WeMeet',
-        userProperty: 'payload',
-        getToken: getTokenFromHeaders,
-    }),
-    optional: jwt({
-        secret: 'WeMeet',
-        userProperty: 'payload',
-        getToken: getTokenFromHeaders,
-        credentialsRequired: false,
-    }),
-};
-
-module.exports = auth;
+module.exports.secret = secret;

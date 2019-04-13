@@ -30,10 +30,10 @@ const SERVER_PORT = process.env.SERVER_PORT || '8989',
     MONGO_USERNAME = process.env.MONGO_USERNAME || null,
     MONGO_PASSWORD = process.env.MONGO_PASSWORD || null;
 
+// app.use(morgan('dev'));
+
 // init passport with strategies
 authenticationService(passport);
-
-// app.use(morgan('dev'));
 
 app.use(cookieParser());
 
