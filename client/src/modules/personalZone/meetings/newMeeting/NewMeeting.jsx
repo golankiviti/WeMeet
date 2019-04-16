@@ -30,7 +30,7 @@ class NewMeeting extends Component {
                 name: meeting.get('name'),
                 fromDate: meeting.get('fromDate').substring(0, 16),
                 toDate: meeting.get('toDate').substring(0, 16),
-                participants: meeting.get('participants').toJS(),
+                invited: meeting.get('invited').toJS(),
                 locations: meeting.get('locations').toJS()
             });
         }
@@ -54,10 +54,10 @@ class NewMeeting extends Component {
                     <Field name='toDate'
                         component={DateTimePicker}
                         label='עד תאריך' />
-                    <Field name='participants'
+                    <Field name='invited'
                         component={SelectBox}
                         items={users}
-                        label='משתתפים'
+                        label='מוזמנים'
                         multiple
                         format={value => Array.isArray(value) ? value : []}
                     />
@@ -104,8 +104,8 @@ const validate = values => {
         errors.toDate = 'חובה להזין תאריך מקסימום לפגישה'
     }
 
-    if (!values.participants || (values.participants && values.participants.length === 0)) {
-        errors.participants = 'חובה להזמין משתתפים לפגישה'
+    if (!values.invited || (values.invited && values.invited.length === 0)) {
+        errors.invited = 'חובה להזמין משתתפים לפגישה'
     }
 
     if (!values.locations || (values.locations && values.locations.length === 0)) {

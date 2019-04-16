@@ -18,8 +18,7 @@ let schema = mongoose.Schema({
 	desiredDate: Date,
 	fromDate: Date,
 	toDate: Date,
-	invited: [String],
-	participants: [{
+	invited: [{
 		type: ObjectId,
 		ref: "User"
 	}],
