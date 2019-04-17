@@ -33,7 +33,7 @@ export class NewMeetingContainer extends Component {
     }
 
     getLocations() {
-        userLocations()
+        userLocations(this.props.user.get('_id'))
         .then(res => {
             const locations = fromJS(
                 res.map(location =>

@@ -12,7 +12,7 @@ const getUserMeetings = (userId) => {
         $or: [{
             "creator": userId
         }, {
-            "participants": {
+            "accepted": {
                 $in: userId
             }
         }]
@@ -47,7 +47,7 @@ const getUserWaitingMeetings = (userId) => {
                 $or: [{
                     creator: userId,
                 }, {
-                    participants: userId
+                    invited: userId
                 }],
             },
             {
