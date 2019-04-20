@@ -22,8 +22,7 @@ let schema = mongoose.Schema({
 		type: ObjectId,
 		ref: "User"
 	}],
-	locations: [String],
-	selectedLocation: String,
+	location: String,
 	accepted: [{
 		type: ObjectId,
 		ref: "User"

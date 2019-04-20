@@ -48,3 +48,11 @@
     display: flex;
     justify-content: space-between !important;
 }
+
+:local .dialogContent {
+    height: 60vh;
+}
+
+:local .field {
+    margin-bottom: 22px;
+}

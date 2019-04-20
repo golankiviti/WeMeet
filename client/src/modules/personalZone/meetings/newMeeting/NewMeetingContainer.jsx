@@ -34,21 +34,26 @@ export class NewMeetingContainer extends Component {
 
     getLocations() {
         userLocations(this.props.user.get('_id'))
-        .then(res => {
-            const locations = fromJS(
-                res.map(location =>
-                    ({
-                        id: location._id,
-                        name: location.name
-                    }))
-            );
-            this.setState({ locations });
-        });
+            .then(res => {
+                const locations = fromJS(
+                    res.map(location =>
+                        ({
+                            label: location.name
+                        }))
+                );
+                this.setState({ locations });
+            });
     }
 
     handleSubmit = values => {
         const { user, meeting, onClose } = this.props;
-        const meetingToSend = Object.assign({}, values, { creator: user.get('_id') });
+        const meetingToSend = Object.assign({},
+            values,
+            {
+                creator: user.get('_id'),
+                location: values.location.label,
+                invited: values.invited.map(user => user.value)
+            });
         if (meeting) {
             meetingToSend['_id'] = meeting.get('_id');
             updateMeeting(meetingToSend);
@@ -65,8 +70,8 @@ export class NewMeetingContainer extends Component {
                 const users = fromJS(
                     res.map(user =>
                         ({
-                            id: user._id,
-                            name: user.firstName + ' ' + user.lastName
+                            value: user._id,
+                            label: user.firstName + ' ' + user.lastName
                         }))
                 );
                 this.setState({ users });
