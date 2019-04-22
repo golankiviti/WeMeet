@@ -206,6 +206,13 @@ class IntegrationReactSelect extends React.Component {
               {...input}
               onBlur={() => { }}
               formatCreateLabel={(inputValue) => inputValue}
+              pageSize={3}
+              textFieldProps={{
+                label: this.props.label,
+                InputLabelProps: {
+                  shrink: true,
+                },
+              }}
             /> :
             <Select
               classes={classes}
@@ -216,6 +223,14 @@ class IntegrationReactSelect extends React.Component {
               isMulti={multi}
               {...input}
               onBlur={() => { }}
+              noOptionsMessage={() => 'אין תוצאות'}
+              pageSize={3}
+              textFieldProps={{
+                label: this.props.label,
+                InputLabelProps: {
+                  shrink: true,
+                },
+              }}
             />
         }
       </div>

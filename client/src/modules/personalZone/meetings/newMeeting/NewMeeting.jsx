@@ -68,6 +68,7 @@ class NewMeeting extends Component {
                             component={AutoComplete}
                             options={users.toJS()}
                             placeholder='מוזמנים'
+                            label='מוזמנים'
                             multi
                         />
                     </div>
@@ -75,6 +76,7 @@ class NewMeeting extends Component {
                         component={AutoComplete}
                         options={locations.toJS()}
                         placeholder='מיקום'
+                        label='מיקום'
                         allowCreate
                     />
                 </form>
