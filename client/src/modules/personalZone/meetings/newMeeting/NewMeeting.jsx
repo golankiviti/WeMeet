@@ -23,22 +23,6 @@ const propTypes = {
 }
 
 class NewMeeting extends Component {
-    componentDidUpdate() {
-        const { meeting, users } = this.props;
-        if (meeting && users.size > 0) {
-            this.props.initialize({
-                name: meeting.get('name'),
-                fromDate: meeting.get('fromDate').substring(0, 16),
-                toDate: meeting.get('toDate').substring(0, 16),
-                invited:
-                    meeting.get('invited').map(userId => {
-                        return users.find(user => user.get('value') === userId)
-                    }).toJS(),
-                location: { label: meeting.get('location'), value: meeting.get('location') }
-            });
-        }
-    }
-
     render() {
         const { handleSubmit, valid, locations, users, onClose, onSubmit, title } = this.props;
 
@@ -138,5 +122,6 @@ const asyncValidate = (values /*, dispatch */) => {
 export default reduxForm({
     form: 'newMeeting',
     validate,
-    asyncValidate
+    asyncValidate,
+    enableReinitialize:true
 })(NewMeeting);

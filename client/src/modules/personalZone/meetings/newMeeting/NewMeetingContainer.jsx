@@ -80,7 +80,23 @@ export class NewMeetingContainer extends Component {
 
     render() {
         const { users, locations } = this.state;
-        return <NewMeeting locations={locations} users={users} onSubmit={this.handleSubmit} {...this.props} />
+        const { meeting } = this.props;
+        
+        let initialValues = {}
+        if (meeting) {
+            initialValues = {
+                name: this.props.meeting.get('name'),
+                fromDate: meeting.get('fromDate').substring(0, 16),
+                toDate: meeting.get('toDate').substring(0, 16),
+                invited:
+                    meeting.get('invited').map(userId => {
+                        return users.find(user => user.get('value') === userId)
+                    }).toJS(),
+                location: { label: meeting.get('location'), value: meeting.get('location') }
+            }
+        }
+
+        return <NewMeeting locations={locations} users={users} onSubmit={this.handleSubmit} initialValues={initialValues} {...this.props} />
     }
 }
 
