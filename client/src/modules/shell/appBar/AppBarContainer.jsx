@@ -24,11 +24,14 @@ class AppBarContainer extends Component {
 
     handlePersonalZone = () => { this.props.history.push('/personalZone'); }
 
+    handleCalendar = () => { this.props.history.push('/calendar'); }
+
     render() {
         const { removeUser, history, ...otherProps } = this.props;
         return <AppBar onLogout={this.handleLogout}
             onHome={this.handleHome}
             onPersonalZone={this.handlePersonalZone}
+            onCalendar={this.handleCalendar}
             {...otherProps} />
     }
 }
