@@ -3,6 +3,7 @@ let headers = {
 };
 
 function weMeetFetch(url, options = {}, json = true) {
+    headers.Authorization = localStorage.getItem('authToken');
     const funcOptions = {
         headers
     };
@@ -20,6 +21,7 @@ function weMeetFetch(url, options = {}, json = true) {
 }
 
 function addTokenToHeaders(token) {
+    localStorage.setItem('authToken', token);
     headers.Authorization = token;
 }
 
