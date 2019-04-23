@@ -216,10 +216,9 @@ module.exports.isUserExist = (req, res, next) => {
 
 module.exports.isLoggedIn = (req, res, next) => {
     // check the jwt token from header before continue to the next logic
-    // _passport.authenticate('jwt', {
-    //     session: true
-    // })(req, res, next);
-    next();
+    _passport.authenticate('jwt', {
+        session: true
+    })(req, res, next);
 }
 
 function userResponse(mongoUser) {
