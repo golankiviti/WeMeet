@@ -8,6 +8,7 @@ import rbcStyles from 'react-big-calendar/lib/css/react-big-calendar.css';
 import styles from './calendar.module.scss';
 import { getMeetings } from '../../clientManager/meetingsClientManager';
 import NewMeetingContainer from '../personalZone/meetings/newMeeting/NewMeetingContainer';
+import 'moment/locale/he';
 
 const propTypes = {
     // user: ImmutablePropTypes.map.isRequired //redux

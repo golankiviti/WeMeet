@@ -5,6 +5,7 @@ import { getAllUsers, userLocations } from '../../../../clientManager/userManage
 import { connect } from 'react-redux';
 import { createMeeting, updateMeeting } from '../../../../clientManager/meetingsClientManager';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import NewMeeting from './NewMeeting';
 
 const propTypes = {
@@ -84,10 +85,11 @@ export class NewMeetingContainer extends Component {
         
         let initialValues = {}
         if (meeting) {
+            
             initialValues = {
                 name: this.props.meeting.get('name'),
-                fromDate: meeting.get('fromDate').substring(0, 16),
-                toDate: meeting.get('toDate').substring(0, 16),
+                fromDate: moment(meeting.get('fromDate')).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16),
+                toDate: moment(meeting.get('toDate')).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16),
                 invited:
                     meeting.get('invited').map(userId => {
                         return users.find(user => user.get('value') === userId)
