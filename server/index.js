@@ -21,6 +21,8 @@ const apiRouter = require('./api'),
     authenticationService = require('./services/authentication.service'),
     logger = require('./utils/logger');
 
+const algorithm = require('./services/alrorithm/algorithmHandler');
+
 const app = express();
 
 // init neccesary configuration
@@ -75,6 +77,16 @@ app.post('/login', authenticationService.login);
 app.post('/logout', authenticationService.logout);
 
 app.post('/checkUser', authenticationService.isUserExist);
+
+app.get('/algorithm', (req, res, next) => {
+    algorithm()
+        .then((results) => {
+            res.json(results);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        })
+});
 
 
 // export /api route
