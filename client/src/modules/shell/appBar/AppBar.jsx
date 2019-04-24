@@ -9,7 +9,6 @@ const propTypes = {
     onLogout: PropTypes.func.isRequired,
     onHome: PropTypes.func.isRequired,
     onPersonalZone: PropTypes.func.isRequired,
-    onCalendar: PropTypes.func.isRequired,
     loggedIn: PropTypes.bool.isRequired
 }
 
@@ -33,7 +32,7 @@ class AppBar extends Component {
     }
 
     render() {
-        const { loggedIn, onHome, onPersonalZone, onLogout, onCalendar } = this.props;
+        const { loggedIn, onHome, onPersonalZone, onLogout } = this.props;
 
         const logoutClasses = classNames(styles.button, styles.logout);
 
@@ -52,10 +51,6 @@ class AppBar extends Component {
                         <div className={styles.button}
                             onClick={this.handleNewMeetingClick}>
                             פגישה חדשה
-                        </div>
-                        <div className={styles.button}
-                            onClick={onCalendar}>
-                            לוח שנה
                         </div>
                         <div className={logoutClasses}
                             onClick={onLogout}>

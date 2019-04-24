@@ -1,4 +1,23 @@
 :local .container {
     display: flex;
     padding: 64px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+:local .rightContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    max-width: 50%;
+    margin-left: 64px;
+}
+
+:local .leftContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    max-width: 50%;
+    margin-left: 64px;
 }

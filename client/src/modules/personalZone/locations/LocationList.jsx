@@ -67,7 +67,7 @@ class LocationList extends Component {
                     )
                 }
             </div>
-            <Button onClick={this.handleOpenAddDialog}>
+            <Button className={styles.addButton} onClick={this.handleOpenAddDialog}>
                 <Icon>add</Icon>
             </Button>
             {

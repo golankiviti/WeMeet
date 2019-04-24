@@ -20,7 +20,7 @@ function MeetingsForApproval({meetings, onApprove, onDecline}) {
             meetings.map(x => <MeetingForApproval key={x.get('_id')}
                 id={x.get('_id')}
                 name={x.get('name')}
-                date='ssss'
+                date={new Date(x.get('desiredDate')).toLocaleDateString()}
                 onApprove={onApprove}
                 onDecline={onDecline} />
             )

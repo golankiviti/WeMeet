@@ -8,5 +8,6 @@ $appbar_height: 64px;
 
 :local .content {
     margin-top: $appbar_height;
-    height: calc(100% - #{$appbar_height})
+    height: calc(100% - #{$appbar_height});
+    display: flex;
 }
