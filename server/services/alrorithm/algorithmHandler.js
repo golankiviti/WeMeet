@@ -2,8 +2,12 @@ const {
     fork
 } = require('child_process');
 
+const _ = require('lodash'),
+    Promise = require('bluebird');
+
 const {
-    meetings
+    meetings,
+    restrictions
 } = require('../../data').schemas;
 
 const logger = require('../../utils/logger');
@@ -30,9 +34,29 @@ const startAlgorithm = () => {
             // all meetings that are not deterined yet
             isDetermined: false
         }
+        let _meetings;
         // we need to get all meetings that are relevant for the algorithm
-        meetings.find(query)
+        meetings.find(query).lean()
             .then((meetings) => {
+                _meetings = meetings
+                let invitedUsers = _.map(meetings, (meet) => {
+                    return meet.invited;
+                });
+                invitedUsers = _.flatten(invitedUsers);
+                invitedUsers = _.uniq(invitedUsers);
+                return Promise.map(invitedUsers, (userId) => {
+                        return restrictions.find({
+                            user: userId
+                        }).lean();
+                    })
+                    .then((restrictions) => {
+                        return {
+                            userId,
+                            userRestrictions: restrictions
+                        };
+                    });
+            })
+            .then((restrictions) => {
                 // prepare some option for the child process
                 let childOptions = {
                     // pipe the stdio to the parent
@@ -78,7 +102,14 @@ const startAlgorithm = () => {
                 //     logger.warn(output.toString());
                 // });
                 // send to child the meetings
-                child.send(meetings);
+                child.send({
+                    meetings: _meetings,
+                    restrictions
+                });
+            })
+            .catch((err) => {
+                logger.error(err);
+                reject(err);
             });
     });
 };
