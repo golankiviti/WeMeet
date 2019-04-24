@@ -1,0 +1,10 @@
+:local .calendarContainer {
+    width: 100%;
+    padding: 16px;
+}
+
+:local .addButton {
+    position: fixed !important;
+    bottom: 32px;
+    left: 32px;
+}

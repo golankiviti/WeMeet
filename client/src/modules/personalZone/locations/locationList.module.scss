@@ -3,6 +3,8 @@
 :local .container {
     display: flex;
     flex-direction: column;
+    max-height: 50%;
+    height: 50%;
 }
 
 :local .header {
@@ -18,4 +20,9 @@
 
 :local .content {
     padding: 16px;
+    overflow: overlay;
+}
+
+:local .addButton {
+    margin-top: auto !important;
 }

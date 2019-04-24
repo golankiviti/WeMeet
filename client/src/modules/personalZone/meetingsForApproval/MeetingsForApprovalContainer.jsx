@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { List, fromJS } from 'immutable';
 import { registerRefresh, updateRefresh, unregisterRefresh } from '../../../redux/refresh/actionCreators';
-import { meetingsForApproval as meetingsForApprovalKey } from '../../../redux/refresh/refreshFields';
+import { meetingsForApproval as meetingsForApprovalKey, myMeetings as myMeetingsKey } from '../../../redux/refresh/refreshFields';
 import { ACCPET_MEETING, REJECT_MEETING } from '../../../enums/meeting_response';
 import { getMeetingsForApproval, responseToMeeting } from '../../../clientManager/meetingsClientManager';
 
@@ -40,6 +40,7 @@ function MeetingsForApprovalContainer(props) {
         })
         .then(() => {
             props.updateRefresh(meetingsForApprovalKey)
+            props.updateRefresh(myMeetingsKey)
         });
     }
 

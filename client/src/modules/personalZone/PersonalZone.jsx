@@ -7,8 +7,13 @@ import styles from './personalZone.module.scss';
 class PersonalZone extends Component {
     render() {
         return <div className={styles.container}>
-            <LocationListContainer />
-            <MyMeetingsContainer />
+            <div className={styles.rightContainer}>
+                <MeetingsForApprovalContainer />
+                <LocationListContainer />
+            </div>
+            <div className={styles.leftContainer}>
+                <MyMeetingsContainer />
+            </div>
         </div>
     }
 }

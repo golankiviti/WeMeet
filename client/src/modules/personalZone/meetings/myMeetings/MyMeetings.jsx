@@ -13,7 +13,7 @@ export default class MyMeetings extends Component {
     render() {
         const { meetings } = this.props;
         return (
-            <Card raised className={styles.card}>
+            <Card raised className={styles.container}>
                 <div className={styles.header}>הפגישות שלי</div>
                 <CardContent className={styles.cardContent}>
                     {meetings.map(meeting => <Meeting meeting={meeting} />)}
