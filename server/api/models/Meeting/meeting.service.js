@@ -12,7 +12,7 @@ const getUserMeetings = (userId) => {
         $or: [{
             "creator": userId
         }, {
-            "participants": {
+            "accepted": {
                 $in: userId
             }
         }]
@@ -39,11 +39,15 @@ const getUserWaitingMeetings = (userId) => {
                 }
             },
             {
+                // get only meetings that the algorithm offer
+                isDetermined: true
+            },
+            {
                 // the user need to be creator or one of the participants
                 $or: [{
                     creator: userId,
                 }, {
-                    participants: userId
+                    invited: userId
                 }],
             },
             {

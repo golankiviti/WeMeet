@@ -7,6 +7,7 @@ import PersonalZone from '../modules/personalZone/PersonalZone';
 import Shell from '../modules/shell/Shell';
 import AuthRoute from './AuthRoute';
 import AlreadyLoggedRoute from './AlreadyLoggedRoute';
+import CalendarContainer from '../modules/calendar/CalendarContainer';
 
 class Routing extends Component {
     render() {
@@ -17,6 +18,7 @@ class Routing extends Component {
                     <Route path="/register/" component={RegisterContainer} />
                     <AuthRoute path="/home/" component={HomeContainer} />
                     <AuthRoute path="/personalzone/" component={PersonalZone} />
+                    <AuthRoute path="/calendar/" component={CalendarContainer} />
                 </Switch>
             </Shell>
         </Router>

@@ -12,15 +12,17 @@ let schema = mongoose.Schema({
 		type: ObjectId,
 		ref: "User"
 	},
+	// flag if the algorithm find date to the meeting
+	isDetermined: Boolean,
+	// the desired date for the meeting (the deadline)
+	desiredDate: Date,
 	fromDate: Date,
 	toDate: Date,
-	invited: [String],
-	participants: [{
+	invited: [{
 		type: ObjectId,
 		ref: "User"
 	}],
-	locations: [String],
-	selectedLocation: String,
+	location: String,
 	accepted: [{
 		type: ObjectId,
 		ref: "User"

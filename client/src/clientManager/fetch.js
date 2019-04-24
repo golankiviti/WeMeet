@@ -1,8 +1,11 @@
+let headers = {
+    'content-type': 'application/json'
+};
+
 function weMeetFetch(url, options = {}, json = true) {
+    headers.Authorization = localStorage.getItem('authToken');
     const funcOptions = {
-        headers: {
-            'content-type': 'application/json'
-        }
+        headers
     };
 
     const newOptions = Object.assign({}, funcOptions, options);
@@ -14,7 +17,15 @@ function weMeetFetch(url, options = {}, json = true) {
     }
 
     return promise;
-    
+
 }
 
+function addTokenToHeaders(token) {
+    localStorage.setItem('authToken', token);
+    headers.Authorization = token;
+}
+
+export {
+    addTokenToHeaders
+};
 export default weMeetFetch;

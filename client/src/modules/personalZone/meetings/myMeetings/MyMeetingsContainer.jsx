@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { List, fromJS } from 'immutable';
-import ImmutablePropTypes from 'immutable-prop-types';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'immutable-prop-types';
+import { bindActionCreators } from 'redux';
+import { myMeetings } from '../../../../redux/refresh/refreshFields';
+import { registerRefresh, unregisterRefresh } from '../../../../redux/refresh/actionCreators';
 import MyMeetings from './MyMeetings';
 import { getMeetings } from '../../../../clientManager/meetingsClientManager';
 
@@ -21,36 +24,25 @@ export class MyMeetingsContainer extends Component {
     }
 
     componentDidMount() {
+        this.props.registerRefresh(myMeetings);
         this.getMeetings();
     }
 
+    componentWillUnmount() {
+        this.props.unregisterRefresh(myMeetings);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.timestamp !== prevProps.timestamp) {
+            this.getMeetings();
+        }
+    }
+
     getMeetings() {
-        getMeetings(this.props.user.get('email'))
-            .then((res) => res.json())
-            .then((res) => 
+        getMeetings(this.props.user.get('_id'))
+            .then(res =>
                 this.setState({ meetings: fromJS(res) })
             );
-
-        // this.setState({
-        //     meetings: fromJS([
-        //         {
-        //             id: 1,
-        //             name: 'פגישה 3 עם איגור',
-        //             participants: [{ id: 1, name: 'עידן' }, { id: 2, name: 'גיייייל' }],
-        //             location: { id: 1, name: 'המכללה למנהל' },
-        //             fromDate: '2019-02-10T01:01',
-        //             toDate: '2019-02-10T03:01'
-        //         },
-        //         {
-        //             id: 2,
-        //             name: 'בירה עם גולן',
-        //             participants: [{ id: 1, name: 'עידן' }, { id: 3, name: 'איגור' }],
-        //             location:  { id: 3, name: 'שלישות רמת גן' },
-        //             fromDate: '2019-01-10T01:01',
-        //             toDate: '2019-02-10T06:01'
-        //         }
-        //     ])
-        // })
     }
 
     render() {
@@ -62,7 +54,15 @@ export class MyMeetingsContainer extends Component {
 MyMeetingsContainer.propTypes = propTypes;
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    timestamp: state.refresh[myMeetings]
 });
 
-export default connect(mapStateToProps)(MyMeetingsContainer);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        registerRefresh,
+        unregisterRefresh
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyMeetingsContainer);

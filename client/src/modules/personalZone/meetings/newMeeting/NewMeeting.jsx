@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '../../../../common/TextField';
 import styles from './newMeeting.module.scss';
 import DateTimePicker from '../../../../common/DateTimePicker';
-import SelectBox from '../../../../common/SelectBox';
+import AutoComplete from '../../../../common/AutoComplete';
 
 const propTypes = {
     // locations: ImmutablePropTypes.List.isRequired,
@@ -23,50 +23,45 @@ const propTypes = {
 }
 
 class NewMeeting extends Component {
-    componentDidMount() {
-        const { meeting } = this.props;
-        if (meeting) {
-            this.props.initialize({
-                name: meeting.get('name'),
-                fromDate: meeting.get('fromDate').substring(0, 16),
-                toDate: meeting.get('toDate').substring(0, 16),
-                participants: meeting.get('participants').toJS(),
-                locations: meeting.get('locations').toJS()
-            });
-        }
-    }
-
     render() {
         const { handleSubmit, valid, locations, users, onClose, onSubmit, title } = this.props;
 
         return <Dialog onClose={onClose}
             open={true}>
             <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
-            <DialogContent>
+            <DialogContent className={styles.dialogContent}>
                 <form className={styles.form}>
-                    <Field name='name'
-                        component={TextField}
-                        type='text'
-                        label='שם' />
-                    <Field name='fromDate'
-                        component={DateTimePicker}
-                        label='מתאריך' />
-                    <Field name='toDate'
-                        component={DateTimePicker}
-                        label='עד תאריך' />
-                    <Field name='participants'
-                        component={SelectBox}
-                        items={users}
-                        label='משתתפים'
-                        multiple
-                        format={value => Array.isArray(value) ? value : []}
-                    />
-                    <Field name='locations'
-                        component={SelectBox}
-                        items={locations}
-                        label='מיקומים'
-                        multiple
-                        format={value => Array.isArray(value) ? value : []}
+                    <div className={styles.field}>
+                        <Field name='name'
+                            component={TextField}
+                            type='text'
+                            label='שם' />
+                    </div>
+                    <div className={styles.field}>
+                        <Field name='fromDate'
+                            component={DateTimePicker}
+                            label='מתאריך' />
+                    </div>
+                    <div className={styles.field}>
+                        <Field name='toDate'
+                            component={DateTimePicker}
+                            label='עד תאריך' />
+                    </div>
+                    <div className={styles.field}>
+                        <Field name='invited'
+                            component={AutoComplete}
+                            options={users.toJS()}
+                            placeholder='מוזמנים'
+                            label='מוזמנים'
+                            multi
+                        />
+                    </div>
+                    <Field name='location'
+                        component={AutoComplete}
+                        options={locations.toJS()}
+                        placeholder='מיקום'
+                        label='מיקום'
+                        allowCreate
                     />
                 </form>
             </DialogContent>
@@ -104,12 +99,12 @@ const validate = values => {
         errors.toDate = 'חובה להזין תאריך מקסימום לפגישה'
     }
 
-    if (!values.participants || (values.participants && values.participants.length === 0)) {
-        errors.participants = 'חובה להזמין משתתפים לפגישה'
+    if (!values.invited || (values.invited && values.invited.length === 0)) {
+        errors.invited = 'חובה להזמין משתתפים לפגישה'
     }
 
-    if (!values.locations || (values.locations && values.locations.length === 0)) {
-        errors.locations = 'חובה להזין מיקומים אפשריים לפגישה'
+    if (!values.location || (values.location && values.location.length === 0)) {
+        errors.location = 'חובה להזין מיקום לפגישה'
     }
 
     return errors
@@ -127,5 +122,6 @@ const asyncValidate = (values /*, dispatch */) => {
 export default reduxForm({
     form: 'newMeeting',
     validate,
-    asyncValidate
+    asyncValidate,
+    enableReinitialize:true
 })(NewMeeting);

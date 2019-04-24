@@ -5,7 +5,7 @@ import {
 import customFetch from './fetch';
 
 export function createMeeting(meeting) {
-    return fetch(`${BASE_API_URL}/meeting`, {
+    return customFetch(`${BASE_API_URL}/meeting`, {
         method: 'PUT',
         headers: {
             'content-type': 'application/json'
@@ -15,7 +15,7 @@ export function createMeeting(meeting) {
 }
 
 export function updateMeeting(meeting) {
-    return fetch(`${BASE_API_URL}/meeting`, {
+    return customFetch(`${BASE_API_URL}/meeting`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
@@ -25,11 +25,11 @@ export function updateMeeting(meeting) {
 }
 
 export function getMeetings(userId) {
-    return fetch(`${BASE_API_URL}/meeting/${userId}`);
+    return customFetch(`${BASE_API_URL}/meeting/${userId}`);
 }
 
 export function getMeetingsForApproval(userId) {
-    return customFetch(`${BASE_API_URL}/meeting/waitingMeetings/${userId}`,);
+    return customFetch(`${BASE_API_URL}/meeting/waitingMeetings/${userId}`);
 }
 
 export function responseToMeeting(response) {

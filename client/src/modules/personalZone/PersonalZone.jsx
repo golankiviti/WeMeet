@@ -8,7 +8,7 @@ class PersonalZone extends Component {
     render() {
         return <div className={styles.container}>
             <LocationListContainer />
-            <MeetingsForApprovalContainer />
+            <MyMeetingsContainer />
         </div>
     }
 }
