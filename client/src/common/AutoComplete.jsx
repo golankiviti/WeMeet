@@ -180,7 +180,7 @@ class IntegrationReactSelect extends React.Component {
   };
 
   render() {
-    const { classes, theme, options, placeholder, input, multi, allowCreate } = this.props;
+    const { classes, theme, options, placeholder, input, multi, allowCreate, disabled } = this.props;
 
     const selectStyles = {
       input: base => ({
@@ -207,6 +207,7 @@ class IntegrationReactSelect extends React.Component {
               onBlur={() => { }}
               formatCreateLabel={(inputValue) => inputValue}
               pageSize={3}
+              isDisabled={disabled}
               textFieldProps={{
                 label: this.props.label,
                 InputLabelProps: {
@@ -225,6 +226,7 @@ class IntegrationReactSelect extends React.Component {
               onBlur={() => { }}
               noOptionsMessage={() => 'אין תוצאות'}
               pageSize={3}
+              isDisabled={disabled}
               textFieldProps={{
                 label: this.props.label,
                 InputLabelProps: {

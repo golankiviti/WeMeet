@@ -55,7 +55,8 @@ export class HomeContainer extends Component {
                         start: new Date(meeting.fromDate),
                         end: new Date(meeting.toDate),
                         invited: meeting.invited,
-                        location: meeting.location
+                        location: meeting.location,
+                        creator: meeting.creator
                     }));
 
                 this.setState({ meetings });
@@ -69,7 +70,8 @@ export class HomeContainer extends Component {
             fromDate: meeting.start.toISOString(),
             toDate: meeting.end.toISOString(),
             invited: List(meeting.invited),
-            location: meeting.location
+            location: meeting.location,
+            creator: meeting.creator
         });
 
         this.setState({ showMeetingDialog: true, selectedMeeting });

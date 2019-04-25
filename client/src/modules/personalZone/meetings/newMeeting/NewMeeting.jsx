@@ -18,13 +18,14 @@ const propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
+    disabled: PropTypes.bool,
     meeting: ImmutablePropTypes.map,
     valid: PropTypes.bool // from redux-form
 }
 
 class NewMeeting extends Component {
     render() {
-        const { handleSubmit, valid, locations, users, onClose, onSubmit, title } = this.props;
+        const { handleSubmit, valid, locations, users, onClose, onSubmit, title, disabled } = this.props;
 
         return <Dialog onClose={onClose}
             open={true}>
@@ -35,17 +36,21 @@ class NewMeeting extends Component {
                         <Field name='name'
                             component={TextField}
                             type='text'
-                            label='שם' />
+                            label='שם'
+                            disabled={disabled}
+                             />
                     </div>
                     <div className={styles.field}>
                         <Field name='fromDate'
                             component={DateTimePicker}
-                            label='מתאריך' />
+                            label='מתאריך'
+                            disabled={disabled} />
                     </div>
                     <div className={styles.field}>
                         <Field name='toDate'
                             component={DateTimePicker}
-                            label='עד תאריך' />
+                            label='עד תאריך' 
+                            disabled={disabled}/>
                     </div>
                     <div className={styles.field}>
                         <Field name='invited'
@@ -54,6 +59,7 @@ class NewMeeting extends Component {
                             placeholder='מוזמנים'
                             label='מוזמנים'
                             multi
+                            disabled={disabled}
                         />
                     </div>
                     <Field name='location'
@@ -62,12 +68,13 @@ class NewMeeting extends Component {
                         placeholder='מיקום'
                         label='מיקום'
                         allowCreate
+                        disabled={disabled}
                     />
                 </form>
             </DialogContent>
             <DialogActions className={styles.dialogActions}>
                 <Button color='primary'
-                    disabled={!valid}
+                    disabled={!valid || disabled}
                     type='submit'
                     onClick={handleSubmit(onSubmit)}>
                     אישור
