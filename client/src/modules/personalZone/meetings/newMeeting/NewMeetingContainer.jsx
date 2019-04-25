@@ -103,7 +103,7 @@ export class NewMeetingContainer extends Component {
             users={users}
             onSubmit={this.handleSubmit}
             initialValues={initialValues}
-            disabled={meeting.get('creator') !== this.props.user.get('_id')}
+            disabled={meeting && (meeting.get('creator') !== this.props.user.get('_id'))}
             {...this.props} />
     }
 }

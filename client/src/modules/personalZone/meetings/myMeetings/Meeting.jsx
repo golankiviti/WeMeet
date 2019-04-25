@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import NewMeetingContainer from '../newMeeting/NewMeetingContainer';
 import ImmutablePropTypes from 'immutable-prop-types';
 import styles from './myMeetings.module.scss';
@@ -32,7 +32,7 @@ export default class Meeting extends Component {
         return (
             <div>
                 <span>{meeting.get('name')} - {new Date(meeting.get('desiredDate')).toLocaleDateString()}</span>
-                <EditIcon className={styles.editIcon} onClick={this.handleNewMeetingClick} />
+                <VisibilityIcon className={styles.editIcon} onClick={this.handleNewMeetingClick} />
                 {
                     this.state.showNewMeetingDialog &&
                     <NewMeetingContainer onClose={this.closeNewMeetingDialog} meeting={meeting} title={meeting.get('name')} />
