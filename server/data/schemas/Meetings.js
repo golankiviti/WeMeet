@@ -30,7 +30,8 @@ let schema = mongoose.Schema({
 	rejected: [{
 		type: ObjectId,
 		ref: "User"
-	}]
+	}],
+	duration: Number
 });
 
 

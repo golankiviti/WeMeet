@@ -82,10 +82,10 @@ export class NewMeetingContainer extends Component {
     render() {
         const { users, locations } = this.state;
         const { meeting } = this.props;
-        
+
         let initialValues = {}
         if (meeting) {
-            
+
             initialValues = {
                 name: this.props.meeting.get('name'),
                 fromDate: moment(meeting.get('fromDate')).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16),
@@ -98,7 +98,13 @@ export class NewMeetingContainer extends Component {
             }
         }
 
-        return <NewMeeting locations={locations} users={users} onSubmit={this.handleSubmit} initialValues={initialValues} {...this.props} />
+        return <NewMeeting
+            locations={locations}
+            users={users}
+            onSubmit={this.handleSubmit}
+            initialValues={initialValues}
+            disabled={meeting && (meeting.get('creator') !== this.props.user.get('_id'))}
+            {...this.props} />
     }
 }
 
