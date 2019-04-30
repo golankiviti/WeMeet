@@ -7,9 +7,6 @@ import customFetch from './fetch';
 export function createMeeting(meeting) {
     return customFetch(`${BASE_API_URL}/meeting`, {
         method: 'PUT',
-        headers: {
-            'content-type': 'application/json'
-        },
         body: JSON.stringify(meeting)
     });
 }
@@ -17,9 +14,6 @@ export function createMeeting(meeting) {
 export function updateMeeting(meeting) {
     return customFetch(`${BASE_API_URL}/meeting`, {
         method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
         body: JSON.stringify(meeting)
     });
 }
