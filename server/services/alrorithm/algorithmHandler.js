@@ -38,23 +38,26 @@ const startAlgorithm = () => {
         // we need to get all meetings that are relevant for the algorithm
         meetings.find(query).lean()
             .then((meetings) => {
+                if (meetings.lenght === 0) {
+                    return resolve([]);
+                }
                 _meetings = meetings
                 let invitedUsers = _.map(meetings, (meet) => {
-                    return meet.invited;
+                    return meet.invited.map(m => m.toString());
                 });
                 invitedUsers = _.flatten(invitedUsers);
                 invitedUsers = _.uniq(invitedUsers);
                 return Promise.map(invitedUsers, (userId) => {
-                        return restrictions.find({
+                    return restrictions.find({
                             user: userId
-                        }).lean();
-                    })
-                    .then((restrictions) => {
-                        return {
-                            userId,
-                            userRestrictions: restrictions
-                        };
-                    });
+                        }).lean()
+                        .then((restrictions) => {
+                            return {
+                                userId,
+                                userRestrictions: restrictions
+                            };
+                        })
+                });
             })
             .then((restrictions) => {
                 // prepare some option for the child process
