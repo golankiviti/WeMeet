@@ -15,7 +15,7 @@ let schema = mongoose.Schema({
 	// flag if the algorithm find date to the meeting
 	isDetermined: Boolean,
 	// the desired date for the meeting (the deadline)
-	decidedDate: Date,
+	actualDate: Date,
 	meetLengthInSeconds: Number,
 	fromDate: Date,
 	toDate: Date,
