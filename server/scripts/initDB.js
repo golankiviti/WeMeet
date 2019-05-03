@@ -189,10 +189,10 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
                     usersTmp[index]._id = savedUsr._id;
                     preferenceTmp[index].user = savedUsr._id;
                     restrictionsTmp[index].user = savedUsr._id;
-                    meetingsTmp[0].participants.push(savedUsr._id);
-                    meetingsTmp[1].participants.push(savedUsr._id);
-                    meetingsTmp[2].participants.push(savedUsr._id);
-                    meetingsTmp[3].participants.push(savedUsr._id);
+                    meetingsTmp[0].invited.push(savedUsr._id);
+                    meetingsTmp[1].invited.push(savedUsr._id);
+                    meetingsTmp[2].invited.push(savedUsr._id);
+                    meetingsTmp[3].invited.push(savedUsr._id);
                 });
         });
     })
