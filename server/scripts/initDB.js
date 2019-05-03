@@ -119,8 +119,8 @@ let restrictionsTmp = [{
 let meetingsTmp = [{
     name: 'meet A',
     isDetermined: true,
-    meetLengthInSeconds: 60 ** 60 * 3,
-    desiredDate: moment().add(6, 'd').toDate(),
+    meetLengthInSeconds: 60 * 60 * 3,
+    actualDate: moment().add(6, 'd').toDate(),
     fromDate: moment().add(5, 'd').toDate(),
     toDate: moment().add(5, 'd').add(5, 'h').toDate(),
     invited: [],
@@ -131,10 +131,32 @@ let meetingsTmp = [{
 }, {
     name: 'meet B',
     isDetermined: true,
-    meetLengthInSeconds: 60 ** 60 * 3,
-    desiredDate: moment().add(7, 'd').toDate(),
+    meetLengthInSeconds: 60 * 60 * 3,
+    actualDate: moment().add(7, 'd').toDate(),
     fromDate: moment().add(6, 'd').toDate(),
-    toDate: moment().add(6, 'd').add(3, 'h').toDate(),
+    toDate: moment().add(6, 'd').add(5, 'h').toDate(),
+    invited: [],
+    locations: [usersTmp[1].address],
+    selectedLocation: usersTmp[1].address,
+    accepted: [],
+    rejected: []
+}, {
+    name: 'meet C (for algorithm)',
+    isDetermined: false,
+    meetLengthInSeconds: 60 * 60 * 3,
+    fromDate: moment().add(1, 'd').toDate(),
+    toDate: moment().add(15, 'd').toDate(),
+    invited: [],
+    locations: [usersTmp[1].address],
+    selectedLocation: usersTmp[1].address,
+    accepted: [],
+    rejected: []
+}, {
+    name: 'meet D (for algorithm)',
+    isDetermined: false,
+    meetLengthInSeconds: 60 * 60 * 3,
+    fromDate: moment().add(16, 'd').toDate(),
+    toDate: moment().add(23, 'd').toDate(),
     invited: [],
     locations: [usersTmp[1].address],
     selectedLocation: usersTmp[1].address,
@@ -158,11 +180,19 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
                     if (index === 1) {
                         meetingsTmp[index].creator = savedUsr._id;
                     }
+                    if (index === 2) {
+                        meetingsTmp[index].creator = savedUsr._id;
+                    }
+                    if (index === 3) {
+                        meetingsTmp[index].creator = savedUsr._id;
+                    }
                     usersTmp[index]._id = savedUsr._id;
                     preferenceTmp[index].user = savedUsr._id;
                     restrictionsTmp[index].user = savedUsr._id;
                     meetingsTmp[0].participants.push(savedUsr._id);
                     meetingsTmp[1].participants.push(savedUsr._id);
+                    meetingsTmp[2].participants.push(savedUsr._id);
+                    meetingsTmp[3].participants.push(savedUsr._id);
                 });
         });
     })
