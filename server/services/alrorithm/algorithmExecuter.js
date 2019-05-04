@@ -25,6 +25,20 @@ const MIN_HOUR = process.env.ALGORITHM_MIN_HOUR || 8,
 */
 process.on('message', (data) => {
     console.log('got data, start to execute the algorithm');
+
+    // declare globals
+    // global._ = _;
+    // global.data = data;
+    // global.moment = moment;
+    // global.randomBetweenTwoNumbers = randomBetweenTwoNumbers;
+    // global.getRelevantMeetingForMeeting = getRelevantMeetingForMeeting;
+    // global.isDatesOverlap = isDatesOverlap;
+    // global.MIN_HOUR = MIN_HOUR;
+    // global.MAX_HOUR = MAX_HOUR;
+
+    let seedCount = 0,
+        fitnessCount = 0;
+
     // create instace of the algorithm
     let genetic = Genetic.create();
     // config our algorithm
@@ -35,8 +49,7 @@ process.on('message', (data) => {
     // every individual is snapshot of our calander:
     // [meeting, meeting, meeting...]
     genetic.seed = () => {
-        let _ = require('lodash');
-        let data = data;
+        console.log(`seed:${++seedCount}`);
         // run over all meetings and add to them the random actualDate
         let individual = _.map(data.meetings, (meeting) => {
             // init some variables
@@ -79,9 +92,13 @@ process.on('message', (data) => {
     };
     // create fitness function
     genetic.fitness = (individual) => {
+        console.log(`fitnessRun:${++fitnessCount}`);
         let fitnessScore = 0;
         // run over all meeting in the individual
         _.each(individual, (meeting) => {
+            meeting.actualDate = moment(meeting.actualDate);
+            meeting.fromDate = moment(meeting.fromDate);
+            meeting.toDate = moment(meeting.toDate);
             let meetingActualEndTime = moment(meeting.actualDate).add(meeting.meetLengthInSeconds, 'seconds');
             // in case the actualDate is not in the range of fromDate and toDate
             if (!(meeting.actualDate.isAfter(meeting.fromDate) &&
@@ -91,7 +108,8 @@ process.on('message', (data) => {
             } else {
                 // check here all the meetings and restrictions that are in the range of the current meeting
                 // create dictionary of all invited.
-                let invitedDict, relevantMeetings;
+                let invitedDict = {},
+                    relevantMeetings;
                 _.each(meeting.invited, (user) => {
                     // right now every user can go to the meeting
                     invitedDict[user] = true;
@@ -99,9 +117,9 @@ process.on('message', (data) => {
                 // run over all restrictions
                 _.each(data.restrictions, (restrictObject) => {
                     // in case this restriction is not relevant to any of our invited
-                    if (_.indexOf(currentMeeting.invited, restrictObject.userId) === -1) return;
+                    if (_.indexOf(meeting.invited, restrictObject.userId) === -1) return;
                     // run over all the restiction of the inveted and check if it intersact our meeting
-                    _.each(restrictObject.userRestriction, (restrict) => {
+                    _.each(restrictObject.userRestrictions, (restrict) => {
                         // in case the restrict date and meeting date are overlaps
                         if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting.actualDate, meetingActualEndTime)) {
                             // the current invited can not go to meeting
@@ -133,13 +151,13 @@ process.on('message', (data) => {
                     }
                 });
                 let numOfInvitedCanNotGoToMeeting = 0;
-                _.each(invitedDict, (key, value) => {
+                _.each(invitedDict, (value) => {
                     if (!value) numOfInvitedCanNotGoToMeeting++;
                 });
                 fitnessScore += numOfInvitedCanNotGoToMeeting / meeting.invited.length;
             }
         });
-
+        console.log(`score:${fitnessScore}`);
         return fitnessScore;
     };
     // create mutate function
@@ -152,15 +170,16 @@ process.on('message', (data) => {
     }
     // general config
     let geneticConfig = {
-        size: 1000,
+        size: 100,
         crossover: 0.5,
         mutation: 0.2,
         iterations: 100,
         fittestAlwaysSurvives: true
     };
-    let result = genetic.evolve(geneticConfig);
-    console.log(result);
-    process.send(result);
+    genetic.configuration = geneticConfig;
+    genetic.start(geneticConfig);
+    process.send(genetic.entities);
+    process.exit(0);
 });
 
 const randomBetweenTwoNumbers = (min, max) => {
