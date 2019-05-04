@@ -117,4 +117,44 @@ const startAlgorithm = () => {
     });
 };
 
-module.exports = startAlgorithm;
+const getAlgorithmData = () => {
+    let query = {
+        // all meetings that are not deterined yet
+        isDetermined: false
+    };
+    return meetings.find(query).lean()
+        .then((meetings) => {
+            if (meetings.lenght === 0) {
+                return resolve([]);
+            }
+            _meetings = meetings
+            let invitedUsers = _.map(meetings, (meet) => {
+                return meet.invited.map(m => m.toString());
+            });
+            invitedUsers = _.flatten(invitedUsers);
+            invitedUsers = _.uniq(invitedUsers);
+            return Promise.map(invitedUsers, (userId) => {
+                return restrictions.find({
+                        user: userId
+                    }).lean()
+                    .then((restrictions) => {
+                        return {
+                            userId,
+                            userRestrictions: restrictions
+                        };
+                    })
+            });
+        })
+        .then((restrictions) => {
+            return Promise.resolve({
+                meetings: _meetings,
+                restrictions
+            });
+        });
+
+};
+
+module.exports = {
+    startAlgorithm,
+    getAlgorithmData
+};

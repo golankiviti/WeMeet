@@ -79,13 +79,26 @@ app.post('/logout', authenticationService.logout);
 app.post('/checkUser', authenticationService.isUserExist);
 
 app.get('/algorithm', (req, res, next) => {
-    algorithm()
+    algorithm.startAlgorithm()
         .then((results) => {
             res.json(results);
         })
         .catch((err) => {
             res.status(500).send(err);
         })
+});
+
+app.get('/algorithmData', (req, res, next) => {
+    algorithm.getAlgorithmData()
+        .then(results => {
+            res.json(results);
+        })
+});
+
+app.use(express.static(path.join(__dirname, '/node_modules')));
+
+app.get('/algorithmTester', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/static/algorithmTester.html'));
 });
 
 
