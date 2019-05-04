@@ -1,7 +1,8 @@
 const Genetic = require('genetic-js'),
     _ = require('lodash'),
     Moment = require('moment'),
-    momentRange = require('moment-range');
+    momentRange = require('moment-range'),
+    clone = require('clone');
 const moment = momentRange.extendMoment(Moment);
 
 const MIN_HOUR = process.env.ALGORITHM_MIN_HOUR || 8,
@@ -44,7 +45,7 @@ process.on('message', (data) => {
     // config our algorithm
     genetic.optimize = Genetic.Optimize.Minimize;
     genetic.select1 = Genetic.Select1.Tournament2;
-    genetic.select2 = Genetic.Select2.Tournament2;
+    genetic.select2 = Genetic.Select2.FittestRandom;
     // create our seed function
     // every individual is snapshot of our calander:
     // [meeting, meeting, meeting...]
@@ -162,15 +163,38 @@ process.on('message', (data) => {
     };
     // create mutate function
     genetic.mutate = (individual) => {
+        console.log(`mutate`);
+        let startIndex, endIndex;
+        startIndex = randomBetweenTwoNumbers(0, individual.length - 1);
+        endIndex = randomBetweenTwoNumbers(startIndex, individual.length);
+        for (index = startIndex; index < endIndex; index++) {
+            let randomHour = randomBetweenTwoNumbers(1, 5);
+            individual[index].actualDate = moment(individual[index].actualDate);
+            if (Math.random() > 0.5) {
+                individual[index].actualDate.add(randomHour, 'hours');
+            } else {
+                individual[index].actualDate.subtract(randomHour, 'hours');
+            }
+        }
         return individual;
     }
     // create crossover function
     genetic.crossover = (mother, father) => {
+        console.log(`crossover`);
+        let startIndex, endIndex;
+        startIndex = randomBetweenTwoNumbers(0, mother.length - 1);
+        endIndex = randomBetweenTwoNumbers(startIndex, mother.length);
+        for (index = startIndex; index < endIndex; index++) {
+            let tmpMother = clone(mother[index]),
+                tmpFather = clone(father[index]);
+            mother[index] = tmpFather;
+            father[index] = tmpMother;
+        }
         return [mother, father];
     }
     // general config
     let geneticConfig = {
-        size: 100,
+        size: 20,
         crossover: 0.5,
         mutation: 0.2,
         iterations: 100,
