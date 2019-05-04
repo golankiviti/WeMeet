@@ -21,6 +21,8 @@ const apiRouter = require('./api'),
     authenticationService = require('./services/authentication.service'),
     logger = require('./utils/logger');
 
+const algorithm = require('./services/alrorithm/algorithmHandler');
+
 const app = express();
 
 // init neccesary configuration
@@ -75,6 +77,29 @@ app.post('/login', authenticationService.login);
 app.post('/logout', authenticationService.logout);
 
 app.post('/checkUser', authenticationService.isUserExist);
+
+app.get('/algorithm', (req, res, next) => {
+    algorithm.startAlgorithm()
+        .then((results) => {
+            res.json(results);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        })
+});
+
+app.get('/algorithmData', (req, res, next) => {
+    algorithm.getAlgorithmData()
+        .then(results => {
+            res.json(results);
+        })
+});
+
+app.use(express.static(path.join(__dirname, '/node_modules')));
+
+app.get('/algorithmTester', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/static/algorithmTester.html'));
+});
 
 
 // export /api route
