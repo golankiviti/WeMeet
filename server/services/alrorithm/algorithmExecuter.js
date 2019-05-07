@@ -133,7 +133,7 @@ process.on('message', (data) => {
                 // in case we found all invited can not be in meeting because of restriction,
                 // we skip over the meeting search
                 if (_.every(Object.keys(invitedDict), false)) {
-                    fitnessScore += meeting.invited.length;
+                    fitnessScore += 1;
                     return;
                 }
 
