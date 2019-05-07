@@ -45,7 +45,25 @@ const getUserWaitingMeetings = (req, res) => {
         return res.status(400).send('id parameter must exist');
     }
     logger.debug('get all waiting meetings');
-    return meetingsService.getUserWaitingMeetings(id)
+    return meetingsService.getUserWaitingMeetings(id, true)
+        .then((meetings) => {
+            return res.json(meetings);
+        })
+        .catch((err) => {
+            logger.error(err);
+            return res.status(500).send(err);
+        });
+}
+
+const getUserFutureMeetings = (req, res) => {
+    let id = req.params.id;
+    logger.debug('validate params');
+    if (_.isNil(id)) {
+        logger.warn('id param is not valid');
+        return res.status(400).send('id parameter must exist');
+    }
+    logger.debug('get all waiting meetings');
+    return meetingsService.getUserWaitingMeetings(id, false)
         .then((meetings) => {
             return res.json(meetings);
         })
@@ -113,5 +131,6 @@ module.exports = {
     creatNewMeeting,
     updateMeeting,
     getUserWaitingMeetings,
+    getUserFutureMeetings,
     acceptOrRejectMeeting
 }

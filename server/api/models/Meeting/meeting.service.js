@@ -30,7 +30,7 @@ const updateMeeting = (currentMeeting) => {
     }, currentMeeting);
 };
 
-const getUserWaitingMeetings = (userId) => {
+const getUserWaitingMeetings = (userId, isDetermined) => {
     const query = {
         $and: [{
                 // not relevat if the meeting already started
@@ -40,7 +40,7 @@ const getUserWaitingMeetings = (userId) => {
             },
             {
                 // get only meetings that the algorithm offer
-                isDetermined: true
+                isDetermined: isDetermined
             },
             {
                 // the user need to be creator or one of the participants
