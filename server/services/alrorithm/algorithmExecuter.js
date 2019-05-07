@@ -75,6 +75,8 @@ process.on('message', (data) => {
             if (randomDay === diffrenceInDays && meetingToDate.hour() < MAX_HOUR) {
                 maxHour = meetingToDate.hour();
             }
+            // maxHour should be less than real maxHour because of the meetLengthInSeconds
+            maxHour -= secondsToHour(parseInt(meeting.meetLengthInSeconds, 10));
             // random hour between the min and max hour
             randomHour = randomBetweenTwoNumbers(minHour, maxHour);
             // set the random actual date
@@ -231,3 +233,7 @@ const getRelevantMeetingForMeeting = (allMeetings, meeting) => {
         return isRelevant;
     });
 };
+
+const secondsToHour = (seconds) => {
+    return seconds / 60 / 60;
+}
