@@ -195,6 +195,11 @@ process.on('message', (data) => {
         }
         return [mother, father];
     }
+    // create generation function
+    // genetic.generation = (pop, generation, stats) => {
+    //     // stop the algorithm in case we found the optimal solution
+    //     return !(pop[0].fitness === 0);
+    // }
     // general config
     let geneticConfig = {
         size: 200,
