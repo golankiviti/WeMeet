@@ -3,8 +3,12 @@ import { List, fromJS } from 'immutable';
 import ImmutablePropTypes from 'immutable-prop-types';
 import { getAllUsers, userLocations } from '../../../../clientManager/userManager';
 import { connect } from 'react-redux';
+import Swal from 'sweetalert2';
+import { bindActionCreators } from 'redux';
 import { createMeeting, updateMeeting } from '../../../../clientManager/meetingsClientManager';
 import PropTypes from 'prop-types';
+import { updateRefresh } from '../../../../redux/refresh/actionCreators';
+import { myMeetings as myMeetingsKey, home } from '../../../../redux/refresh/refreshFields';
 import moment from 'moment';
 import NewMeeting from './NewMeeting';
 
@@ -47,7 +51,7 @@ export class NewMeetingContainer extends Component {
     }
 
     handleSubmit = values => {
-        const { user, meeting, onClose } = this.props;
+        const { user, meeting, onClose, updateRefresh } = this.props;
         const meetingToSend = Object.assign({},
             values,
             {
@@ -57,10 +61,20 @@ export class NewMeetingContainer extends Component {
             });
         if (meeting) {
             meetingToSend['_id'] = meeting.get('_id');
-            updateMeeting(meetingToSend);
+            updateMeeting(meetingToSend).then(() => {
+                updateRefresh(myMeetingsKey);
+                updateRefresh(home);
+            });
         }
         else {
-            createMeeting(meetingToSend);
+            createMeeting(meetingToSend).then(() => {
+                Swal.fire(
+                    'בקשתך לפגישה חדשה התקבלה בהצלחה',
+                    'תוכל לראות את מועד הפגישה בלוח השנה שלך ובאיזור האישי החל ממחר',
+                    'success'
+                );
+                updateRefresh(myMeetingsKey);
+            });
         }
         onClose();
     }
@@ -69,12 +83,11 @@ export class NewMeetingContainer extends Component {
         getAllUsers()
             .then(res => {
                 const users = fromJS(
-                    res.map(user =>
-                        ({
+                    res.filter(user => user._id !== this.props.user.get('_id'))
+                        .map(user => ({
                             value: user._id,
                             label: user.firstName + ' ' + user.lastName
-                        }))
-                );
+                        })));
                 this.setState({ users });
             });
     }
@@ -94,7 +107,10 @@ export class NewMeetingContainer extends Component {
                     meeting.get('invited').map(userId => {
                         return users.find(user => user.get('value') === userId)
                     }).toJS(),
-                location: { label: meeting.get('location'), value: meeting.get('location') }
+                location: { label: meeting.get('location'), value: meeting.get('location') },
+                actualDate: meeting.get('actualDate') ?
+                    moment(meeting.get('actualDate')).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16) :
+                    ''
             }
         }
 
@@ -114,4 +130,10 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps)(NewMeetingContainer);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateRefresh,
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewMeetingContainer);
