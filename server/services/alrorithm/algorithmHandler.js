@@ -13,9 +13,12 @@ const {
 
 const logger = require('../../utils/logger');
 
+let numOfChild = 0;
+
 // here we will get all the meeting we want set from the db,
 // then we will send it to the algorithemExecuter
 const startAlgorithm = () => {
+    numOfChild++;
     return new Promise((resolve, reject) => {
         // in case we are in debug mode
         let debugPort;
@@ -98,12 +101,13 @@ const startAlgorithm = () => {
                 };
                 // in case we are in debug mode
                 if (isDebugMode !== -1) {
-                    childOptions.execArgv.push(`--inspect-brk=${parseInt(debugPort) + 1}`)
+                    childOptions.execArgv.push(`--inspect-brk=${parseInt(debugPort) + numOfChild}`)
                 }
                 // start the algorithm
                 let child = fork(`${__dirname}/algorithmExecuter.js`, childOptions);
                 // in case our child finish it job
                 child.on('exit', (exitCode) => {
+                    numOfChild--;
                     // in case the child exit with code different from 0
                     // it mean the child didnt exit propely
                     if (exitCode !== 0) {
