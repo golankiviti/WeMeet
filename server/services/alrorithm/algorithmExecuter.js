@@ -51,6 +51,7 @@ process.on('message', (data) => {
     // [meeting, meeting, meeting...]
     genetic.seed = () => {
         console.log(`seed:${++seedCount}`);
+        sleep(20);
         // run over all meetings and add to them the random actualDate
         let individual = _.map(data.meetings, (meeting) => {
             // init some variables
@@ -80,7 +81,7 @@ process.on('message', (data) => {
             // random hour between the min and max hour
             randomHour = randomBetweenTwoNumbers(minHour, maxHour);
             // set the random actual date
-            meetingActualDate.add(randomDay, 'days').startOf('day').hour(randomHour);
+            meetingActualDate.add(randomDay, 'days').startOf('hour').hour(randomHour);
             // put actual date in the meeting
             meeting.actualDate = meetingActualDate;
             // set the fromDate and toDate to moment for next algorithm manipulation
@@ -104,10 +105,10 @@ process.on('message', (data) => {
             meeting.toDate = moment(meeting.toDate);
             let meetingActualEndTime = moment(meeting.actualDate).add(meeting.meetLengthInSeconds, 'seconds');
             // in case the actualDate is not in the range of fromDate and toDate
-            if (!(meeting.actualDate.isAfter(meeting.fromDate) &&
-                    meetingActualEndTime.isBefore(meeting.toDate))) {
+            if (!(meeting.actualDate.isSameOrAfter(meeting.fromDate) &&
+                    meetingActualEndTime.isSameOrBefore(meeting.toDate))) {
                 // add to score the number of invited 
-                fitnessScore += meeting.invited.length;
+                fitnessScore += meeting.invited.length * 2;
             } else {
                 // check here all the meetings and restrictions that are in the range of the current meeting
                 // create dictionary of all invited.
@@ -173,9 +174,9 @@ process.on('message', (data) => {
             let randomHour = randomBetweenTwoNumbers(1, 5);
             individual[index].actualDate = moment(individual[index].actualDate);
             if (Math.random() > 0.5) {
-                individual[index].actualDate.add(randomHour, 'hours');
+                individual[index].actualDate.add(1, 'hours');
             } else {
-                individual[index].actualDate.subtract(randomHour, 'hours');
+                individual[index].actualDate.subtract(1, 'hours');
             }
         }
         return individual;
@@ -196,10 +197,10 @@ process.on('message', (data) => {
     }
     // general config
     let geneticConfig = {
-        size: 20,
+        size: 200,
         crossover: 0.5,
-        mutation: 0.2,
-        iterations: 100,
+        mutation: 0.5,
+        iterations: 50,
         fittestAlwaysSurvives: true
     };
     genetic.configuration = geneticConfig;
@@ -208,16 +209,17 @@ process.on('message', (data) => {
     process.exit(0);
 });
 
+
 const randomBetweenTwoNumbers = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const isDatesOverlap = (startDateOne, endDateOne, startDateTwo, endDateTwo) => {
     let rangeOne = moment.range(moment(startDateOne), moment(endDateOne)),
         rangeTwo = moment.range(moment(startDateTwo), moment(endDateTwo));
-    return rangeOne.overlaps(rangeTwo);
+    return rangeOne.overlaps(rangeTwo, {
+        adjacent: false // not include
+    });
 };
 
 const getRelevantMeetingForMeeting = (allMeetings, meeting) => {
@@ -233,6 +235,13 @@ const getRelevantMeetingForMeeting = (allMeetings, meeting) => {
         return isRelevant;
     });
 };
+
+const sleep = (ms) => {
+    let stop = new Date().getTime();
+    while (new Date().getTime() < stop + ms) {
+        ;
+    }
+}
 
 const secondsToHour = (seconds) => {
     return seconds / 60 / 60;
