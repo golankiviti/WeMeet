@@ -84,7 +84,12 @@ const startAlgorithm = () => {
                         return reject(new Error(`child exit with code ${exitCode}, but didnt send response`));
                     }
                     return resolve(_.map(response, (snapShot) => {
-                        return _.map(snapShot, 'actualDate');
+                        return _.map(snapShot, snap => {
+                            return {
+                                actualDate: snap.actualDate,
+                                name: snap.name
+                            }
+                        });
                     }));
                 });
                 // in case we got error from fork the child
