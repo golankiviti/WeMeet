@@ -44,3 +44,7 @@ export function addRestriction(id, restriction) {
         body: JSON.stringify(restriction)
     }, false);
 }
+
+export function getRestrictions(id) {
+    return fetch(`${BASE_URL}/${id}/restrictions`);
+}
