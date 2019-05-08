@@ -3,7 +3,8 @@ const {
 } = require('child_process');
 
 const _ = require('lodash'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    moment = require('moment');
 
 const {
     meetings,
@@ -58,6 +59,35 @@ const startAlgorithm = () => {
                             };
                         })
                 });
+            })
+            .then((restrictions) => {
+                let query = {
+                    isDetermined: true
+                };
+                return meetings.find(query).lean()
+                    .then((meetings) => {
+                        _.each(meetings, meet => {
+                            _.each(meet.invited, (userId) => {
+                                let meetingActualEndDate = moment(meet.actualDate).add(meet.meetLengthInSeconds, 'seconds');
+                                let newRestiction = {
+                                    name: meet.name,
+                                    startDate: meet.actualDate,
+                                    endDate: meetingActualEndDate.toISOString(),
+                                    user: userId
+                                };
+                                let relevantRestrict = _.findIndex(restrictions, (res) => res.userId.toString() === userId.toString());
+                                if (relevantRestrict === -1) {
+                                    restrictions.push({
+                                        userId,
+                                        userRestrictions: [newRestiction]
+                                    });
+                                } else {
+                                    restrictions[relevantRestrict].userRestrictions.push(newRestiction);
+                                }
+                            });
+                        });
+                        return restrictions;
+                    });
             })
             .then((restrictions) => {
                 // prepare some option for the child process
