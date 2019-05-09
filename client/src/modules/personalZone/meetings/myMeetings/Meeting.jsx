@@ -31,7 +31,12 @@ export default class Meeting extends Component {
         const { meeting } = this.props;
         return (
             <div>
-                <span>{meeting.get('name')} - {new Date(meeting.get('actualDate')).toLocaleDateString()}</span>
+                <span>{meeting.get('name')} -
+                {meeting.get('actualDate') ?
+                        new Date(meeting.get('actualDate')).toLocaleDateString() :
+                        'עדיין לא נקבע תאריך'
+                    }
+                </span>
                 <VisibilityIcon className={styles.editIcon} onClick={this.handleNewMeetingClick} />
                 {
                     this.state.showNewMeetingDialog &&

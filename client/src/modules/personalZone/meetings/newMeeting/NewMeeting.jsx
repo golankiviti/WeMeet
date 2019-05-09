@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'immutable-prop-types';
@@ -25,7 +25,7 @@ const propTypes = {
 
 class NewMeeting extends Component {
     render() {
-        const { handleSubmit, valid, locations, users, onClose, onSubmit, title, disabled } = this.props;
+        const { handleSubmit, valid, locations, users, onClose, onSubmit, title, disabled, meeting } = this.props;
 
         return <Dialog onClose={onClose}
             open={true}>
@@ -38,20 +38,31 @@ class NewMeeting extends Component {
                             type='text'
                             label='שם'
                             disabled={disabled}
-                             />
+                        />
                     </div>
-                    <div className={styles.field}>
-                        <Field name='fromDate'
-                            component={DateTimePicker}
-                            label='מתאריך'
-                            disabled={disabled} />
-                    </div>
-                    <div className={styles.field}>
-                        <Field name='toDate'
-                            component={DateTimePicker}
-                            label='עד תאריך' 
-                            disabled={disabled}/>
-                    </div>
+                    {!meeting ?
+                        <Fragment>
+                            <div className={styles.field}>
+                                <Field name='fromDate'
+                                    component={DateTimePicker}
+                                    label='מתאריך'
+                                    disabled={disabled} />
+                            </div>
+                            <div className={styles.field}>
+                                <Field name='toDate'
+                                    component={DateTimePicker}
+                                    label='עד תאריך'
+                                    disabled={disabled} />
+                            </div>
+                        </Fragment>
+                        :
+                        <div className={styles.field}>
+                            <Field name='actualDate'
+                                component={DateTimePicker}
+                                label='תאריך'
+                                disabled={true} />
+                        </div>
+                    }
                     <div className={styles.field}>
                         <Field name='invited'
                             component={AutoComplete}
@@ -130,5 +141,5 @@ export default reduxForm({
     form: 'newMeeting',
     validate,
     asyncValidate,
-    enableReinitialize:true
+    enableReinitialize: true
 })(NewMeeting);

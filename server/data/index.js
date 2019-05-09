@@ -12,7 +12,7 @@ mongoose.plugin(mongooseDeletePlugin, {
 
 // here we require all our schemas from the schemas dir
 const users = require('./schemas/Users');
-const meetings = require('./schemas/meetings');
+const meetings = require('./schemas/Meetings');
 const preferences = require('./schemas/Preferences');
 const restrictions = require('./schemas/Restriction');
 
