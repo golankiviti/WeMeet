@@ -126,11 +126,22 @@ const acceptOrRejectMeeting = (req, res) => {
         });
 }
 
+const deleteMeeting = (req, res) => {
+    return meetingsService.deleteMeeting(req.body.meetingId)
+        .then((meeting) => {
+            res.json(meeting);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+}
+
 module.exports = {
     getUserMeetings,
     creatNewMeeting,
     updateMeeting,
     getUserWaitingMeetings,
     getUserFutureMeetings,
-    acceptOrRejectMeeting
+    acceptOrRejectMeeting,
+    deleteMeeting
 }

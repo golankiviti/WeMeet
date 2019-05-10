@@ -4,8 +4,10 @@ import TextField from '@material-ui/core/TextField';
 export default ({
     label,
     input,
+    step,
     meta: { touched, invalid, error },
-    ...custom
+    ...custom,
+    
   }) => (
     <TextField
       label={label}
