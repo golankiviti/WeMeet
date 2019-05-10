@@ -143,11 +143,16 @@ const rejectMeeting = (userId, meetingId) => {
         });
 }
 
+const deleteMeeting = (meetingId) => {
+    return meeting.delete({ '_id': new mongoose.Types.ObjectId(meetingId) });
+};
+
 module.exports = {
     getUserMeetings,
     creatNewMeeting,
     updateMeeting,
     getUserWaitingMeetings,
     acceptMeeting,
-    rejectMeeting
+    rejectMeeting,
+    deleteMeeting
 };

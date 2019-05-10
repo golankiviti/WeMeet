@@ -16,6 +16,7 @@ import 'moment/locale/he';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import AddRestriction from './restrictions/restrictionDialogs/AddRestriction';
+import Event from './Event';
 
 const propTypes = {
     // user: ImmutablePropTypes.map.isRequired //redux
@@ -65,16 +66,16 @@ export class HomeContainer extends Component {
             [getMeetings(this.props.user.get('_id')),
             getRestrictions(this.props.user.get('_id'))])
             .then(res => {
-                debugger;
                 const meetings = res[0].map(meeting =>
                     ({
                         id: meeting._id,
                         title: meeting.name,
-                        start: new Date(meeting.fromDate),
-                        end: new Date(meeting.toDate),
+                        start: new Date(meeting.fromDate), //new Date(meeting.actualDate)
+                        end: new Date(meeting.toDate), // new Date(new Date(meeting.actualDate).setHours(new Date(meeting.actualDate).getHours() + meeting.duration))
                         invited: meeting.invited,
                         location: meeting.location,
                         creator: meeting.creator,
+                        duration: meeting.duration,
                         color: '#2196f3',
                         type: 'meeting'
                     }));
@@ -117,6 +118,7 @@ export class HomeContainer extends Component {
                 toDate: meeting.end.toISOString(),
                 invited: List(meeting.invited),
                 location: meeting.location,
+                duration: meeting.duration,
                 creator: meeting.creator
             });
 
@@ -155,6 +157,10 @@ export class HomeContainer extends Component {
                         messages={this.messages}
                         onSelectEvent={this.handleSelect}
                         eventPropGetter={(this.eventStyleGetter)}
+                        components={{
+                            event: Event,
+                        }}
+                        tooltipAccessor={null}
                     />
                 </div>
                 {

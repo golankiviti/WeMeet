@@ -7,6 +7,8 @@ const router = express.Router();
 router.get('/:id', meetingController.getUserMeetings);
 router.put('/', meetingController.creatNewMeeting);
 router.post('/', meetingController.updateMeeting);
+router.delete('/', meetingController.deleteMeeting);
+
 
 /**
  * users waiting meetings

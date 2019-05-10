@@ -40,6 +40,16 @@ class NewMeeting extends Component {
                             disabled={disabled}
                         />
                     </div>
+                    <div className={styles.field}>
+                        <Field name='duration'
+                            component={TextField}
+                            type='number'
+                            label='משך בשעות'
+                            step='0.5'
+                            disabled={disabled}
+                            inputProps={{step: 0.5}}
+                        />
+                    </div>
                     {!meeting ?
                         <Fragment>
                             <div className={styles.field}>
@@ -107,6 +117,10 @@ const validate = values => {
     const errors = {}
     if (!values.name) {
         errors.name = 'חובה להזין שם לפגישה'
+    }
+
+    if (!values.duration) {
+        errors.duration = 'חובה להזין משך פגישה'
     }
 
     if (!values.fromDate) {
