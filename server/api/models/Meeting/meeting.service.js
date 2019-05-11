@@ -3,6 +3,8 @@ const mongoose = require('mongoose'),
     moment = require('moment'),
     _ = require('lodash');
 
+const algorithmUtils = require('../../../services/alrorithm');
+
 const meeting = require('../../../data').schemas.meetings;
 
 const logger = require('../../../utils/logger');
@@ -20,7 +22,12 @@ const getUserMeetings = (userId) => {
 };
 
 const creatNewMeeting = (currentMeeting) => {
-
+    let currentMeetingToDate = moment(currentMeeting),
+        nextCronJob = algorithmUtils.getNextAlgorithmRunDate();
+    if (currentMeetingToDate.isBefore(nextCronJob)) {
+        return algorithmUtils.greedyAlgorithm(currentMeeting);
+    }
+    currentMeeting.isDetermined = false;
     let newMeeting = new meeting(currentMeeting);
     return newMeeting.save();
 };

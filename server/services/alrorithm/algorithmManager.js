@@ -43,7 +43,10 @@ function geneticAlgorithm() {
 
 // greedy algorithm
 const greedyAlgorithm = (meeting) => {
-    return Promise.resolve();
+    meeting.isDetermined = true;
+    meeting.actualDate = moment(meeting.fromDate);
+    let newMeeting = new meetings(meeting);
+    return newMeeting.save();
 };
 
 // get next algorithm run for the greedy algorithm
