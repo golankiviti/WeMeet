@@ -1,4 +1,4 @@
-const cronJob = require('node-cron').CronJob,
+const CronJob = require('cron').CronJob,
     _ = require('lodash'),
     Promise = require('bluebird'),
     moment = require('moment');
@@ -17,13 +17,13 @@ const job = new CronJob({
     onTick: geneticAlgorithm
 });
 
-const geneticAlgorithm = () => {
+function geneticAlgorithm() {
     logger.info('start genetic algorithm')
     return algorithm()
         .then((result) => {
             // run over all meetings in the result and update them according to algorithm result
             return Promise
-                .map(result, meeting => {
+                .map(result[0], meeting => {
                     return meetings.update({
                         _id: meeting._id
                     }, {
@@ -39,6 +39,11 @@ const geneticAlgorithm = () => {
             logger.error('error while execute the algorithm');
             logger.error(err);
         });
+};
+
+// greedy algorithm
+const greedyAlgorithm = (meeting) => {
+    return Promise.resolve();
 };
 
 // get next algorithm run for the greedy algorithm
@@ -59,5 +64,6 @@ const initCronJob = () => {
 module.exports = {
     initCronJob,
     getNextAlgorithmRunDate,
-    forceRunGeneticAlgorithm
+    forceRunGeneticAlgorithm,
+    greedyAlgorithm
 };

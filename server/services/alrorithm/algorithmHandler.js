@@ -117,14 +117,7 @@ const startAlgorithm = () => {
                     if (!gotResponseFromchild) {
                         return reject(new Error(`child exit with code ${exitCode}, but didnt send response`));
                     }
-                    return resolve(_.map(response, (snapShot) => {
-                        return _.map(snapShot, snap => {
-                            return {
-                                actualDate: snap.actualDate,
-                                name: snap.name
-                            }
-                        });
-                    }));
+                    return resolve(response);
                 });
                 // in case we got error from fork the child
                 child.on('error', (err) => {
@@ -145,11 +138,14 @@ const startAlgorithm = () => {
                 child.stderr.on('data', (output) => {
                     logger.warn(output.toString());
                 });
-                // send to child the meetings
-                child.send({
-                    meetings: _meetings,
-                    restrictions
-                });
+
+                setTimeout(() => {
+                    // send to child the meetings
+                    child.send({
+                        meetings: _meetings,
+                        restrictions
+                    });
+                }, 500);
             })
             .catch((err) => {
                 logger.error(err);
