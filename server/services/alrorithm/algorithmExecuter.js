@@ -45,7 +45,7 @@ process.on('message', (data) => {
     // config our algorithm
     genetic.optimize = Genetic.Optimize.Minimize;
     genetic.select1 = Genetic.Select1.Tournament2;
-    genetic.select2 = Genetic.Select2.FittestRandom;
+    genetic.select2 = Genetic.Select2.Tournament2;
     // create our seed function
     // every individual is snapshot of our calander:
     // [meeting, meeting, meeting...]
@@ -210,7 +210,7 @@ process.on('message', (data) => {
     // }
     // general config
     let geneticConfig = {
-        size: 200,
+        size: 50,
         crossover: 0.5,
         mutation: 0.5,
         iterations: 50,
@@ -218,7 +218,8 @@ process.on('message', (data) => {
     };
     genetic.configuration = geneticConfig;
     genetic.start(geneticConfig);
-    process.send(genetic.entities);
+    let result = _.sortBy(genetic.entities,entity=>genetic.fitness(entity));
+    process.send(result);
     process.exit(0);
 });
 
