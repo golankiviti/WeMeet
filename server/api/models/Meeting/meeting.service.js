@@ -22,7 +22,7 @@ const getUserMeetings = (userId) => {
 };
 
 const creatNewMeeting = (currentMeeting) => {
-    let currentMeetingToDate = moment(currentMeeting),
+    let currentMeetingToDate = moment(currentMeeting.toDate),
         nextCronJob = algorithmUtils.getNextAlgorithmRunDate();
     if (currentMeetingToDate.isBefore(nextCronJob)) {
         return algorithmUtils.greedyAlgorithm(currentMeeting);
