@@ -69,19 +69,27 @@ process.on('message', (data) => {
             // generate random day between 0 to diff in days
             randomDay = randomBetweenTwoNumbers(0, diffrenceInDays);
             // in case randomDay is 0 and fromDate hour is greater the MIN_HOUR
-            if (randomDay === 0 && meetingFromDate.hour() > MIN_HOUR) {
+            if (randomDay === 0 && meetingFromDate.hour() * 60 + meetingFromDate.minute() > MIN_HOUR * 60) {
                 minHour = meetingFromDate.hour();
             }
             // in case randomDay is the max day and toDate hour is lower the MAX_HOUR
-            if (randomDay === diffrenceInDays && meetingToDate.hour() < MAX_HOUR) {
+            if (randomDay === diffrenceInDays && meetingToDate.hour() * 60 + meetingToDate.minute() < MAX_HOUR * 60) {
                 maxHour = meetingToDate.hour();
+            }
+            // in case from date is not round hour
+            if(meetingFromDate.minute() > 0){
+                minHour+=0.5;
+            }
+            // in case from date is not round hour
+            if(meetingToDate.minute()> 0){
+                maxHour+=0.5;
             }
             // maxHour should be less than real maxHour because of the meetLengthInSeconds
             maxHour -= secondsToHour(parseInt(meeting.meetLengthInSeconds, 10));
             // random hour between the min and max hour
-            randomHour = randomBetweenTwoNumbers(minHour, maxHour);
+            randomHour = randomBetweenTwoNumbers(minHour * 2, maxHour * 2);
             // set the random actual date
-            meetingActualDate.add(randomDay, 'days').startOf('hour').hour(randomHour);
+            meetingActualDate.add(randomDay, 'days').startOf('hour').hour(randomHour / 2).minute((randomHour % 2) * 30);
             // put actual date in the meeting
             meeting.actualDate = meetingActualDate;
             // set the fromDate and toDate to moment for next algorithm manipulation
