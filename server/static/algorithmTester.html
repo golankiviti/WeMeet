@@ -148,6 +148,16 @@
             });
         };
 
+        const sleep = (ms) => {
+    let stop = new Date().getTime();
+    while (new Date().getTime() < stop + ms) {
+        ;
+    }
+}
+        const secondsToHour = (seconds) => {
+        return seconds / 60 / 60;
+    }
+
         // var graph = new Graph(document.getElementById("scratch"), 10, 10);
         let seedCount = 0,
             fitnessCount = 0;
@@ -157,74 +167,85 @@
         genetic.select2 = Genetic.Select2.FittestRandom;
         genetic.seed = () => {
             console.log(`seed:${++seedCount}`);
-            // run over all meetings and add to them the random actualDate
-            let individual = _.map(data.meetings, (meeting) => {
-                // init some variables
-                // start actualDate from fromDate
-                let meetingActualDate = moment(meeting.fromDate),
-                    // convert fromDate and toDate to moment dates
-                    meetingFromDate = moment(meeting.fromDate),
-                    meetingToDate = moment(meeting.toDate),
-                    // get the diff in days between fromDate and toDate
-                    diffrenceInDays = meetingToDate.diff(meetingFromDate, 'days'),
-                    // init minHour and maxHour to limitaion range
-                    minHour = MIN_HOUR,
-                    maxHour = MAX_HOUR,
-                    randomDay, randomHour;
-                // generate random day between 0 to diff in days
-                randomDay = randomBetweenTwoNumbers(0, diffrenceInDays);
-                // in case randomDay is 0 and fromDate hour is greater the MIN_HOUR
-                if (randomDay === 0 && meetingFromDate.hour() > MIN_HOUR) {
-                    minHour = meetingFromDate.hour();
-                }
-                // in case randomDay is the max day and toDate hour is lower the MAX_HOUR
-                if (randomDay === diffrenceInDays && meetingToDate.hour() < MAX_HOUR) {
-                    maxHour = meetingToDate.hour();
-                }
-                // random hour between the min and max hour
-                randomHour = randomBetweenTwoNumbers(minHour, maxHour);
-                // set the random actual date
-                meetingActualDate.add(randomDay, 'days').startOf('day').hour(randomHour);
-                // put actual date in the meeting
-                meeting.actualDate = meetingActualDate;
-                // set the fromDate and toDate to moment for next algorithm manipulation
-                meeting.fromDate = meetingFromDate;
-                meeting.toDate = meetingToDate;
-                // set meeting _id to string for sorting
-                meeting._id = meeting._id.toString();
-                return meeting;
-            });
-            // return sort meeting array
-            return _.sortBy(individual, ['_id']);
+        sleep(20);
+        // run over all meetings and add to them the random actualDate
+        let individual = _.map(data.meetings, (meeting) => {
+            // init some variables
+            // start actualDate from fromDate
+            let meetingActualDate = moment(meeting.fromDate),
+                // convert fromDate and toDate to moment dates
+                meetingFromDate = moment(meeting.fromDate),
+                meetingToDate = moment(meeting.toDate),
+                // get the diff in days between fromDate and toDate
+                diffrenceInDays = meetingToDate.diff(meetingFromDate, 'days'),
+                // init minHour and maxHour to limitaion range
+                minHour = MIN_HOUR,
+                maxHour = MAX_HOUR,
+                randomDay, randomHour;
+            // generate random day between 0 to diff in days
+            randomDay = randomBetweenTwoNumbers(0, diffrenceInDays);
+            // in case randomDay is 0 and fromDate hour is greater the MIN_HOUR
+            if (randomDay === 0 && meetingFromDate.hour() * 60 + meetingFromDate.minute() > MIN_HOUR * 60) {
+                minHour = meetingFromDate.hour();
+            }
+            // in case randomDay is the max day and toDate hour is lower the MAX_HOUR
+            if (randomDay === diffrenceInDays && meetingToDate.hour() * 60 + meetingToDate.minute() < MAX_HOUR * 60) {
+                maxHour = meetingToDate.hour();
+            }
+            // in case from date is not round hour
+            if(meetingFromDate.minute() > 0){
+                minHour+=0.5;
+            }
+            // in case from date is not round hour
+            if(meetingToDate.minute()> 0){
+                maxHour+=0.5;
+            }
+            // maxHour should be less than real maxHour because of the meetLengthInSeconds
+            maxHour -= secondsToHour(parseInt(meeting.meetLengthInSeconds, 10));
+            // random hour between the min and max hour
+            randomHour = randomBetweenTwoNumbers(minHour * 2, maxHour * 2);
+            // set the random actual date
+            meetingActualDate.add(randomDay, 'days').startOf('hour').hour(randomHour / 2).minute((randomHour % 2) * 30);
+            // put actual date in the meeting
+            meeting.actualDate = meetingActualDate;
+            // set the fromDate and toDate to moment for next algorithm manipulation
+            meeting.fromDate = meetingFromDate;
+            meeting.toDate = meetingToDate;
+            // set meeting _id to string for sorting
+            meeting._id = meeting._id.toString();
+            return meeting;
+        });
+        // return sort meeting array
+        return _.sortBy(individual, ['_id']);
         };
         genetic.mutate = (individual) => {
             console.log(`mutate`);
-            let startIndex, endIndex;
-            startIndex = randomBetweenTwoNumbers(0, individual.length - 1);
-            endIndex = randomBetweenTwoNumbers(startIndex, individual.length);
-            for (index = startIndex; index < endIndex; index++) {
-                let randomHour = randomBetweenTwoNumbers(1, 5);
-                individual[index].actualDate = moment(individual[index].actualDate);
-                if (Math.random() > 0.5) {
-                    individual[index].actualDate.add(randomHour, 'hours');
-                } else {
-                    individual[index].actualDate.subtract(randomHour, 'hours');
-                }
+        let startIndex, endIndex;
+        startIndex = randomBetweenTwoNumbers(0, individual.length - 1);
+        endIndex = randomBetweenTwoNumbers(startIndex, individual.length);
+        for (index = startIndex; index < endIndex; index++) {
+            let randomHour = randomBetweenTwoNumbers(1, 5);
+            individual[index].actualDate = moment(individual[index].actualDate);
+            if (Math.random() > 0.5) {
+                individual[index].actualDate.add(1, 'hours');
+            } else {
+                individual[index].actualDate.subtract(1, 'hours');
             }
-            return individual;
+        }
+        return individual;
         }
         genetic.crossover = (mother, father) => {
             console.log(`crossover`);
-            let startIndex, endIndex;
-            startIndex = randomBetweenTwoNumbers(0, mother.length - 1);
-            endIndex = randomBetweenTwoNumbers(startIndex, mother.length);
-            for (index = startIndex; index < endIndex; index++) {
-                let tmpMother = clone(mother[index]),
-                    tmpFather = clone(father[index]);
-                mother[index] = tmpFather;
-                father[index] = tmpMother;
-            }
-            return [mother, father];
+        let startIndex, endIndex;
+        startIndex = randomBetweenTwoNumbers(0, mother.length - 1);
+        endIndex = randomBetweenTwoNumbers(startIndex, mother.length);
+        for (index = startIndex; index < endIndex; index++) {
+            let tmpMother = clone(mother[index]),
+                tmpFather = clone(father[index]);
+            mother[index] = tmpFather;
+            father[index] = tmpMother;
+        }
+        return [mother, father];
         }
         // example 3 term polynomial: cx^0 + bx^1 + ax^2
         genetic.evaluatePoly = function (coefficients, x) {
@@ -239,151 +260,81 @@
             return s;
         }
 
-        genetic.fitness = (individual) => {
+        function fitness(individual){
             console.log(`fitnessRun:${++fitnessCount}`);
-            let fitnessScore = 0;
-            // run over all meeting in the individual
-            _.each(individual, (meeting) => {
-                meeting.actualDate = moment(meeting.actualDate);
-                meeting.fromDate = moment(meeting.fromDate);
-                meeting.toDate = moment(meeting.toDate);
-                let meetingActualEndTime = moment(meeting.actualDate).add(meeting.meetLengthInSeconds,
-                    'seconds');
-                // in case the actualDate is not in the range of fromDate and toDate
-                if (!(meeting.actualDate.isAfter(meeting.fromDate) &&
-                        meetingActualEndTime.isBefore(meeting.toDate))) {
-                    // add to score the number of invited 
-                    fitnessScore += meeting.invited.length;
-                } else {
-                    // check here all the meetings and restrictions that are in the range of the current meeting
-                    // create dictionary of all invited.
-                    let invitedDict = {},
-                        relevantMeetings;
-                    _.each(meeting.invited, (user) => {
-                        // right now every user can go to the meeting
-                        invitedDict[user] = true;
-                    });
-                    // run over all restrictions
-                    _.each(data.restrictions, (restrictObject) => {
-                        // in case this restriction is not relevant to any of our invited
-                        if (_.indexOf(meeting.invited, restrictObject.userId) === -1) return;
-                        // run over all the restiction of the inveted and check if it intersact our meeting
-                        _.each(restrictObject.userRestrictions, (restrict) => {
-                            // in case the restrict date and meeting date are overlaps
-                            if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting
-                                    .actualDate, meetingActualEndTime)) {
-                                // the current invited can not go to meeting
-                                invitedDict[restrictObject.userId] = false;
-                                return false;
-                            }
-                        });
-                    });
-
-                    // in case we found all invited can not be in meeting because of restriction,
-                    // we skip over the meeting search
-                    if (_.every(Object.keys(invitedDict), false)) {
-                        fitnessScore += meeting.invited.length;
-                        return;
-                    }
-
-                    // get all relevant meetings
-                    relevantMeetings = getRelevantMeetingForMeeting(individual, meeting);
-                    // run over all relevant meeting
-                    _.each(relevantMeetings, (relevantMeeting) => {
-                        let relevantMeetingActualEndDate = moment(relevantMeeting.actualDate).add(
-                            relevantMeeting.meetLengthInSeconds, 'seconds');
-                        // in case the relevant meeting is overlap
-                        if (isDatesOverlap(relevantMeeting.actualDate, relevantMeetingActualEndDate,
-                                meeting.actualDate, meetingActualEndTime)) {
-                            _.each(relevantMeeting.invited, (relevantMeetingInvited) => {
-                                if (_.indexOf(meeting.invited, relevantMeetingInvited) !== -
-                                    1) {
-                                    invitedDict[relevantMeetingInvited] = false;
-                                }
-                            });
+        let fitnessScore = 0;
+        // run over all meeting in the individual
+        _.each(individual, (meeting) => {
+            meeting.actualDate = moment(meeting.actualDate);
+            meeting.fromDate = moment(meeting.fromDate);
+            meeting.toDate = moment(meeting.toDate);
+            let meetingActualEndTime = moment(meeting.actualDate).add(meeting.meetLengthInSeconds, 'seconds');
+            // in case the actualDate is not in the range of fromDate and toDate
+            if (!(meeting.actualDate.isSameOrAfter(meeting.fromDate) &&
+                    meetingActualEndTime.isSameOrBefore(meeting.toDate))) {
+                // add to score the number of invited 
+                fitnessScore += meeting.invited.length * 2;
+            } else {
+                // check here all the meetings and restrictions that are in the range of the current meeting
+                // create dictionary of all invited.
+                let invitedDict = {},
+                    relevantMeetings;
+                _.each(meeting.invited, (user) => {
+                    // right now every user can go to the meeting
+                    invitedDict[user] = true;
+                });
+                // run over all restrictions
+                _.each(data.restrictions, (restrictObject) => {
+                    // in case this restriction is not relevant to any of our invited
+                    if (_.indexOf(meeting.invited, restrictObject.userId) === -1) return;
+                    // run over all the restiction of the inveted and check if it intersact our meeting
+                    _.each(restrictObject.userRestrictions, (restrict) => {
+                        // in case the restrict date and meeting date are overlaps
+                        if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting.actualDate, meetingActualEndTime)) {
+                            // the current invited can not go to meeting
+                            invitedDict[restrictObject.userId] = false;
+                            return false;
                         }
                     });
-                    let numOfInvitedCanNotGoToMeeting = 0;
-                    _.each(invitedDict, (value) => {
-                        if (!value) numOfInvitedCanNotGoToMeeting++;
-                    });
-                    fitnessScore += numOfInvitedCanNotGoToMeeting / meeting.invited.length;
+                });
+
+                // in case we found all invited can not be in meeting because of restriction,
+                // we skip over the meeting search
+                if (_.every(Object.keys(invitedDict), false)) {
+                    fitnessScore += 1;
+                    return;
                 }
-            });
-            console.log(`score:${fitnessScore}`);
-            return fitnessScore;
+
+                // get all relevant meetings
+                relevantMeetings = getRelevantMeetingForMeeting(individual, meeting);
+                // run over all relevant meeting
+                _.each(relevantMeetings, (relevantMeeting) => {
+                    let relevantMeetingActualEndDate = moment(relevantMeeting.actualDate).add(relevantMeeting.meetLengthInSeconds, 'seconds');
+                    // in case the relevant meeting is overlap
+                    if (isDatesOverlap(relevantMeeting.actualDate, relevantMeetingActualEndDate, meeting.actualDate, meetingActualEndTime)) {
+                        _.each(relevantMeeting.invited, (relevantMeetingInvited) => {
+                            if (_.indexOf(meeting.invited, relevantMeetingInvited) !== -1) {
+                                invitedDict[relevantMeetingInvited] = false;
+                            }
+                        });
+                    }
+                });
+                let numOfInvitedCanNotGoToMeeting = 0;
+                _.each(invitedDict, (value) => {
+                    if (!value) numOfInvitedCanNotGoToMeeting++;
+                });
+                fitnessScore += numOfInvitedCanNotGoToMeeting / meeting.invited.length;
+            }
+        });
+        console.log(`score:${fitnessScore}`);
+        return fitnessScore;
+        }
+
+        genetic.fitness = (individual) => {
+           return fitness(individual)
         };
         genetic.generation = function (pop, generation, stats) {};
-        // genetic.notification = function (pop, generation, stats, isFinished) {
-        //     console.log('notification');
-        //     // function poly(entity) {
-        //     //     var a = [];
-        //     //     var i;
-        //     //     for (i = entity.length - 1; i >= 0; --i) {
-        //     //         var buf = entity[i].toPrecision(2);
-        //     //         if (i > 1)
-        //     //             buf += "<em><b>x<sup>" + i + "<sup></b></em>";
-        //     //         else if (i == 1)
-        //     //             buf += "<em><b>x</b></em>";
-
-        //     //         a.push(buf);
-        //     //     }
-        //     //     return a.join(" + ");
-        //     // }
-
-        //     // function lerp(a, b, p) {
-        //     //     return a + (b - a) * p;
-        //     // }
-
-        //     // if (generation == 0) {
-        //     //     graph.solutions = [];
-        //     // }
-
-        //     // $("#solution").html(poly(pop[0].entity));
-        //     // $("#generation").html(generation + 1);
-        //     // $("#bestfit").html(pop[0].fitness.toPrecision(4))
-
-        //     // $("#vertexerror").html((pop[0].fitness / graph.vertices.length).toPrecision(4));;
-        //     // $("#avgbestfit").html(stats.mean.toPrecision(4));
-        //     // $("#errorstdev").html(stats.stdev.toPrecision(4));
-
-
-        //     // var last = graph.last || "";
-
-        //     // var str = pop[0].entity.join(",");
-        //     // if (last != str || isFinished) {
-
-        //     //     if (last != str) {
-        //     //         graph.solutions.push(pop[0].entity);
-        //     //         graph.last = str;
-        //     //     }
-
-
-        //     //     graph.draw();
-
-        //     //     var i;
-        //     //     var start = Math.max(0, graph.solutions.length - 10);
-        //     //     if (isFinished) {
-        //     //         start = 0;
-        //     //     }
-        //     //     for (i = start; i < graph.solutions.length; ++i) {
-        //     //         var p = (i - start) / (graph.solutions.length - start);
-
-        //     //         var r = Math.round(lerp(90, 255, p));
-        //     //         var g = Math.round(lerp(0, 255, 0));
-        //     //         var b = Math.round(lerp(200, 50, p));
-        //     //         var alpha = lerp(0.5, 1, p);
-        //     //         var strokeStyle = "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
-        //     //         var lineWidth = Math.floor(lerp(10, 1, p));
-
-        //     //         //var strokeStyle = i == graph.solutions.length-1 ? "#00f" : "rgba(0,0,0,0.1)";
-        //     //         graph.drawFunction(graph.solutions[i], strokeStyle, lineWidth);
-        //     //     }
-
-
-        //     //     graph.drawVertices();
-        //     // }
-        // };
+        
 
         function Graph(canvas, xmax, ymax) {
             this.canvas = document.getElementById("scratch");
@@ -601,9 +552,28 @@
                 fetch('/algorithmData')
                     .then((res) => res.json())
                     .then(res => {
+                        seedCount = 0;
+                        fitnessCount = 0;
                         data = res;
                         genetic.configuration = config;
                         genetic.start();
+                        let resWithFit = _.map(genetic.entities, entity => {
+                            return {
+                                fit: fitness(entity),
+                                entity: entity
+                            }
+                        });
+                        resWithFit = _.sortBy(resWithFit,'fit');
+                        let result = _.map(resWithFit[0].entity, snap => {
+                            return {
+                                actualDate: snap.actualDate,
+                                name: snap.name
+                            }
+                        });
+                        let txt = '';
+                        _.each(result, res => txt += `name: ${res.name}, actualDate: ${moment(res.actualDate).toISOString()}.<br />`)
+                        $('#fitnessScore').html(`${JSON.stringify(resWithFit[0].fit)}`);
+                        $('#individual').html(txt);
                     });
             });
 
