@@ -5,7 +5,10 @@ const CronJob = require('cron').CronJob,
 
 const logger = require('../../utils/logger');
 
-const {meetings,restrictions} = require('../../data/index').schemas;
+const {
+    meetings,
+    restrictions
+} = require('../../data/index').schemas;
 
 const algorithm = require('./algorithmHandler').startAlgorithm;
 
@@ -50,17 +53,17 @@ const greedyAlgorithm = (meeting) => {
         bestMeetingDate = moment(meetingFromDate);
     let meetingQuery = {},
         restrictionQuery = {};
-    let relevantMeetings,relevantRestrictions;
+    let relevantMeetings, relevantRestrictions;
     return meetings.find(meetingQuery).lean()
-        .then((meets)=>{
+        .then((meets) => {
             relevantMeetings = meets;
             return restrictions.find(restrictionQuery).lean();
         })
-        .then((resticts)=>{
+        .then((resticts) => {
             relevantRestrictions = resticts;
             let foundSolution = false;
-            let actualMeetingToDate = moment(currentMeetingCheckDate).add(meeting.meetLengthInSeconds,'s');
-            while(!foundSolution && actualMeetingToDate.isBefore(meetingToDate)){
+            let actualMeetingToDate = moment(currentMeetingCheckDate).add(meeting.meetLengthInSeconds, 's');
+            while (!foundSolution && actualMeetingToDate.isBefore(meetingToDate)) {
 
             }
         });
@@ -69,72 +72,70 @@ const greedyAlgorithm = (meeting) => {
     return newMeeting.save();
 };
 
-function _fitness(){
+function _fitness(meeting, restrictions, meetings) {
     console.log(`fitnessRun:${++fitnessCount}`);
     let fitnessScore = 0;
-    // run over all meeting in the individual
-    _.each(individual, (meeting) => {
-        meeting.actualDate = moment(meeting.actualDate);
-        meeting.fromDate = moment(meeting.fromDate);
-        meeting.toDate = moment(meeting.toDate);
-        let meetingActualEndTime = moment(meeting.actualDate).add(meeting.meetLengthInSeconds, 'seconds');
-        // in case the actualDate is not in the range of fromDate and toDate
-        if (!(meeting.actualDate.isSameOrAfter(meeting.fromDate) &&
-                meetingActualEndTime.isSameOrBefore(meeting.toDate))) {
-            // add to score the number of invited 
-            fitnessScore += meeting.invited.length * 2;
-        } else {
-            // check here all the meetings and restrictions that are in the range of the current meeting
-            // create dictionary of all invited.
-            let invitedDict = {},
-                relevantMeetings;
-            _.each(meeting.invited, (user) => {
-                // right now every user can go to the meeting
-                invitedDict[user] = true;
-            });
-            // run over all restrictions
-            _.each(data.restrictions, (restrictObject) => {
-                // in case this restriction is not relevant to any of our invited
-                if (_.indexOf(meeting.invited, restrictObject.userId) === -1) return;
-                // run over all the restiction of the inveted and check if it intersact our meeting
-                _.each(restrictObject.userRestrictions, (restrict) => {
-                    // in case the restrict date and meeting date are overlaps
-                    if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting.actualDate, meetingActualEndTime)) {
-                        // the current invited can not go to meeting
-                        invitedDict[restrictObject.userId] = false;
-                        return false;
-                    }
-                });
-            });
 
-            // in case we found all invited can not be in meeting because of restriction,
-            // we skip over the meeting search
-            if (_.every(Object.keys(invitedDict), false)) {
-                fitnessScore += meeting.invited.length;
-                return;
-            }
-
-            // get all relevant meetings
-            relevantMeetings = getRelevantMeetingForMeeting(individual, meeting);
-            // run over all relevant meeting
-            _.each(relevantMeetings, (relevantMeeting) => {
-                let relevantMeetingActualEndDate = moment(relevantMeeting.actualDate).add(relevantMeeting.meetLengthInSeconds, 'seconds');
-                // in case the relevant meeting is overlap
-                if (isDatesOverlap(relevantMeeting.actualDate, relevantMeetingActualEndDate, meeting.actualDate, meetingActualEndTime)) {
-                    _.each(relevantMeeting.invited, (relevantMeetingInvited) => {
-                        if (_.indexOf(meeting.invited, relevantMeetingInvited) !== -1) {
-                            invitedDict[relevantMeetingInvited] = false;
-                        }
-                    });
+    meeting.actualDate = moment(meeting.actualDate);
+    meeting.fromDate = moment(meeting.fromDate);
+    meeting.toDate = moment(meeting.toDate);
+    let meetingActualEndTime = moment(meeting.actualDate).add(meeting.meetLengthInSeconds, 'seconds');
+    // in case the actualDate is not in the range of fromDate and toDate
+    if (!(meeting.actualDate.isSameOrAfter(meeting.fromDate) &&
+            meetingActualEndTime.isSameOrBefore(meeting.toDate))) {
+        // add to score the number of invited 
+        fitnessScore += meeting.invited.length * 2;
+    } else {
+        // check here all the meetings and restrictions that are in the range of the current meeting
+        // create dictionary of all invited.
+        let invitedDict = {},
+            relevantMeetings;
+        _.each(meeting.invited, (user) => {
+            // right now every user can go to the meeting
+            invitedDict[user] = true;
+        });
+        // run over all restrictions
+        _.each(data.restrictions, (restrictObject) => {
+            // in case this restriction is not relevant to any of our invited
+            if (_.indexOf(meeting.invited, restrictObject.userId) === -1) return;
+            // run over all the restiction of the inveted and check if it intersact our meeting
+            _.each(restrictObject.userRestrictions, (restrict) => {
+                // in case the restrict date and meeting date are overlaps
+                if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting.actualDate, meetingActualEndTime)) {
+                    // the current invited can not go to meeting
+                    invitedDict[restrictObject.userId] = false;
+                    return false;
                 }
             });
-            let numOfInvitedCanNotGoToMeeting = 0;
-            _.each(invitedDict, (value) => {
-                if (!value) numOfInvitedCanNotGoToMeeting++;
-            });
-            fitnessScore += numOfInvitedCanNotGoToMeeting / meeting.invited.length;
+        });
+
+        // in case we found all invited can not be in meeting because of restriction,
+        // we skip over the meeting search
+        if (_.every(Object.keys(invitedDict), false)) {
+            fitnessScore += meeting.invited.length;
+            return;
         }
-    });
+
+        // get all relevant meetings
+        relevantMeetings = getRelevantMeetingForMeeting(individual, meeting);
+        // run over all relevant meeting
+        _.each(relevantMeetings, (relevantMeeting) => {
+            let relevantMeetingActualEndDate = moment(relevantMeeting.actualDate).add(relevantMeeting.meetLengthInSeconds, 'seconds');
+            // in case the relevant meeting is overlap
+            if (isDatesOverlap(relevantMeeting.actualDate, relevantMeetingActualEndDate, meeting.actualDate, meetingActualEndTime)) {
+                _.each(relevantMeeting.invited, (relevantMeetingInvited) => {
+                    if (_.indexOf(meeting.invited, relevantMeetingInvited) !== -1) {
+                        invitedDict[relevantMeetingInvited] = false;
+                    }
+                });
+            }
+        });
+        let numOfInvitedCanNotGoToMeeting = 0;
+        _.each(invitedDict, (value) => {
+            if (!value) numOfInvitedCanNotGoToMeeting++;
+        });
+        fitnessScore += numOfInvitedCanNotGoToMeeting / meeting.invited.length;
+    }
     console.log(`score:${fitnessScore}`);
     return fitnessScore;
 }
