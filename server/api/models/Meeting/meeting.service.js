@@ -28,8 +28,10 @@ const creatNewMeeting = (currentMeeting) => {
     currentMeeting.invited.push(currentMeeting.creator);
     currentMeeting.invited = _.uniq(currentMeeting.invited);
     // in case there is no meetLengthInSeconds, default is hour
-    if (_.isNil(currentMeeting.meetLengthInSeconds)) {
+    if (_.isNil(currentMeeting.duration)) {
         currentMeeting.meetLengthInSeconds = 60 * 60; // hour
+    } else {
+        currentMeeting.meetLengthInSeconds = currentMeeting.duration * 60 * 60;
     }
     // in case the user want to start the meeting before the genetic algorithm will run
     if (currentMeetingFromDate.isBefore(nextCronJob)) {
@@ -161,7 +163,9 @@ const rejectMeeting = (userId, meetingId) => {
 }
 
 const deleteMeeting = (meetingId) => {
-    return meeting.delete({ '_id': new mongoose.Types.ObjectId(meetingId) });
+    return meeting.delete({
+        '_id': new mongoose.Types.ObjectId(meetingId)
+    });
 };
 
 module.exports = {
