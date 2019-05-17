@@ -19,6 +19,8 @@ const propTypes = {
     // user: ImmutablePropTypes.map.isRequired //redux
 }
 
+
+
 export class NewMeetingContainer extends Component {
     constructor(props) {
         super(props);
@@ -110,7 +112,8 @@ export class NewMeetingContainer extends Component {
                 location: { label: meeting.get('location'), value: meeting.get('location') },
                 actualDate: meeting.get('actualDate') ?
                     moment(meeting.get('actualDate')).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16) :
-                    ''
+                    '',
+                duration: meeting.get('duration')
             }
         }
 

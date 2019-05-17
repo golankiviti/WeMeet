@@ -21,7 +21,7 @@ const apiRouter = require('./api'),
     authenticationService = require('./services/authentication.service'),
     logger = require('./utils/logger');
 
-const algorithm = require('./services/alrorithm/algorithmHandler');
+const algorithmUtils = require('./services/alrorithm');
 
 const app = express();
 
@@ -78,8 +78,8 @@ app.post('/logout', authenticationService.logout);
 
 app.post('/checkUser', authenticationService.isUserExist);
 
-app.get('/algorithm', (req, res, next) => {
-    algorithm.startAlgorithm()
+app.get('/algorithmTest', (req, res, next) => {
+    algorithmUtils.geneticAlgorithmTest()
         .then((results) => {
             res.json(results);
         })
@@ -88,8 +88,18 @@ app.get('/algorithm', (req, res, next) => {
         })
 });
 
+app.get('/algorithmForce', (req, res, next) => {
+    algorithmUtils.forceRunGeneticAlgorithm()
+        .then(() => {
+            res.json(true);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        })
+});
+
 app.get('/algorithmData', (req, res, next) => {
-    algorithm.getAlgorithmData()
+    algorithmUtils.geneticAlgorithmData()
         .then(results => {
             res.json(results);
         })
@@ -122,6 +132,8 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
         // start express server
         app.listen(parseInt(SERVER_PORT), () => {
             logger.info(`server is up on port ${SERVER_PORT}`);
+            // init cron job for genetic algorithm
+            algorithmUtils.initCronJob();
         });
     })
     .catch((err) => {

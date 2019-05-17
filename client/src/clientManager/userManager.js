@@ -48,3 +48,12 @@ export function addRestriction(id, restriction) {
 export function getRestrictions(id) {
     return fetch(`${BASE_URL}/${id}/restrictions`);
 }
+
+export function deleteRestriction(restrictionId) {
+    return fetch(`${BASE_URL}/restriction`, {
+        method: 'DELETE',
+        body: JSON.stringify({
+            resId: restrictionId
+        })
+    }, false)
+}

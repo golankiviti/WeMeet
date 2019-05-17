@@ -18,6 +18,15 @@ export function updateMeeting(meeting) {
     });
 }
 
+export function deleteMeeting(meetingId) {
+    return customFetch(`${BASE_API_URL}/meeting`, {
+        method: 'DELETE',
+        body: JSON.stringify({
+            meetingId: meetingId
+        })
+    }, false)
+}
+
 export function getMeetings(userId) {
     return customFetch(`${BASE_API_URL}/meeting/${userId}`);
 }
