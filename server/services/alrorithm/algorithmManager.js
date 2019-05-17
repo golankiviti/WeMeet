@@ -1,7 +1,10 @@
 const CronJob = require('cron').CronJob,
     _ = require('lodash'),
     Promise = require('bluebird'),
-    moment = require('moment');
+    Moment = require('moment'),
+    momentRange = require('moment-range');
+
+const moment = momentRange.extendMoment(Moment);
 
 const logger = require('../../utils/logger');
 
@@ -14,6 +17,8 @@ const algorithm = require('./algorithmHandler').startAlgorithm;
 
 const CRON_TIME = process.env.CRON_TIME || '0 0 * * *'; // default to every day at midnight
 
+const MIN_HOUR = process.env.ALGORITHM_MIN_HOUR || 8,
+    MAX_HOUR = process.env.ALGORITHM_MAX_HOUR || 22
 
 const job = new CronJob({
     cronTime: CRON_TIME,
@@ -51,8 +56,30 @@ const greedyAlgorithm = (meeting) => {
         meetingToDate = moment(meeting.toDate),
         currentMeetingCheckDate = moment(meetingFromDate),
         bestMeetingDate = moment(meetingFromDate);
-    let meetingQuery = {},
-        restrictionQuery = {};
+    let meetingQuery = {
+            $and: [{
+                fromDate: {
+                    $gte: meetingFromDate.toDate()
+                }
+            }, {
+                toDate: {
+                    $lte: meetingToDate.toDate()
+                }
+            }, {
+                isDetermined: true
+            }]
+        },
+        restrictionQuery = {
+            $and: [{
+                startDate: {
+                    $gte: meetingFromDate.toDate()
+                }
+            }, {
+                endDate: {
+                    $lte: meetingToDate.toDate()
+                }
+            }]
+        };
     let relevantMeetings, relevantRestrictions;
     return meetings.find(meetingQuery).lean()
         .then((meets) => {
@@ -61,19 +88,29 @@ const greedyAlgorithm = (meeting) => {
         })
         .then((resticts) => {
             relevantRestrictions = resticts;
-            let foundSolution = false;
-            let actualMeetingToDate = moment(currentMeetingCheckDate).add(meeting.meetLengthInSeconds, 's');
+            let foundSolution = false,
+                actualMeetingToDate = moment(currentMeetingCheckDate).add(meeting.meetLengthInSeconds, 's'),
+                bestScore = Infinity;
+            meeting.actualDate = currentMeetingCheckDate;
             while (!foundSolution && actualMeetingToDate.isBefore(meetingToDate)) {
-
+                let currentMeetingScore = _fitness(meeting, relevantRestrictions, relevantMeetings);
+                if (currentMeetingScore === 0) {
+                    foundSolution = true;
+                    bestMeetingDate = meeting.actualDate;
+                } else if (currentMeetingScore < bestScore) {
+                    bestScore = currentMeetingScore;
+                    bestMeetingDate = meeting.actualDate;
+                }
+                meeting.actualDate = currentMeetingCheckDate.add(30, 'minutes');
+                actualMeetingToDate = moment(meeting.actualDate).add(meeting.meetLengthInSeconds, 's');
             }
+            meeting.actualDate = bestMeetingDate;
+            let newMeeting = new meetings(meeting);
+            return newMeeting.save();
         });
-    meeting.actualDate = moment(meeting.fromDate);
-    let newMeeting = new meetings(meeting);
-    return newMeeting.save();
 };
 
 function _fitness(meeting, restrictions, meetings) {
-    console.log(`fitnessRun:${++fitnessCount}`);
     let fitnessScore = 0;
 
     meeting.actualDate = moment(meeting.actualDate);
@@ -85,28 +122,32 @@ function _fitness(meeting, restrictions, meetings) {
             meetingActualEndTime.isSameOrBefore(meeting.toDate))) {
         // add to score the number of invited 
         fitnessScore += meeting.invited.length * 2;
+        // in case the meeting want to be at night
+    } else if ((MAX_HOUR < meeting.actualDate.hour() || meeting.actualDate.hour() < MIN_HOUR) ||
+        MAX_HOUR < meetingActualEndTime.hour() || meetingActualEndTime.hour() < MIN_HOUR) {
+        // no chance to choose this solution
+        fitnessScore += Infinity;
     } else {
         // check here all the meetings and restrictions that are in the range of the current meeting
         // create dictionary of all invited.
-        let invitedDict = {},
-            relevantMeetings;
+        let invitedDict = {};
+
         _.each(meeting.invited, (user) => {
             // right now every user can go to the meeting
             invitedDict[user] = true;
         });
         // run over all restrictions
-        _.each(data.restrictions, (restrictObject) => {
+        _.each(restrictions, (restrict) => {
+            restrict.user = restrict.user.toString();
             // in case this restriction is not relevant to any of our invited
-            if (_.indexOf(meeting.invited, restrictObject.userId) === -1) return;
-            // run over all the restiction of the inveted and check if it intersact our meeting
-            _.each(restrictObject.userRestrictions, (restrict) => {
-                // in case the restrict date and meeting date are overlaps
-                if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting.actualDate, meetingActualEndTime)) {
-                    // the current invited can not go to meeting
-                    invitedDict[restrictObject.userId] = false;
-                    return false;
-                }
-            });
+            if (_.indexOf(meeting.invited, restrict.user) === -1) return;
+
+            // in case the restrict date and meeting date are overlaps
+            if (isDatesOverlap(restrict.startDate, restrict.endDate, meeting.actualDate, meetingActualEndTime)) {
+                // the current invited can not go to meeting
+                invitedDict[restrict.user] = false;
+                return false;
+            }
         });
 
         // in case we found all invited can not be in meeting because of restriction,
@@ -116,15 +157,13 @@ function _fitness(meeting, restrictions, meetings) {
             return;
         }
 
-        // get all relevant meetings
-        relevantMeetings = getRelevantMeetingForMeeting(individual, meeting);
         // run over all relevant meeting
-        _.each(relevantMeetings, (relevantMeeting) => {
+        _.each(meetings, (relevantMeeting) => {
             let relevantMeetingActualEndDate = moment(relevantMeeting.actualDate).add(relevantMeeting.meetLengthInSeconds, 'seconds');
             // in case the relevant meeting is overlap
             if (isDatesOverlap(relevantMeeting.actualDate, relevantMeetingActualEndDate, meeting.actualDate, meetingActualEndTime)) {
                 _.each(relevantMeeting.invited, (relevantMeetingInvited) => {
-                    if (_.indexOf(meeting.invited, relevantMeetingInvited) !== -1) {
+                    if (_.indexOf(meeting.invited, relevantMeetingInvited.toString()) !== -1) {
                         invitedDict[relevantMeetingInvited] = false;
                     }
                 });
@@ -139,6 +178,14 @@ function _fitness(meeting, restrictions, meetings) {
     console.log(`score:${fitnessScore}`);
     return fitnessScore;
 }
+
+const isDatesOverlap = (startDateOne, endDateOne, startDateTwo, endDateTwo) => {
+    let rangeOne = moment.range(moment(startDateOne), moment(endDateOne)),
+        rangeTwo = moment.range(moment(startDateTwo), moment(endDateTwo));
+    return rangeOne.overlaps(rangeTwo, {
+        adjacent: false // not include
+    });
+};
 
 // get next algorithm run for the greedy algorithm
 const getNextAlgorithmRunDate = () => {
