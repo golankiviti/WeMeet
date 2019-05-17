@@ -17,7 +17,8 @@ export class MyMeetingsContainer extends Component {
         super(props);
 
         this.state = {
-            meetings: List()
+            meetings: List(),
+            isBusy: false
         };
 
         this.getMeetings = this.getMeetings.bind(this);
@@ -39,15 +40,20 @@ export class MyMeetingsContainer extends Component {
     }
 
     getMeetings() {
+        this.setState({ isBusy: true })
         getMeetings(this.props.user.get('_id'))
             .then(res =>
-                this.setState({ meetings: fromJS(res) })
+                this.setState({
+                    isBusy: false,
+                    meetings: fromJS(res)
+                })
             );
     }
 
     render() {
         const { meetings } = this.state;
-        return <MyMeetings meetings={meetings} />
+        return <MyMeetings isBusy={this.state.isBusy}
+            meetings={meetings} />
     }
 }
 

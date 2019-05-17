@@ -6,6 +6,7 @@ import { List, fromJS } from 'immutable';
 import { registerRefresh, updateRefresh, unregisterRefresh } from '../../../redux/refresh/actionCreators';
 import { futureMeetings as futureMeetingsKey } from '../../../redux/refresh/refreshFields';
 import { getFutureMeetings } from '../../../clientManager/meetingsClientManager';
+import FutureMeetings from './FutureMeetings';
 
 const propTypes = {
     userId: PropTypes.string,
@@ -17,19 +18,25 @@ const propTypes = {
 
 function FutureMeetingsContainer(props) {
     const [futureMeetings, setFutureMeetings] = useState(List())
+    const [isBusy, setBusy] = useState(false)
 
     useEffect(() => {
         props.registerRefresh(futureMeetingsKey);
-        
+
         return () => props.unregisterRefresh(futureMeetingsKey);
     }, [])
 
     useEffect(() => {
+        setBusy(true)
         getFutureMeetings(props.userId)
-        .then(res => setFutureMeetings(fromJS(res)))
+            .then(res => {
+                setBusy(false)
+                setFutureMeetings(fromJS(res))
+            })
     }, [props.timestamp])
 
-    return <div></div>
+    return <FutureMeetings isBusy={isBusy}
+        meetings={futureMeetings} />
 }
 
 FutureMeetingsContainer.propTypes = propTypes;

@@ -5,7 +5,6 @@
     flex-direction: column;
     max-height: 50%;
     height: 50%;
-    margin-bottom: 32px;
 }
 
 :local .header {
@@ -22,7 +21,6 @@
 :local .content {
     padding: 16px;
     overflow: overlay;
-    height: 100%;
 
     &.busy {
         display: flex;

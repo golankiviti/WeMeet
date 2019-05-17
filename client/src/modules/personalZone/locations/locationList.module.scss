@@ -9,7 +9,7 @@
 
 :local .header {
     background-color: $secondary;
-    height: 48px;;
+    height: 48px;
     display: flex;
     align-items: center;
     padding: 16px;
@@ -21,6 +21,13 @@
 :local .content {
     padding: 16px;
     overflow: overlay;
+    height: 100%;
+
+    &.busy {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 :local .addButton {
