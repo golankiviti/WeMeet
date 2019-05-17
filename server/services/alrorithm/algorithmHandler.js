@@ -3,7 +3,8 @@ const {
 } = require('child_process');
 
 const _ = require('lodash'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    moment = require('moment');
 
 const {
     meetings,
@@ -12,9 +13,12 @@ const {
 
 const logger = require('../../utils/logger');
 
+let numOfChild = 0;
+
 // here we will get all the meeting we want set from the db,
 // then we will send it to the algorithemExecuter
 const startAlgorithm = () => {
+    numOfChild++;
     return new Promise((resolve, reject) => {
         // in case we are in debug mode
         let debugPort;
@@ -60,6 +64,35 @@ const startAlgorithm = () => {
                 });
             })
             .then((restrictions) => {
+                let query = {
+                    isDetermined: true
+                };
+                return meetings.find(query).lean()
+                    .then((meetings) => {
+                        _.each(meetings, meet => {
+                            _.each(meet.invited, (userId) => {
+                                let meetingActualEndDate = moment(meet.actualDate).add(meet.meetLengthInSeconds, 'seconds');
+                                let newRestiction = {
+                                    name: meet.name,
+                                    startDate: meet.actualDate,
+                                    endDate: meetingActualEndDate.toISOString(),
+                                    user: userId
+                                };
+                                let relevantRestrict = _.findIndex(restrictions, (res) => res.userId.toString() === userId.toString());
+                                if (relevantRestrict === -1) {
+                                    restrictions.push({
+                                        userId,
+                                        userRestrictions: [newRestiction]
+                                    });
+                                } else {
+                                    restrictions[relevantRestrict].userRestrictions.push(newRestiction);
+                                }
+                            });
+                        });
+                        return restrictions;
+                    });
+            })
+            .then((restrictions) => {
                 // prepare some option for the child process
                 let childOptions = {
                     // pipe the stdio to the parent
@@ -68,12 +101,13 @@ const startAlgorithm = () => {
                 };
                 // in case we are in debug mode
                 if (isDebugMode !== -1) {
-                    childOptions.execArgv.push(`--inspect-brk=${parseInt(debugPort) + 1}`)
+                    childOptions.execArgv.push(`--inspect-brk=${parseInt(debugPort) + numOfChild}`)
                 }
                 // start the algorithm
                 let child = fork(`${__dirname}/algorithmExecuter.js`, childOptions);
                 // in case our child finish it job
                 child.on('exit', (exitCode) => {
+                    numOfChild--;
                     // in case the child exit with code different from 0
                     // it mean the child didnt exit propely
                     if (exitCode !== 0) {
@@ -101,14 +135,17 @@ const startAlgorithm = () => {
                     logger.debug(output.toString().trim());
                 });
                 // get the stderr of child and log it
-                // child.stderr.on('data', (output) => {
-                //     logger.warn(output.toString());
-                // });
-                // send to child the meetings
-                child.send({
-                    meetings: _meetings,
-                    restrictions
+                child.stderr.on('data', (output) => {
+                    logger.warn(output.toString());
                 });
+
+                setTimeout(() => {
+                    // send to child the meetings
+                    child.send({
+                        meetings: _meetings,
+                        restrictions
+                    });
+                }, 500);
             })
             .catch((err) => {
                 logger.error(err);

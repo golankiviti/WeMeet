@@ -3,6 +3,8 @@ const mongoose = require('mongoose'),
     moment = require('moment'),
     _ = require('lodash');
 
+const algorithmUtils = require('../../../services/alrorithm');
+
 const meeting = require('../../../data').schemas.meetings;
 
 const logger = require('../../../utils/logger');
@@ -20,10 +22,25 @@ const getUserMeetings = (userId) => {
 };
 
 const creatNewMeeting = (currentMeeting) => {
-
+    let currentMeetingFromDate = moment(currentMeeting.fromDate),
+        nextCronJob = algorithmUtils.getNextAlgorithmRunDate();
+    // creator is part of the invited
+    currentMeeting.invited.push(currentMeeting.creator);
+    currentMeeting.invited = _.uniq(currentMeeting.invited);
+    // in case there is no meetLengthInSeconds, default is hour
+    if (_.isNil(currentMeeting.meetLengthInSeconds)) {
+        currentMeeting.meetLengthInSeconds = 60 * 60; // hour
+    }
+    // in case the user want to start the meeting before the genetic algorithm will run
+    if (currentMeetingFromDate.isBefore(nextCronJob)) {
+        return algorithmUtils.greedyAlgorithm(currentMeeting);
+    }
+    // let the genetic algorithm handle this meeting
+    currentMeeting.isDetermined = false;
     let newMeeting = new meeting(currentMeeting);
     return newMeeting.save();
 };
+
 const updateMeeting = (currentMeeting) => {
     return meeting.findOneAndUpdate({
         '_id': new mongoose.Types.ObjectId(currentMeeting._id)
