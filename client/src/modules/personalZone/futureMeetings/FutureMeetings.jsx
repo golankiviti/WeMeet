@@ -18,13 +18,13 @@ function FutureMeetings({ meetings, isBusy }) {
     })
     return <Card raised
         className={styles.container}>
-        <div className={styles.header}>פגישות שמחכות לשיבוץ.</div>
+        <div className={styles.header}>פגישות שמחכות לשיבוץ</div>
         <div className={contentClasses}>
             {
                 isBusy &&
                 <CircularProgress /> ||
                 meetings.size === 0 &&
-                <div>לא קיימות פגישות שממתינות לשיבוץ</div> ||
+                <div>לא קיימות פגישות שממתינות לשיבוץ.</div> ||
                 meetings.map(x => <FutureMeeting key={x.get('_id')}
                     id={x.get('_id')}
                     name={x.get('name')}

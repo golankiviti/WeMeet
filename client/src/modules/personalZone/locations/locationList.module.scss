@@ -8,7 +8,7 @@
 }
 
 :local .header {
-    background-color: $secondary;
+    background-color: $primary;
     height: 48px;
     display: flex;
     align-items: center;
@@ -31,5 +31,8 @@
 }
 
 :local .addButton {
+    margin: 8px !important;
+    background-color: $secondary !important;
+    color: white !important;
     margin-top: auto !important;
 }

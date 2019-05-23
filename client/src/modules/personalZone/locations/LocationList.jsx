@@ -61,13 +61,13 @@ class LocationList extends Component {
 
         return <Card raised
             className={styles.container}>
-            <div className={styles.header}>המיקומים שלי.</div>
+            <div className={styles.header}>המיקומים שלי</div>
             <div className={contentClasses}>
                 {
                     this.props.isBusy &&
                     <CircularProgress /> ||
                     this.props.locations.size === 0 &&
-                    <div>לא קיימים מיקומים</div> ||
+                    <div>לא קיימים מיקומים.</div> ||
                     this.props.locations.map(x =>
                         <Location key={x.get('_id')}
                             id={x.get('_id')}

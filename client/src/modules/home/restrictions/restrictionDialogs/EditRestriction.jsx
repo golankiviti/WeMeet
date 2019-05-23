@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import RestrictionDialog from './RestrictionDialog';
-import { addRestriction } from '../../../../clientManager/userManager';
+import { editRestriction } from '../../../../clientManager/userManager';
 import { updateRefresh } from '../../../../redux/refresh/actionCreators';
 import { home as homeKey } from '../../../../redux/refresh/refreshFields';
 import { bindActionCreators } from 'redux';
@@ -10,30 +10,26 @@ import { bindActionCreators } from 'redux';
 const propTypes = {
     onClose: PropTypes.func.isRequired,
     userId: PropTypes.string, // from redux
+    restriction: PropTypes.object,
     updateRefresh: PropTypes.func
 };
 
-class AddRestriction extends Component {
-    handleSubmit = values => {
-        addRestriction(this.props.userId, values)
+function EditRestriction({ onClose, restriction, userId, updateRefresh }) {
+    const handleSubmit = values => {
+        editRestriction(userId, values)
             .then(() => {
-                this.props.onClose();
-                this.props.updateRefresh(homeKey)
+                onClose();
+                updateRefresh(homeKey)
             })
     }
-
-
-    render() {
-        const { onClose } = this.props;
-
-        return <RestrictionDialog title='אילוץ חדש'
-            form='add-restriction'
-            onSubmit={this.handleSubmit}
-            onClose={onClose} />
-    }
+    return <RestrictionDialog title='עריכת אילוץ'
+        form='edit-restriction'
+        restriction={restriction}
+        onSubmit={handleSubmit}
+        onClose={onClose} />
 }
 
-AddRestriction.propTypes = propTypes;
+EditRestriction.propTypes = propTypes;
 
 const mapStateToProps = state => ({
     userId: state.user ? state.user.get('_id') : ''
@@ -45,4 +41,4 @@ const mapDispatchToProps = dispatch => {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddRestriction);
+export default connect(mapStateToProps, mapDispatchToProps)(EditRestriction);

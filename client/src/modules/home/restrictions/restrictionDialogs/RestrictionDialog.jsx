@@ -9,6 +9,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import DateTimePicker from '../../../../common/DateTimePicker';
 import styles from './restrictionDialog.module.scss';
+import moment from 'moment';
+import 'moment/locale/he';
 
 const propTypes = {
     title: PropTypes.string.isRequired,
@@ -19,6 +21,10 @@ const propTypes = {
 };
 
 class RestrictionDialog extends Component {
+    componentDidMount() {
+        this.props.initialize(this.props.restriction)
+    }
+
     render() {
         const { title, valid, handleSubmit, onClose } = this.props;
         return <Dialog onClose={onClose}
@@ -68,6 +74,10 @@ const validate = values => {
 
     if (!values.endDate) {
         errors.endDate = 'חובה להזין תאריך סיום';
+    } else if (moment(values.endDate).isBefore(values.startDate)) {
+        errors.endDate = 'תאריך סיום אינו יכול להיות לפני תאריך ההתחלה.'
+    } else if (moment(values.endDate).isSame(values.startDate)) {
+        errors.endDate = 'תאריך הסיום אינו יכול להיות זהה לתאריך ההתחלה.'
     }
 
     return errors;
