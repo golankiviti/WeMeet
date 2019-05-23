@@ -1,4 +1,6 @@
-import { BASE_API_URL } from './constants';
+import {
+    BASE_API_URL
+} from './constants';
 import fetch from './fetch';
 
 const BASE_URL = `${BASE_API_URL}/users`;
@@ -40,6 +42,13 @@ export function deleteLocation(locationId) {
 
 export function addRestriction(id, restriction) {
     return fetch(`${BASE_URL}/${id}/restriction`, {
+        method: 'PUT',
+        body: JSON.stringify(restriction)
+    }, false);
+}
+
+export function editRestriction(id, restriction) {
+    return fetch(`${BASE_URL}/${id}/restriction/${restriction.id}`, {
         method: 'PUT',
         body: JSON.stringify(restriction)
     }, false);

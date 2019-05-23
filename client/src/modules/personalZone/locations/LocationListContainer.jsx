@@ -14,7 +14,8 @@ class LocationListContainer extends Component {
         super(props);
 
         this.state = {
-            locations: List()
+            locations: List(),
+            isBusy: false
         };
     }
 
@@ -23,9 +24,11 @@ class LocationListContainer extends Component {
     }
 
     fetchLocations = () => {
+        this.setState({ isBusy: true })
         userLocations(this.props.userId)
             .then(res => {
                 this.setState({
+                    isBusy: false,
                     locations: fromJS(res)
                 });
             })
@@ -39,6 +42,7 @@ class LocationListContainer extends Component {
     render() {
         return <LocationList locations={this.state.locations}
             {...this.props}
+            isBusy={this.state.isBusy}
             refresh={this.fetchLocations}
             onDelete={this.handleDelete} />
     }

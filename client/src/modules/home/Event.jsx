@@ -16,7 +16,9 @@ const propTypes = {
 }
 
 export class Event extends Component {
-    deleteRestriction(restrictionId) {
+    deleteRestriction(restrictionId, e) {
+        e.preventDefault();
+        e.stopPropagation();
         deleteRestriction(restrictionId).then(() => {
             this.props.updateRefresh(home);
         });
@@ -37,7 +39,7 @@ export class Event extends Component {
                 {event.title}
                 {event.type === 'restriction' &&
                     <span title='מחק אילוץ'>
-                        <DeleteIcon className={styles.deleteIcon} onClick={() => this.deleteRestriction(event.id)} />
+                        <DeleteIcon className={styles.deleteIcon} onClick={(e) => this.deleteRestriction(event.id, e)} />
                     </span>
                 }
                 {event.type === 'meeting' && event.creator === user.get('_id') &&
