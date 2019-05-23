@@ -19,6 +19,7 @@ const propTypes = {
 
 function MeetingsForApprovalContainer(props) {
     const [meetings, setMeetings] = useState(List());
+    const [isBusy, setBusy] = useState(false)
 
     // componentDidMount
     useEffect(() => {
@@ -28,8 +29,13 @@ function MeetingsForApprovalContainer(props) {
     }, []);
 
     useEffect(() => {
+        setBusy(true)
         getMeetingsForApproval(props.userId)
-        .then(res => setMeetings(fromJS(res)))
+            .then(res => {
+                setBusy(false)
+                setMeetings(fromJS(res))
+            })
+
     }, [props.timestamp])
 
     const approveMeeting = (meetingId) => {
@@ -38,10 +44,10 @@ function MeetingsForApprovalContainer(props) {
             meetingId,
             response: ACCPET_MEETING
         })
-        .then(() => {
-            props.updateRefresh(meetingsForApprovalKey)
-            props.updateRefresh(myMeetingsKey)
-        });
+            .then(() => {
+                props.updateRefresh(meetingsForApprovalKey)
+                props.updateRefresh(myMeetingsKey)
+            });
     }
 
     const declineMeeting = (meetingId) => {
@@ -50,12 +56,13 @@ function MeetingsForApprovalContainer(props) {
             meetingId,
             response: REJECT_MEETING
         })
-        .then(() => {
-            props.updateRefresh(meetingsForApprovalKey)
-        });;
+            .then(() => {
+                props.updateRefresh(meetingsForApprovalKey)
+            });
     }
 
     return <MeetingsForApproval meetings={meetings}
+        isBusy={isBusy}
         onApprove={approveMeeting}
         onDecline={declineMeeting} />
 }

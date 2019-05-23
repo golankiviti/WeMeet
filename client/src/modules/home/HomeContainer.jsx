@@ -17,6 +17,9 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import AddRestriction from './restrictions/restrictionDialogs/AddRestriction';
 import Event from './Event';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import classNames from 'classnames';
+import EditRestriction from '../home/restrictions/restrictionDialogs/EditRestriction';
 
 const propTypes = {
     // user: ImmutablePropTypes.map.isRequired //redux
@@ -29,11 +32,15 @@ export class HomeContainer extends Component {
         this.state = {
             events: [],
             showMeetingDialog: false,
+            showRestrictionDialog: false,
             selectedMeeting: Map(),
-            addDialogOpen: false
+            selectedRestriction: {},
+            addDialogOpen: false,
+            isBusy: false
         };
 
         this.closeMeetingDialog = this.closeMeetingDialog.bind(this);
+        this.closeRestrictionDialog = this.closeRestrictionDialog.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.localizer = BigCalendar.momentLocalizer(moment);
         this.messages = {
@@ -62,35 +69,41 @@ export class HomeContainer extends Component {
     }
 
     getMeetings() {
-        Promise.all(
-            [getMeetings(this.props.user.get('_id')),
-            getRestrictions(this.props.user.get('_id'))])
-            .then(res => {
-                const meetings = res[0].map(meeting =>
-                    ({
-                        id: meeting._id,
-                        title: meeting.name,
-                        start: new Date(meeting.fromDate), //new Date(meeting.actualDate)
-                        end: new Date(meeting.toDate), // new Date(new Date(meeting.actualDate).setHours(new Date(meeting.actualDate).getHours() + meeting.duration))
-                        invited: meeting.invited,
-                        location: meeting.location,
-                        creator: meeting.creator,
-                        duration: meeting.duration,
-                        color: '#2196f3',
-                        type: 'meeting'
-                    }));
-                const restrictions = res[1].map(meeting =>
-                    ({
-                        id: meeting._id,
-                        title: meeting.name,
-                        start: new Date(meeting.startDate),
-                        end: new Date(meeting.endDate),
-                        color: 'green',
-                        type: 'restriction'
-                    }));
-                const events = meetings.concat(restrictions);
-                this.setState({ events });
-            });
+        this.setState({ isBusy: true })
+        {
+            Promise.all(
+                [getMeetings(this.props.user.get('_id')),
+                getRestrictions(this.props.user.get('_id'))])
+                .then(res => {
+                    const meetings = res[0].map(meeting =>
+                        ({
+                            id: meeting._id,
+                            title: meeting.name,
+                            start: new Date(meeting.fromDate), //new Date(meeting.actualDate)
+                            end: new Date(meeting.toDate), // new Date(new Date(meeting.actualDate).setHours(new Date(meeting.actualDate).getHours() + meeting.duration))
+                            invited: meeting.invited,
+                            location: meeting.location,
+                            creator: meeting.creator,
+                            duration: meeting.duration,
+                            color: '#2196f3',
+                            type: 'meeting'
+                        }));
+                    const restrictions = res[1].map(meeting =>
+                        ({
+                            id: meeting._id,
+                            title: meeting.name,
+                            start: new Date(meeting.startDate),
+                            end: new Date(meeting.endDate),
+                            color: 'green',
+                            type: 'restriction'
+                        }));
+                    const events = meetings.concat(restrictions);
+                    this.setState({
+                        events,
+                        isBusy: false
+                    });
+                });
+        }
     }
 
     eventStyleGetter(event, start, end, isSelected) {
@@ -123,6 +136,15 @@ export class HomeContainer extends Component {
             });
 
             this.setState({ showMeetingDialog: true, selectedMeeting });
+        } else {
+            const selectedRestriction = {
+                id: meeting.id,
+                name: meeting.title,
+                startDate: moment(meeting.start).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16),
+                endDate: moment(meeting.end).format('YYYY-MM-DDTHH:mm:ss').substring(0, 16),
+            };
+
+            this.setState({ showRestrictionDialog: true, selectedRestriction });
         }
     }
 
@@ -130,6 +152,13 @@ export class HomeContainer extends Component {
         this.setState({
             showMeetingDialog: false,
             selectedMeeting: Map()
+        });
+    }
+
+    closeRestrictionDialog() {
+        this.setState({
+            showRestrictionDialog: false,
+            selectedRestriction: Map()
         });
     }
 
@@ -146,9 +175,18 @@ export class HomeContainer extends Component {
     }
 
     render() {
+        const calendarClasses = classNames(styles.calendarContainer, {
+            [styles.busy]: this.state.isBusy
+        })
         return (
             <Fragment>
-                <div className={styles.calendarContainer}>
+                {
+                    this.state.isBusy &&
+                    <div className={styles.busyContainer}>
+                        <CircularProgress />
+                    </div>
+                }
+                <div className={calendarClasses}>
                     <BigCalendar
                         localizer={this.localizer}
                         events={this.state.events}
@@ -169,6 +207,12 @@ export class HomeContainer extends Component {
                         onClose={this.closeMeetingDialog}
                         meeting={this.state.selectedMeeting}
                         title={this.state.selectedMeeting.get('name')} />
+                }
+                {
+                    this.state.showRestrictionDialog &&
+                    <EditRestriction
+                        onClose={this.closeRestrictionDialog}
+                        restriction={this.state.selectedRestriction} />
                 }
                 <Fab className={styles.addButton} color='primary' aria-label='Add' onClick={this.handleOpenAddDialog}>
                     <AddIcon />

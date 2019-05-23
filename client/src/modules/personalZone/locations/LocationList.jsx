@@ -8,12 +8,15 @@ import Location from './Location';
 import AddLocation from './locationDialogs/AddLocation';
 import EditLocation from './locationDialogs/EditLocation';
 import styles from './locationList.module.scss';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import classNames from 'classnames';
 
 const propTypes = {
     locations: ImmutablePropTypes.list.isRequired,
     userId: PropTypes.string.isRequired,
     refresh: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired,
+    isBusy: PropTypes.bool.isRequired
 };
 
 class LocationList extends Component {
@@ -52,13 +55,20 @@ class LocationList extends Component {
 
     render() {
         const { userId, onDelete } = this.props;
+        const contentClasses = classNames(styles.content, {
+            [styles.busy]: this.props.isBusy
+        })
 
         return <Card raised
             className={styles.container}>
             <div className={styles.header}>המיקומים שלי</div>
-            <div className={styles.content}>
+            <div className={contentClasses}>
                 {
-                    this.props.locations.map(x => 
+                    this.props.isBusy &&
+                    <CircularProgress /> ||
+                    this.props.locations.size === 0 &&
+                    <div>לא קיימים מיקומים.</div> ||
+                    this.props.locations.map(x =>
                         <Location key={x.get('_id')}
                             id={x.get('_id')}
                             name={x.get('name')}
@@ -71,15 +81,15 @@ class LocationList extends Component {
                 <Icon>add</Icon>
             </Button>
             {
-                this.state.addDialogOpen && 
-                    <AddLocation userId={userId}
-                        onClose={this.handleCloseAddDialog} />
+                this.state.addDialogOpen &&
+                <AddLocation userId={userId}
+                    onClose={this.handleCloseAddDialog} />
             }
             {
-                this.state.editLocatonId && 
-                    <EditLocation userId={userId}
-                        id={this.state.editLocatonId}
-                        onClose={this.handleCloseEditDialog} />
+                this.state.editLocatonId &&
+                <EditLocation userId={userId}
+                    id={this.state.editLocatonId}
+                    onClose={this.handleCloseEditDialog} />
             }
         </Card>
     }
