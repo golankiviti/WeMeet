@@ -52,7 +52,7 @@ export class Meeting extends Component {
                 </span>
                 <VisibilityIcon className={styles.editIcon} onClick={this.handleNewMeetingClick} />
                 {
-                    meeting.get('creator') === user.get('_id') &&
+                    meeting.get('creator') === user.get('_id') && meeting.get('isDetermined') === false &&
                     <DeleteIcon className={styles.editIcon} onClick={this.deleteMeeting} />
                 }
 
