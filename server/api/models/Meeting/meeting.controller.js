@@ -10,35 +10,42 @@ const MEETING_RESPONSE = {
 };
 
 const getUserMeetings = (req, res) => {
+    logger.debug(`get all user with id: ${req.params.id} meetings from db`);
     return meetingsService.getUserMeetings(req.params.id)
         .then((meetings) => {
             res.json(meetings);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
 const creatNewMeeting = (req, res) => {
+    logger.debug(`create new meeting`);
     return meetingsService.creatNewMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
 const updateMeeting = (req, res) => {
+    logger.debug(`update meeting`)
     return meetingsService.updateMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
 
 const getUserWaitingMeetings = (req, res) => {
     let id = req.params.id;
+    logger.debug(`get all user with id: ${id} waiting meeting from db`);
     logger.debug('validate params');
     if (_.isNil(id)) {
         logger.warn('id param is not valid');
@@ -57,6 +64,7 @@ const getUserWaitingMeetings = (req, res) => {
 
 const getUserFutureMeetings = (req, res) => {
     let id = req.params.id;
+    logger.debug(`get all user with id ${id} future meetings from db`);
     logger.debug('validate params');
     if (_.isNil(id)) {
         logger.warn('id param is not valid');
@@ -122,6 +130,7 @@ const acceptOrRejectMeeting = (req, res) => {
             return res.json(true);
         })
         .catch((err) => {
+            logger.error(err);
             return res.status(500).send(err);
         });
 }
@@ -132,6 +141,7 @@ const deleteMeeting = (req, res) => {
             res.json(meeting);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
