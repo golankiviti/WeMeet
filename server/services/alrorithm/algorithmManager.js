@@ -51,6 +51,7 @@ function geneticAlgorithm() {
 
 // greedy algorithm
 const greedyAlgorithm = (meeting) => {
+    logger.debug('start greedy algorithm');
     meeting.isDetermined = true;
     let meetingFromDate = moment(meeting.fromDate),
         meetingToDate = moment(meeting.toDate),
@@ -81,9 +82,11 @@ const greedyAlgorithm = (meeting) => {
             }]
         };
     let relevantMeetings, relevantRestrictions;
+    logger.debug('get all relevant meeting for the algorithm')
     return meetings.find(meetingQuery).lean()
         .then((meets) => {
             relevantMeetings = meets;
+            logger.debug('get all relevant restriction for the algorithm');
             return restrictions.find(restrictionQuery).lean();
         })
         .then((resticts) => {
@@ -92,9 +95,11 @@ const greedyAlgorithm = (meeting) => {
                 actualMeetingToDate = moment(currentMeetingCheckDate).add(meeting.meetLengthInSeconds, 's'),
                 bestScore = Infinity;
             meeting.actualDate = currentMeetingCheckDate;
+            logger.debug('start to search for the best meeting date');
             while (!foundSolution && actualMeetingToDate.isBefore(meetingToDate)) {
                 let currentMeetingScore = _fitness(meeting, relevantRestrictions, relevantMeetings);
                 if (currentMeetingScore === 0) {
+                    logger.debug('found time with score 0!')
                     foundSolution = true;
                     bestMeetingDate = meeting.actualDate;
                 } else if (currentMeetingScore < bestScore) {

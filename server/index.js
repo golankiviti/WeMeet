@@ -84,6 +84,7 @@ app.get('/algorithmTest', (req, res, next) => {
             res.json(results);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         })
 });
@@ -94,6 +95,7 @@ app.get('/algorithmForce', (req, res, next) => {
             res.json(true);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         })
 });
@@ -102,6 +104,10 @@ app.get('/algorithmData', (req, res, next) => {
     algorithmUtils.geneticAlgorithmData()
         .then(results => {
             res.json(results);
+        })
+        .catch((err) => {
+            logger.error(err);
+            res.status(500).send(err);
         })
 });
 

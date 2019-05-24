@@ -75,19 +75,25 @@ export class HomeContainer extends Component {
                 [getMeetings(this.props.user.get('_id')),
                 getRestrictions(this.props.user.get('_id'))])
                 .then(res => {
-                    const meetings = res[0].map(meeting =>
-                        ({
-                            id: meeting._id,
-                            title: meeting.name,
-                            start: new Date(meeting.fromDate), //new Date(meeting.actualDate)
-                            end: new Date(meeting.toDate), // new Date(new Date(meeting.actualDate).setHours(new Date(meeting.actualDate).getHours() + meeting.duration))
-                            invited: meeting.invited,
-                            location: meeting.location,
-                            creator: meeting.creator,
-                            duration: meeting.duration,
-                            color: '#2196f3',
-                            type: 'meeting'
-                        }));
+                    const meetings = res[0].map(meeting => {
+                        if (meeting.isDetermined) {
+                            return {
+                                id: meeting._id,
+                                title: meeting.name,
+                                start: new Date(meeting.actualDate),
+                                end: new Date(new Date(meeting.actualDate).setHours(new Date(meeting.actualDate).getHours() + meeting.duration)),
+                                invited: meeting.invited,
+                                location: meeting.location,
+                                creator: meeting.creator,
+                                duration: meeting.duration,
+                                actualDate: new Date(meeting.actualDate),
+                                isDetermined: meeting.isDetermined,
+                                color: '#2196f3',
+                                type: 'meeting'
+                            }
+                        }
+                        return null;
+                    }).filter((item) => item !== null);
                     const restrictions = res[1].map(meeting =>
                         ({
                             id: meeting._id,
@@ -132,7 +138,9 @@ export class HomeContainer extends Component {
                 invited: List(meeting.invited),
                 location: meeting.location,
                 duration: meeting.duration,
-                creator: meeting.creator
+                creator: meeting.creator,
+                actualDate: meeting.actualDate.toISOString(),
+                isDetermined: meeting.isDetermined
             });
 
             this.setState({ showMeetingDialog: true, selectedMeeting });

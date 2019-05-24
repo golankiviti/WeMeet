@@ -42,7 +42,7 @@ export class Event extends Component {
                         <DeleteIcon className={styles.deleteIcon} onClick={(e) => this.deleteRestriction(event.id, e)} />
                     </span>
                 }
-                {event.type === 'meeting' && event.creator === user.get('_id') &&
+                {event.type === 'meeting' && event.creator === user.get('_id') && event.isdetermined === false &&
                     <span title='בטל פגישה'>
                         <DeleteIcon className={styles.deleteIcon} onClick={(e) => this.deleteMeeting(event.id, e)} />
                     </span>
