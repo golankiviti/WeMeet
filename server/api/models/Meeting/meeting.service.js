@@ -12,8 +12,6 @@ const logger = require('../../../utils/logger');
 const getUserMeetings = (userId) => {
     return meeting.find({
         $or: [{
-            "creator": userId
-        }, {
             "accepted": {
                 $in: userId
             }
@@ -27,16 +25,20 @@ const creatNewMeeting = (currentMeeting) => {
     // creator is part of the invited
     currentMeeting.invited.push(currentMeeting.creator);
     currentMeeting.invited = _.uniq(currentMeeting.invited);
+    logger.debug(`get duration from client, duration: ${currentMeeting.duration}`);
     // in case there is no meetLengthInSeconds, default is hour
     if (_.isNil(currentMeeting.duration)) {
         currentMeeting.meetLengthInSeconds = 60 * 60; // hour
     } else {
         currentMeeting.meetLengthInSeconds = currentMeeting.duration * 60 * 60;
     }
+    logger.debug('check if need to active the greedy algorithm')
     // in case the user want to start the meeting before the genetic algorithm will run
     if (currentMeetingFromDate.isBefore(nextCronJob)) {
+        logger.debug('start greedy algorithm');
         return algorithmUtils.greedyAlgorithm(currentMeeting);
     }
+    logger.debug('can wait to genetic algorithm');
     // let the genetic algorithm handle this meeting
     currentMeeting.isDetermined = false;
     let newMeeting = new meeting(currentMeeting);
