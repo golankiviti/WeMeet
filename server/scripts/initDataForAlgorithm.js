@@ -15,6 +15,11 @@ const MONGO_URL = process.env.MONGO_URL || 'localhost',
     MONGO_USERNAME = process.env.MONGO_USERNAME || null,
     MONGO_PASSWORD = process.env.MONGO_PASSWORD || null;
 
+let preference = {
+    name: 'address',
+    address: 'abc'
+};
+
 // some users
 let usersTmp = [{
         local: {
@@ -225,7 +230,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 2',
     isDetermined: false,
@@ -236,7 +242,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 3',
     isDetermined: false,
@@ -247,7 +254,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 4',
     isDetermined: false,
@@ -258,7 +266,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 5',
     isDetermined: false,
@@ -269,7 +278,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 6',
     isDetermined: false,
@@ -280,7 +290,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 7',
     isDetermined: false,
@@ -291,7 +302,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 8',
     isDetermined: false,
@@ -302,7 +314,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 9',
     isDetermined: false,
@@ -313,7 +326,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 10',
     isDetermined: false,
@@ -324,7 +338,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 11',
     isDetermined: false,
@@ -335,7 +350,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 12',
     isDetermined: false,
@@ -346,7 +362,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }, {
     name: 'meet 13',
     isDetermined: false,
@@ -357,7 +374,8 @@ let meetingsTmp = [{
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
     accepted: [],
-    rejected: []
+    rejected: [],
+    location: 'address'
 }];
 
 // connect to mongo for the saving
@@ -386,31 +404,43 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
             users[1]._id.toString(),
             users[2]._id.toString(),
         ];
+        meetingsTmp[0].creator = users[1]._id.toString();
+
         meetingsTmp[1].invited = [
             users[2]._id.toString(),
             users[3]._id.toString(),
             users[4]._id.toString(),
         ];
+        meetingsTmp[1].creator = users[3]._id.toString();
+
         meetingsTmp[2].invited = [
             users[4]._id.toString(),
             users[5]._id.toString(),
             users[6]._id.toString(),
         ];
+        meetingsTmp[2].creator = users[5]._id.toString();
+
         meetingsTmp[3].invited = [
             users[1]._id.toString(),
             users[2]._id.toString(),
             users[3]._id.toString(),
             users[4]._id.toString(),
         ];
+        meetingsTmp[3].creator = users[1]._id.toString();
+
         meetingsTmp[4].invited = [
             users[0]._id.toString(),
             users[1]._id.toString(),
         ];
+        meetingsTmp[4].creator = users[1]._id.toString();
+
         meetingsTmp[5].invited = [
             users[1]._id.toString(),
             users[2]._id.toString(),
             users[3]._id.toString(),
         ];
+        meetingsTmp[5].creator = users[3]._id.toString();
+
         meetingsTmp[6].invited = [
             users[0]._id.toString(),
             users[2]._id.toString(),
@@ -418,36 +448,50 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
             users[4]._id.toString(),
             users[5]._id.toString(),
         ];
+        meetingsTmp[6].creator = users[5]._id.toString();
+
         meetingsTmp[7].invited = [
             users[0]._id.toString(),
             users[5]._id.toString(),
             users[6]._id.toString(),
         ];
+        meetingsTmp[7].creator = users[0]._id.toString();
+
         meetingsTmp[8].invited = [
             users[2]._id.toString(),
             users[3]._id.toString(),
             users[4]._id.toString(),
             users[5]._id.toString(),
         ];
+        meetingsTmp[8].creator = users[3]._id.toString();
+
         meetingsTmp[9].invited = [
             users[0]._id.toString(),
             users[1]._id.toString(),
             users[6]._id.toString(),
         ];
+        meetingsTmp[9].creator = users[0]._id.toString();
+
         meetingsTmp[10].invited = [
             users[4]._id.toString(),
             users[5]._id.toString(),
             users[6]._id.toString(),
         ];
+        meetingsTmp[10].creator = users[6]._id.toString();
+
         meetingsTmp[11].invited = [
             users[2]._id.toString(),
             users[5]._id.toString(),
             users[6]._id.toString(),
         ];
+        meetingsTmp[11].creator = users[6]._id.toString();
+
         meetingsTmp[12].invited = [
             users[0]._id.toString(),
             users[4]._id.toString(),
         ];
+        meetingsTmp[12].creator = users[4]._id.toString();
+
         return Promise.map(meetingsTmp, (meet) => {
                 let tmp = new meetings(meet);
                 return tmp.save();
@@ -483,6 +527,15 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
                     let tmp = new restrictions(restrict);
                     return tmp.save();
                 })
+            })
+            .then(() => {
+                return Promise.map(users, (user) => {
+                    let pref = Object.assign({
+                        user: user._id.toString()
+                    }, preference);
+                    let tmp = new preferences(pref);
+                    return tmp.save();
+                });
             });
     })
     .then(() => {
