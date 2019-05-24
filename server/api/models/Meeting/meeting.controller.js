@@ -13,7 +13,7 @@ const getUserMeetings = (req, res) => {
     logger.debug(`get all user with id: ${req.params.id} meetings from db`);
     return meetingsService.getUserMeetings(req.params.id)
         .then((meetings) => {
-            res.json(meetings);
+            res.json(_.map(meetings, addDurationToMeeting));
         })
         .catch((err) => {
             logger.error(err);
@@ -54,7 +54,7 @@ const getUserWaitingMeetings = (req, res) => {
     logger.debug('get all waiting meetings');
     return meetingsService.getUserWaitingMeetings(id, true)
         .then((meetings) => {
-            return res.json(meetings);
+            return res.json(_.map(meetings, addDurationToMeeting));
         })
         .catch((err) => {
             logger.error(err);
@@ -73,7 +73,7 @@ const getUserFutureMeetings = (req, res) => {
     logger.debug('get all waiting meetings');
     return meetingsService.getUserWaitingMeetings(id, false)
         .then((meetings) => {
-            return res.json(meetings);
+            return res.json(_.map(meetings, addDurationToMeeting));
         })
         .catch((err) => {
             logger.error(err);
@@ -144,6 +144,11 @@ const deleteMeeting = (req, res) => {
             logger.error(err);
             res.status(500).send(err);
         });
+}
+
+function addDurationToMeeting(meeting) {
+    meeting.duration = meeting.meetLengthInSeconds / 60 / 60;
+    return meeting;
 }
 
 module.exports = {
