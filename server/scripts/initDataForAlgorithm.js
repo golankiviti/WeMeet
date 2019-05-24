@@ -90,128 +90,128 @@ let usersTmp = [{
 
 let restrictionsTmp = [{
         name: 'user 1 restriction 1',
-        startDate: moment().startOf('week').add(0, 'd').hour(10).minute(30),
-        endDate: moment().startOf('week').add(0, 'd').hour(12).minute(0)
+        startDate: moment().startOf('day').add(1, 'd').hour(10).minute(30),
+        endDate: moment().startOf('day').add(1, 'd').hour(12).minute(0)
     },
     {
         name: 'user 1 restriction 2',
-        startDate: moment().startOf('week').add(0, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(0, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(1, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(1, 'd').hour(10).minute(0)
     },
     {
         name: 'user 1 restriction 3',
-        startDate: moment().startOf('week').add(0, 'd').hour(13).minute(0),
-        endDate: moment().startOf('week').add(1, 'd').hour(9).minute(0)
+        startDate: moment().startOf('day').add(1, 'd').hour(13).minute(0),
+        endDate: moment().startOf('day').add(2, 'd').hour(9).minute(0)
     },
     {
         name: 'user 1 restriction 4',
-        startDate: moment().startOf('week').add(3, 'd').hour(8).minute(30),
-        endDate: moment().startOf('week').add(3, 'd').hour(22).minute(0)
+        startDate: moment().startOf('day').add(4, 'd').hour(8).minute(30),
+        endDate: moment().startOf('day').add(4, 'd').hour(22).minute(0)
     },
     {
         name: 'user 1 restriction 5',
-        startDate: moment().startOf('week').add(3, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(4, 'd').hour(8).minute(30)
+        startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(5, 'd').hour(8).minute(30)
     },
     {
         name: 'user 1 restriction 6',
-        startDate: moment().startOf('week').add(2, 'd').hour(17).minute(0),
-        endDate: moment().startOf('week').add(3, 'd').hour(8).minute(00)
+        startDate: moment().startOf('day').add(3, 'd').hour(17).minute(0),
+        endDate: moment().startOf('day').add(4, 'd').hour(8).minute(00)
     },
     {
         name: 'user 3 restriction 1',
-        startDate: moment().startOf('week').add(1, 'd').hour(12).minute(0),
-        endDate: moment().startOf('week').add(1, 'd').hour(13).minute(30)
+        startDate: moment().startOf('day').add(2, 'd').hour(12).minute(0),
+        endDate: moment().startOf('day').add(2, 'd').hour(13).minute(30)
     },
     {
         name: 'user 3 restriction 2',
-        startDate: moment().startOf('week').add(2, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(2, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
         name: 'user 3 restriction 3',
-        startDate: moment().startOf('week').add(3, 'd').hour(18).minute(0),
-        endDate: moment().startOf('week').add(4, 'd').hour(9).minute(0)
+        startDate: moment().startOf('day').add(4, 'd').hour(18).minute(0),
+        endDate: moment().startOf('day').add(5, 'd').hour(9).minute(0)
     },
     {
         name: 'user 3 restriction 4',
-        startDate: moment().startOf('week').add(4, 'd').hour(16).minute(0),
-        endDate: moment().startOf('week').add(4, 'd').hour(22).minute(0)
+        startDate: moment().startOf('day').add(5, 'd').hour(16).minute(0),
+        endDate: moment().startOf('day').add(5, 'd').hour(22).minute(0)
     },
     {
         name: 'user 3 restriction 5',
-        startDate: moment().startOf('week').add(3, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(3, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(4, 'd').hour(10).minute(0)
     },
     {
         name: 'user 3 restriction 6',
-        startDate: moment().startOf('week').add(3, 'd').hour(16).minute(0),
-        endDate: moment().startOf('week').add(3, 'd').hour(20).minute(0)
+        startDate: moment().startOf('day').add(4, 'd').hour(16).minute(0),
+        endDate: moment().startOf('day').add(4, 'd').hour(20).minute(0)
     },
     {
         name: 'user 4 restriction 1',
-        startDate: moment().startOf('week').add(1, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(2, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(2, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
         name: 'user 4 restriction 2',
-        startDate: moment().startOf('week').add(3, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(5, 'd').hour(8).minute(0)
+        startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(6, 'd').hour(8).minute(0)
     },
     {
         name: 'user 4 restriction 3',
-        startDate: moment().startOf('week').add(2, 'd').hour(18).minute(0),
-        endDate: moment().startOf('week').add(2, 'd').hour(20).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(18).minute(0),
+        endDate: moment().startOf('day').add(3, 'd').hour(20).minute(0)
     },
     {
         name: 'user 5 restriction 1',
-        startDate: moment().startOf('week').add(2, 'd').hour(14).minute(0),
-        endDate: moment().startOf('week').add(3, 'd').hour(14).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(14).minute(0),
+        endDate: moment().startOf('day').add(4, 'd').hour(14).minute(0)
     },
     {
         name: 'user 5 restriction 2',
-        startDate: moment().startOf('week').add(1, 'd').hour(13).minute(0),
-        endDate: moment().startOf('week').add(2, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(2, 'd').hour(13).minute(0),
+        endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
         name: 'user 5 restriction 3',
-        startDate: moment().startOf('week').add(2, 'd').hour(14).minute(0),
-        endDate: moment().startOf('week').add(3, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(14).minute(0),
+        endDate: moment().startOf('day').add(4, 'd').hour(10).minute(0)
     },
     {
         name: 'user 6 restriction 1',
-        startDate: moment().startOf('week').add(3, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(3, 'd').hour(22).minute(0)
+        startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(4, 'd').hour(22).minute(0)
     },
     {
         name: 'user 6 restriction 2',
-        startDate: moment().startOf('week').add(1, 'd').hour(11).minute(30),
-        endDate: moment().startOf('week').add(1, 'd').hour(13).minute(0)
+        startDate: moment().startOf('day').add(2, 'd').hour(11).minute(30),
+        endDate: moment().startOf('day').add(2, 'd').hour(13).minute(0)
     },
     {
         name: 'user 6 restriction 3',
-        startDate: moment().startOf('week').add(1, 'd').hour(18).minute(0),
-        endDate: moment().startOf('week').add(2, 'd').hour(10).minute(0)
+        startDate: moment().startOf('day').add(2, 'd').hour(18).minute(0),
+        endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
         name: 'user 7 restriction 1',
-        startDate: moment().startOf('week').add(2, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(2, 'd').hour(9).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(3, 'd').hour(9).minute(0)
     },
     {
         name: 'user 7 restriction 2',
-        startDate: moment().startOf('week').add(2, 'd').hour(13).minute(0),
-        endDate: moment().startOf('week').add(4, 'd').hour(22).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(13).minute(0),
+        endDate: moment().startOf('day').add(5, 'd').hour(22).minute(0)
     },
     {
         name: 'user 7 restriction 3',
-        startDate: moment().startOf('week').add(0, 'd').hour(8).minute(0),
-        endDate: moment().startOf('week').add(0, 'd').hour(23).minute(0)
+        startDate: moment().startOf('day').add(1, 'd').hour(8).minute(0),
+        endDate: moment().startOf('day').add(1, 'd').hour(23).minute(0)
     },
     {
         name: 'user 7 restriction 4',
-        startDate: moment().startOf('week').add(2, 'd').hour(16).minute(30),
-        endDate: moment().startOf('week').add(3, 'd').hour(8).minute(0)
+        startDate: moment().startOf('day').add(3, 'd').hour(16).minute(30),
+        endDate: moment().startOf('day').add(4, 'd').hour(8).minute(0)
     },
 ];
 
@@ -219,8 +219,8 @@ let meetingsTmp = [{
     name: 'meet 1',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
-    fromDate: moment().startOf('week').add(6, 'd').hour(9),
-    toDate: moment().startOf('week').add(7, 'd').hour(13),
+    fromDate: moment().startOf('day').add(7, 'd').hour(9),
+    toDate: moment().startOf('day').add(8, 'd').hour(13),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -230,8 +230,8 @@ let meetingsTmp = [{
     name: 'meet 2',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
-    fromDate: moment().startOf('week').add(1, 'd').hour(12).minute(30),
-    toDate: moment().startOf('week').add(3, 'd').hour(10).minute(30),
+    fromDate: moment().startOf('day').add(2, 'd').hour(12).minute(30),
+    toDate: moment().startOf('day').add(4, 'd').hour(10).minute(30),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -241,8 +241,8 @@ let meetingsTmp = [{
     name: 'meet 3',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
-    fromDate: moment().startOf('week').add(2, 'd').hour(10),
-    toDate: moment().startOf('week').add(3, 'd').hour(12),
+    fromDate: moment().startOf('day').add(3, 'd').hour(10),
+    toDate: moment().startOf('day').add(4, 'd').hour(12),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -252,8 +252,8 @@ let meetingsTmp = [{
     name: 'meet 4',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 4,
-    fromDate: moment().startOf('week').add(3, 'd').hour(9),
-    toDate: moment().startOf('week').add(4, 'd').hour(17).minute(30),
+    fromDate: moment().startOf('day').add(4, 'd').hour(9),
+    toDate: moment().startOf('day').add(5, 'd').hour(17).minute(30),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -263,8 +263,8 @@ let meetingsTmp = [{
     name: 'meet 5',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 0.5,
-    fromDate: moment().startOf('week').add(0, 'd').hour(20),
-    toDate: moment().startOf('week').add(4, 'd').hour(22),
+    fromDate: moment().startOf('day').add(1, 'd').hour(20),
+    toDate: moment().startOf('day').add(5, 'd').hour(22),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -274,8 +274,8 @@ let meetingsTmp = [{
     name: 'meet 6',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2.5,
-    fromDate: moment().startOf('week').add(2, 'd').hour(9),
-    toDate: moment().startOf('week').add(4, 'd').hour(19),
+    fromDate: moment().startOf('day').add(3, 'd').hour(9),
+    toDate: moment().startOf('day').add(5, 'd').hour(19),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -285,8 +285,8 @@ let meetingsTmp = [{
     name: 'meet 7',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 5,
-    fromDate: moment().startOf('week').add(1, 'd').hour(10),
-    toDate: moment().startOf('week').add(4, 'd').hour(16),
+    fromDate: moment().startOf('day').add(2, 'd').hour(10),
+    toDate: moment().startOf('day').add(5, 'd').hour(16),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -296,8 +296,8 @@ let meetingsTmp = [{
     name: 'meet 8',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2,
-    fromDate: moment().startOf('week').add(2, 'd').hour(14).minute(30),
-    toDate: moment().startOf('week').add(4, 'd').hour(15),
+    fromDate: moment().startOf('day').add(3, 'd').hour(14).minute(30),
+    toDate: moment().startOf('day').add(5, 'd').hour(15),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -307,8 +307,8 @@ let meetingsTmp = [{
     name: 'meet 9',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2.5,
-    fromDate: moment().startOf('week').add(0, 'd').hour(8).minute(30),
-    toDate: moment().startOf('week').add(4, 'd').hour(20).minute(30),
+    fromDate: moment().startOf('day').add(1, 'd').hour(8).minute(30),
+    toDate: moment().startOf('day').add(5, 'd').hour(20).minute(30),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -318,8 +318,8 @@ let meetingsTmp = [{
     name: 'meet 10',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 6,
-    fromDate: moment().startOf('week').add(0, 'd').hour(9).minute(30),
-    toDate: moment().startOf('week').add(2, 'd').hour(8).minute(30),
+    fromDate: moment().startOf('day').add(1, 'd').hour(9).minute(30),
+    toDate: moment().startOf('day').add(3, 'd').hour(8).minute(30),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -329,8 +329,8 @@ let meetingsTmp = [{
     name: 'meet 11',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 3,
-    fromDate: moment().startOf('week').add(1, 'd').hour(7).minute(30),
-    toDate: moment().startOf('week').add(3, 'd').hour(16).minute(30),
+    fromDate: moment().startOf('day').add(2, 'd').hour(7).minute(30),
+    toDate: moment().startOf('day').add(4, 'd').hour(16).minute(30),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -340,8 +340,8 @@ let meetingsTmp = [{
     name: 'meet 12',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2,
-    fromDate: moment().startOf('week').add(0, 'd').hour(19).minute(30),
-    toDate: moment().startOf('week').add(2, 'd').hour(9).minute(0),
+    fromDate: moment().startOf('day').add(1, 'd').hour(19).minute(30),
+    toDate: moment().startOf('day').add(3, 'd').hour(9).minute(0),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
@@ -351,8 +351,8 @@ let meetingsTmp = [{
     name: 'meet 13',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
-    fromDate: moment().startOf('week').add(2, 'd').hour(21).minute(30),
-    toDate: moment().startOf('week').add(5, 'd').hour(15).minute(0),
+    fromDate: moment().startOf('day').add(3, 'd').hour(21).minute(30),
+    toDate: moment().startOf('day').add(6, 'd').hour(15).minute(0),
     invited: [],
     locations: [usersTmp[0].address],
     selectedLocation: usersTmp[0].address,
