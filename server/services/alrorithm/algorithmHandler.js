@@ -145,7 +145,7 @@ const startAlgorithm = () => {
                         meetings: _meetings,
                         restrictions
                     });
-                }, 500);
+                }, 1000);
             })
             .catch((err) => {
                 logger.error(err);

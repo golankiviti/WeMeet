@@ -10,35 +10,42 @@ const MEETING_RESPONSE = {
 };
 
 const getUserMeetings = (req, res) => {
+    logger.debug(`get all user with id: ${req.params.id} meetings from db`);
     return meetingsService.getUserMeetings(req.params.id)
         .then((meetings) => {
-            res.json(meetings);
+            res.json(_.map(meetings, addDurationToMeeting));
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
 const creatNewMeeting = (req, res) => {
+    logger.debug(`create new meeting`);
     return meetingsService.creatNewMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
 const updateMeeting = (req, res) => {
+    logger.debug(`update meeting`)
     return meetingsService.updateMeeting(req.body)
         .then((meeting) => {
             res.json(meeting);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
 }
 
 const getUserWaitingMeetings = (req, res) => {
     let id = req.params.id;
+    logger.debug(`get all user with id: ${id} waiting meeting from db`);
     logger.debug('validate params');
     if (_.isNil(id)) {
         logger.warn('id param is not valid');
@@ -47,7 +54,7 @@ const getUserWaitingMeetings = (req, res) => {
     logger.debug('get all waiting meetings');
     return meetingsService.getUserWaitingMeetings(id, true)
         .then((meetings) => {
-            return res.json(meetings);
+            return res.json(_.map(meetings, addDurationToMeeting));
         })
         .catch((err) => {
             logger.error(err);
@@ -57,6 +64,7 @@ const getUserWaitingMeetings = (req, res) => {
 
 const getUserFutureMeetings = (req, res) => {
     let id = req.params.id;
+    logger.debug(`get all user with id ${id} future meetings from db`);
     logger.debug('validate params');
     if (_.isNil(id)) {
         logger.warn('id param is not valid');
@@ -65,7 +73,7 @@ const getUserFutureMeetings = (req, res) => {
     logger.debug('get all waiting meetings');
     return meetingsService.getUserWaitingMeetings(id, false)
         .then((meetings) => {
-            return res.json(meetings);
+            return res.json(_.map(meetings, addDurationToMeeting));
         })
         .catch((err) => {
             logger.error(err);
@@ -122,6 +130,7 @@ const acceptOrRejectMeeting = (req, res) => {
             return res.json(true);
         })
         .catch((err) => {
+            logger.error(err);
             return res.status(500).send(err);
         });
 }
@@ -132,8 +141,14 @@ const deleteMeeting = (req, res) => {
             res.json(meeting);
         })
         .catch((err) => {
+            logger.error(err);
             res.status(500).send(err);
         });
+}
+
+function addDurationToMeeting(meeting) {
+    meeting.duration = meeting.meetLengthInSeconds / 60 / 60;
+    return meeting;
 }
 
 module.exports = {
