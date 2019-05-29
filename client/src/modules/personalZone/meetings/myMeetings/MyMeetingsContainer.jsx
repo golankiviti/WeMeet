@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { List, fromJS } from 'immutable';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'immutable-prop-types';
 import { bindActionCreators } from 'redux';
@@ -10,51 +11,13 @@ import { getMeetings } from '../../../../clientManager/meetingsClientManager';
 
 const propTypes = {
     // user: ImmutablePropTypes.map.isRequired //redux
+    meetings: ImmutablePropTypes.List,
+    isBusy: PropTypes.bool.isRequired,
 }
 
-export class MyMeetingsContainer extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            meetings: List(),
-            isBusy: false
-        };
-
-        this.getMeetings = this.getMeetings.bind(this);
-    }
-
-    componentDidMount() {
-        this.props.registerRefresh(myMeetings);
-        this.getMeetings();
-    }
-
-    componentWillUnmount() {
-        this.props.unregisterRefresh(myMeetings);
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.timestamp !== prevProps.timestamp) {
-            this.getMeetings();
-        }
-    }
-
-    getMeetings() {
-        this.setState({ isBusy: true })
-        getMeetings(this.props.user.get('_id'))
-            .then(res =>
-                this.setState({
-                    isBusy: false,
-                    meetings: fromJS(res)
-                })
-            );
-    }
-
-    render() {
-        const { meetings } = this.state;
-        return <MyMeetings isBusy={this.state.isBusy}
-            meetings={meetings} />
-    }
+function MyMeetingsContainer({ meetings, isBusy }) {
+    return <MyMeetings isBusy={isBusy}
+        meetings={meetings} />
 }
 
 MyMeetingsContainer.propTypes = propTypes;

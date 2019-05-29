@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 import LocationListContainer from './locations/LocationListContainer';
@@ -10,28 +10,34 @@ import styles from './personalZone.module.scss';
 import { getMeetingsForApproval, getMeetings, getFutureMeetings } from '../../clientManager/meetingsClientManager';
 import { userLocations } from '../../clientManager/userManager';
 import classNames from 'classnames';
+import { sleep } from '../../common';
 
 const propTypes = {
-    userId: PropTypes.string
+    userId: PropTypes.string,
+    userName: PropTypes.string
 }
+
 function PersonalZone({ userId }) {
     const [meetingsForApproval, setMeetingsForApproval] = useState(List())
     const [locations, setLocations] = useState(List())
     const [myMeetings, setMyMeetings] = useState(List())
     const [futureMeetings, setFutureMeetings] = useState(List())
+    const [isBusy, setIsBusy] = useState(false)
 
     useEffect(() => {
-        Promise.all([
+        setIsBusy(true)
+        sleep(1000, () => Promise.all([
             getMeetingsForApproval(userId),
             getMeetings(userId),
             userLocations(userId),
             getFutureMeetings(userId)
         ]).then(res => {
-            setMeetingsForApproval(List(res[0]))
-            setLocations(List(res[1]))
-            setMyMeetings(List(res[2]))
-            setFutureMeetings(List(res[3]))
-        })
+            setMeetingsForApproval(fromJS(res[0]))
+            setLocations(fromJS(res[1]))
+            setMyMeetings(fromJS(res[2]))
+            setFutureMeetings(fromJS(res[3]))
+            setIsBusy(false)
+        }))
     }, [])
 
     const rightContainerClasses = classNames(styles.innerContainer, styles.right);
@@ -39,12 +45,12 @@ function PersonalZone({ userId }) {
 
     return <div className={styles.container}>
         <div className={rightContainerClasses}>
-            <MeetingsForApprovalContainer />
-            <FutureMeetingsContainer />
+            <MeetingsForApprovalContainer meetings={meetingsForApproval} isBusy={isBusy} />
+            <FutureMeetingsContainer meetings={futureMeetings} isBusy={isBusy} />
         </div>
         <div className={leftContainerClasses}>
-            <MyMeetingsContainer />
-            <LocationListContainer />
+            <MyMeetingsContainer meetings={myMeetings} isBusy={isBusy} />
+            <LocationListContainer locations={locations} isBusy={isBusy} />
         </div>
     </div>
 }
@@ -52,7 +58,8 @@ function PersonalZone({ userId }) {
 PersonalZone.propTypes = propTypes;
 
 const mapStateToProps = state => ({
-    userId: state.user ? state.user.get('_id') : ''
+    userId: state.user ? state.user.get('_id') : '',
+    userName: state.user ? state.user.get('name') : ''
 });
 
 export default connect(mapStateToProps)(PersonalZone);
