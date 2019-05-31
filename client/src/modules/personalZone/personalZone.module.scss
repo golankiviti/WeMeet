@@ -1,15 +1,68 @@
 :local .container {
     display: flex;
-    padding: 64px 256px;
+    padding: 24px 128px;
     flex-grow: 1;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
-:local .sideContainer {
+:local .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 32px;
+    font-size: 18px;
+}
+
+:local .name {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+:local .headerIcons {
+    display: flex;
+}
+
+:local .headerIconItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+:local .iconAndLength {
+    display: flex;
+    align-items: center;
+}
+
+:local .length {
+    margin-right: 8px;
+}
+
+:local .text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+:local .cardsContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+:local .innerContainer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 50%;
-    max-width: 50%;
-    margin-left: 64px;
+
+    &.right {
+        width: 60%;
+        max-width: 60%;
+        margin-left: 32px;
+    }
+
+    &.left {
+        width: 40%;
+        max-width: 40%;
+    }
 }

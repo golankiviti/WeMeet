@@ -37,14 +37,14 @@ class EditLocation extends Component {
 
     render() {
         const { onClose } = this.props;
-        return this.state.initialValues ? 
+        return this.state.initialValues ?
             <LocationDialog form='edit-location'
                 title='עריכת מיקום'
                 onClose={onClose}
                 onSubmit={this.handleSubmit}
                 initialValues={this.state.initialValues} /> :
             null
-            
+
     }
 }
 
