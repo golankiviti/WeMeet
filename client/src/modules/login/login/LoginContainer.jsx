@@ -6,13 +6,21 @@ import { updateUser } from '../../../redux/user/actionCreators';
 import LoginPanel from './LoginPanel';
 import { login } from '../../../clientManager/loginManager';
 import styles from './loginContainer.module.scss';
+import { SubmissionError } from 'redux-form'
 
 class LoginContainer extends Component {
     handleSubmit = values => {
-        login(values)
+        return login(values)
             .then(res => {
-                this.props.updateUser(fromJS(res));
-                this.props.history.push('/home');
+                if (res) {
+                    this.props.updateUser(fromJS(res));
+                    this.props.history.push('/home');
+                } else {
+                    throw new SubmissionError({
+                        _error: 'פרטי התחברות שגויים, אנא נסה שוב'
+                    })
+                }
+
             })
     }
 

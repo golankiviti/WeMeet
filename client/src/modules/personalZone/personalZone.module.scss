@@ -1,8 +1,53 @@
 :local .container {
     display: flex;
-    padding: 32px 128px;
+    padding: 24px 128px;
     flex-grow: 1;
+    flex-direction: column;
+}
+
+:local .header {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding-bottom: 32px;
+    font-size: 18px;
+}
+
+:local .name {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+:local .headerIcons {
+    display: flex;
+}
+
+:local .headerIconItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+:local .iconAndLength {
+    display: flex;
+    align-items: center;
+}
+
+:local .length {
+    margin-right: 8px;
+}
+
+:local .text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+:local .cardsContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
 :local .innerContainer {

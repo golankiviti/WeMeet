@@ -32,3 +32,9 @@
     color: white;
     font-weight: bold;
 }
+
+:local .error {
+    color: #f44336;
+    font-size: 14px;
+    margin: 8px 0;
+}
