@@ -97,7 +97,6 @@ export class NewMeetingContainer extends Component {
     render() {
         const { users, locations } = this.state;
         const { meeting } = this.props;
-
         let initialValues = {}
         if (meeting) {
 

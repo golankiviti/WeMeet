@@ -1,51 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'redux-persist-transform-immutable';
 import { connect } from 'react-redux';
-import { List, fromJS } from 'immutable';
+import { bindActionCreators } from 'redux';
 import LocationList from './LocationList';
-import { userLocations, deleteLocation } from '../../../clientManager/userManager';
+import { deleteLocation } from '../../../clientManager/userManager';
+import { updateRefresh } from '../../../redux/refresh/actionCreators';
+import { locations as locationsKey } from '../../../redux/refresh/refreshFields';
 
 const propTypes = {
-    userId: PropTypes.string // from redux
+    userId: PropTypes.string, // from redux
+    locations: ImmutablePropTypes.List,
+    isBusy: PropTypes.bool.isRequired,
+    updateRefresh: PropTypes.func
 };
 
-class LocationListContainer extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            locations: List(),
-            isBusy: false
-        };
+function LocationListContainer({ userId, locations, isBusy, updateRefresh }) {
+    const refresh = () => {
+        updateRefresh(locationsKey)
     }
 
-    componentDidMount() {
-        this.fetchLocations();
-    }
-
-    fetchLocations = () => {
-        this.setState({ isBusy: true })
-        userLocations(this.props.userId)
-            .then(res => {
-                this.setState({
-                    isBusy: false,
-                    locations: fromJS(res)
-                });
-            })
-    }
-
-    handleDelete = id => {
+    const handleDelete = id => {
         deleteLocation(id)
-            .then(this.fetchLocations)
+            .then(refresh)
     }
 
-    render() {
-        return <LocationList locations={this.state.locations}
-            {...this.props}
-            isBusy={this.state.isBusy}
-            refresh={this.fetchLocations}
-            onDelete={this.handleDelete} />
-    }
+    return <LocationList locations={locations}
+        userId={userId}
+        isBusy={isBusy}
+        refresh={refresh}
+        onDelete={handleDelete} />
 }
 
 LocationListContainer.propTypes = propTypes;
@@ -54,4 +38,10 @@ const mapStateToProps = state => ({
     userId: state.user ? state.user.get('_id') : ''
 });
 
-export default connect(mapStateToProps)(LocationListContainer);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateRefresh,
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LocationListContainer);

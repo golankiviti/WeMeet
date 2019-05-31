@@ -24,7 +24,7 @@ class LoginPanel extends Component {
     }
 
     render() {
-        const { handleSubmit, valid } = this.props;
+        const { handleSubmit, valid, error } = this.props;
 
         const submitButtonClasses = classNames(styles.button, {
             [styles.disabled]: !valid
@@ -43,6 +43,9 @@ class LoginPanel extends Component {
                         component={TextField}
                         type='password'
                         label='סיסמא' />
+                    {
+                        error && <div className={styles.error}>{error}</div>
+                    }
                 </CardContent>
                 <CardActions className={styles.cardActions}>
                     <Button className={submitButtonClasses}
@@ -66,13 +69,13 @@ LoginPanel.propTypes = propTypes;
 const validate = values => {
     const errors = {}
     if (!values.email) {
-      errors.email = 'חובה להזין כתובת מייל'
+        errors.email = 'חובה להזין כתובת מייל'
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'כתובת מייל לא חוקית'
     }
 
     if (!values.password) {
-      errors.password = 'חובה להזין סיסמא'
+        errors.password = 'חובה להזין סיסמא'
     }
 
     return errors

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MeetingsForApproval from './MeetingsForApproval';
+import ImmutablePropTypes from 'immutable-prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { List, fromJS } from 'immutable';
@@ -12,32 +13,14 @@ import { getMeetingsForApproval, responseToMeeting } from '../../../clientManage
 const propTypes = {
     userId: PropTypes.string,
     timestamp: PropTypes.number,
+    meetings: ImmutablePropTypes.List,
+    isBusy: PropTypes.bool.isRequired,
     registerRefresh: PropTypes.func,
     updateRefresh: PropTypes.func,
     unregisterRefresh: PropTypes.func
 };
 
 function MeetingsForApprovalContainer(props) {
-    const [meetings, setMeetings] = useState(List());
-    const [isBusy, setBusy] = useState(false)
-
-    // componentDidMount
-    useEffect(() => {
-        props.registerRefresh(meetingsForApprovalKey);
-
-        return () => props.unregisterRefresh(meetingsForApprovalKey);
-    }, []);
-
-    useEffect(() => {
-        setBusy(true)
-        getMeetingsForApproval(props.userId)
-            .then(res => {
-                setBusy(false)
-                setMeetings(fromJS(res))
-            })
-
-    }, [props.timestamp])
-
     const approveMeeting = (meetingId) => {
         responseToMeeting({
             userId: props.userId,
@@ -61,8 +44,8 @@ function MeetingsForApprovalContainer(props) {
             });
     }
 
-    return <MeetingsForApproval meetings={meetings}
-        isBusy={isBusy}
+    return <MeetingsForApproval meetings={props.meetings}
+        isBusy={props.isBusy}
         onApprove={approveMeeting}
         onDecline={declineMeeting} />
 }
