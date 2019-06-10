@@ -28,8 +28,8 @@ let usersTmp = [{
         },
         address: 'some address',
         gender: 'female',
-        firstName: 'user',
-        lastName: '1'
+        firstName: 'גיל',
+        lastName: 'אורמן'
     },
     {
         local: {
@@ -38,8 +38,8 @@ let usersTmp = [{
         },
         address: 'some address',
         gender: 'female',
-        firstName: 'user',
-        lastName: '2'
+        firstName: 'זיוה',
+        lastName: 'כהן'
     },
     {
         local: {
@@ -47,9 +47,9 @@ let usersTmp = [{
             password: '123'
         },
         address: 'some address',
-        gender: 'female',
-        firstName: 'user',
-        lastName: '3'
+        gender: 'male',
+        firstName: 'דין',
+        lastName: 'זליגמן'
     },
     {
         local: {
@@ -57,9 +57,9 @@ let usersTmp = [{
             password: '123'
         },
         address: 'some address',
-        gender: 'female',
-        firstName: 'user',
-        lastName: '4'
+        gender: 'male',
+        firstName: 'גולן',
+        lastName: 'קיויתי'
     },
     {
         local: {
@@ -67,9 +67,9 @@ let usersTmp = [{
             password: '123'
         },
         address: 'some address',
-        gender: 'female',
-        firstName: 'user',
-        lastName: '5'
+        gender: 'male',
+        firstName: 'עידן',
+        lastName: 'לזרוביץ'
     },
     {
         local: {
@@ -77,9 +77,9 @@ let usersTmp = [{
             password: '123'
         },
         address: 'some address',
-        gender: 'female',
-        firstName: 'user',
-        lastName: '6'
+        gender: 'male',
+        firstName: 'רון',
+        lastName: 'אברהם'
     },
     {
         local: {
@@ -87,141 +87,141 @@ let usersTmp = [{
             password: '123'
         },
         address: 'some address',
-        gender: 'female',
-        firstName: 'user',
-        lastName: '7'
+        gender: 'male',
+        firstName: 'יוחנן',
+        lastName: 'האגדי'
     }
 ];
 
 let restrictionsTmp = [{
-        name: 'user 1 restriction 1',
+        name: 'לישון',
         startDate: moment().startOf('day').add(1, 'd').hour(10).minute(30),
         endDate: moment().startOf('day').add(1, 'd').hour(12).minute(0)
     },
     {
-        name: 'user 1 restriction 2',
+        name: 'לראות לוציפר',
         startDate: moment().startOf('day').add(1, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(1, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 1 restriction 3',
+        name: 'זמן מדיציה',
         startDate: moment().startOf('day').add(1, 'd').hour(13).minute(0),
         endDate: moment().startOf('day').add(2, 'd').hour(9).minute(0)
     },
     {
-        name: 'user 1 restriction 4',
+        name: 'לחשוב מחשבות חיוביות',
         startDate: moment().startOf('day').add(4, 'd').hour(8).minute(30),
         endDate: moment().startOf('day').add(4, 'd').hour(22).minute(0)
     },
     {
-        name: 'user 1 restriction 5',
+        name: 'להתקשר לסבתא',
         startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(5, 'd').hour(8).minute(30)
     },
     {
-        name: 'user 1 restriction 6',
+        name: 'סוגר בבסיס',
         startDate: moment().startOf('day').add(3, 'd').hour(17).minute(0),
         endDate: moment().startOf('day').add(4, 'd').hour(8).minute(00)
     },
     {
-        name: 'user 3 restriction 1',
+        name: 'שנצ',
         startDate: moment().startOf('day').add(2, 'd').hour(12).minute(0),
         endDate: moment().startOf('day').add(2, 'd').hour(13).minute(30)
     },
     {
-        name: 'user 3 restriction 2',
+        name: 'ארוחת בוקר עם אבא',
         startDate: moment().startOf('day').add(3, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 3 restriction 3',
+        name: 'סיבוב ברים עם החברה הטובים',
         startDate: moment().startOf('day').add(4, 'd').hour(18).minute(0),
         endDate: moment().startOf('day').add(5, 'd').hour(9).minute(0)
     },
     {
-        name: 'user 3 restriction 4',
+        name: 'ביביסטר על הבני דודים',
         startDate: moment().startOf('day').add(5, 'd').hour(16).minute(0),
         endDate: moment().startOf('day').add(5, 'd').hour(22).minute(0)
     },
     {
-        name: 'user 3 restriction 5',
+        name: 'החלפת צמיגים לאוטו',
         startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(4, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 3 restriction 6',
+        name: 'מדיטציה',
         startDate: moment().startOf('day').add(4, 'd').hour(16).minute(0),
         endDate: moment().startOf('day').add(4, 'd').hour(20).minute(0)
     },
     {
-        name: 'user 4 restriction 1',
+        name: 'אימון כושר',
         startDate: moment().startOf('day').add(2, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 4 restriction 2',
+        name: 'סגירה בבסיס',
         startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(6, 'd').hour(8).minute(0)
     },
     {
-        name: 'user 4 restriction 3',
+        name: 'ביקור אצל סבתא',
         startDate: moment().startOf('day').add(3, 'd').hour(18).minute(0),
         endDate: moment().startOf('day').add(3, 'd').hour(20).minute(0)
     },
     {
-        name: 'user 5 restriction 1',
+        name: 'יום כיף עם אמא',
         startDate: moment().startOf('day').add(3, 'd').hour(14).minute(0),
         endDate: moment().startOf('day').add(4, 'd').hour(14).minute(0)
     },
     {
-        name: 'user 5 restriction 2',
+        name: 'לישון עם האויב',
         startDate: moment().startOf('day').add(2, 'd').hour(13).minute(0),
         endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 5 restriction 3',
+        name: 'בינג ריק ומורטי',
         startDate: moment().startOf('day').add(3, 'd').hour(14).minute(0),
         endDate: moment().startOf('day').add(4, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 6 restriction 1',
+        name: 'PI',
         startDate: moment().startOf('day').add(4, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(4, 'd').hour(22).minute(0)
     },
     {
-        name: 'user 6 restriction 2',
+        name: 'ארוחת צהריים עם אהובתי',
         startDate: moment().startOf('day').add(2, 'd').hour(11).minute(30),
         endDate: moment().startOf('day').add(2, 'd').hour(13).minute(0)
     },
     {
-        name: 'user 6 restriction 3',
+        name: 'הופעה של אברהם טל',
         startDate: moment().startOf('day').add(2, 'd').hour(18).minute(0),
         endDate: moment().startOf('day').add(3, 'd').hour(10).minute(0)
     },
     {
-        name: 'user 7 restriction 1',
+        name: 'לשמוע מוסיקה',
         startDate: moment().startOf('day').add(3, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(3, 'd').hour(9).minute(0)
     },
     {
-        name: 'user 7 restriction 2',
+        name: 'מיטאפ באילת (על חשבון החברה)',
         startDate: moment().startOf('day').add(3, 'd').hour(13).minute(0),
         endDate: moment().startOf('day').add(5, 'd').hour(22).minute(0)
     },
     {
-        name: 'user 7 restriction 3',
+        name: 'יום יוגה',
         startDate: moment().startOf('day').add(1, 'd').hour(8).minute(0),
         endDate: moment().startOf('day').add(1, 'd').hour(23).minute(0)
     },
     {
-        name: 'user 7 restriction 4',
+        name: 'זמן לעצמי',
         startDate: moment().startOf('day').add(3, 'd').hour(16).minute(30),
         endDate: moment().startOf('day').add(4, 'd').hour(8).minute(0)
     },
 ];
 
 let meetingsTmp = [{
-    name: 'meet 1',
+    name: 'פגישה עם החברה הטובים',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
     fromDate: moment().startOf('day').add(7, 'd').hour(9),
@@ -233,7 +233,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 2',
+    name: 'לחשוב על אלגוריתם לשיבוץ פגישות',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
     fromDate: moment().startOf('day').add(2, 'd').hour(12).minute(30),
@@ -245,7 +245,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 3',
+    name: 'לשבת על בירה',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
     fromDate: moment().startOf('day').add(3, 'd').hour(10),
@@ -257,7 +257,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 4',
+    name: 'לראות הנוקמים בקולנוע',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 4,
     fromDate: moment().startOf('day').add(4, 'd').hour(9),
@@ -269,7 +269,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 5',
+    name: 'דייט מושלם',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 0.5,
     fromDate: moment().startOf('day').add(1, 'd').hour(20),
@@ -281,7 +281,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 6',
+    name: 'מפגש שבועי בבית קפה השכונתי',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2.5,
     fromDate: moment().startOf('day').add(3, 'd').hour(9),
@@ -293,7 +293,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 7',
+    name: 'חושבים על רעיון לסטרטאפ',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 5,
     fromDate: moment().startOf('day').add(2, 'd').hour(10),
@@ -305,7 +305,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 8',
+    name: 'עובדים על פרוירקט באנדרואיד',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2,
     fromDate: moment().startOf('day').add(3, 'd').hour(14).minute(30),
@@ -317,7 +317,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 9',
+    name: 'לומדים לסיבוכיות',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2.5,
     fromDate: moment().startOf('day').add(1, 'd').hour(8).minute(30),
@@ -329,7 +329,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 10',
+    name: 'יום כיף עם החברים',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 6,
     fromDate: moment().startOf('day').add(1, 'd').hour(9).minute(30),
@@ -341,7 +341,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 11',
+    name: 'פגישה עם איגור',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 3,
     fromDate: moment().startOf('day').add(2, 'd').hour(7).minute(30),
@@ -353,7 +353,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 12',
+    name: 'לראות אמריקן פאי',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 2,
     fromDate: moment().startOf('day').add(1, 'd').hour(19).minute(30),
@@ -365,7 +365,7 @@ let meetingsTmp = [{
     rejected: [],
     location: 'address'
 }, {
-    name: 'meet 13',
+    name: 'מפגש שתיקה',
     isDetermined: false,
     meetLengthInSeconds: 60 * 60 * 1,
     fromDate: moment().startOf('day').add(3, 'd').hour(21).minute(30),
