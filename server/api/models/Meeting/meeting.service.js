@@ -46,6 +46,26 @@ const creatNewMeeting = (currentMeeting) => {
 };
 
 const updateMeeting = (currentMeeting) => {
+    let currentMeetingFromDate = moment(currentMeeting.fromDate),
+        nextCronJob = algorithmUtils.getNextAlgorithmRunDate();
+    // creator is part of the invited
+    currentMeeting.invited.push(currentMeeting.creator);
+    currentMeeting.invited = _.uniq(currentMeeting.invited);
+    logger.debug(`get duration from client, duration: ${currentMeeting.duration}`);
+    // in case there is no meetLengthInSeconds, default is hour
+    if (_.isNil(currentMeeting.duration)) {
+        currentMeeting.meetLengthInSeconds = 60 * 60; // hour
+    } else {
+        currentMeeting.meetLengthInSeconds = currentMeeting.duration * 60 * 60;
+    }
+    logger.debug('check if need to active the greedy algorithm')
+    // in case the user want to start the meeting before the genetic algorithm will run
+    if (currentMeetingFromDate.isBefore(nextCronJob)) {
+        logger.debug('start greedy algorithm');
+        return algorithmUtils.greedyAlgorithm(currentMeeting);
+    }
+    logger.debug('can wait to genetic algorithm');
+    currentMeeting.isDetermined = false;
     return meeting.findOneAndUpdate({
         '_id': new mongoose.Types.ObjectId(currentMeeting._id)
     }, currentMeeting);
