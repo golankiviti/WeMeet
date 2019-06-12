@@ -9,6 +9,7 @@ import { updateRefresh } from '../../../../redux/refresh/actionCreators';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './myMeetings.module.scss';
+import moment from 'moment';
 
 const propTypes = {
     meeting: ImmutablePropTypes.map.isRequired
@@ -46,7 +47,7 @@ export class Meeting extends Component {
             <div>
                 <span>{meeting.get('name')} -
                 {meeting.get('actualDate') ?
-                        new Date(meeting.get('actualDate')).toLocaleDateString() :
+                        moment(meeting.get('actualDate')).format('DD/MM/YYYY hh:mm:ss') :
                         'עדיין לא נקבע תאריך'
                     }
                 </span>

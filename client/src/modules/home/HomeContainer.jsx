@@ -20,6 +20,7 @@ import Event from './Event';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import classNames from 'classnames';
 import EditRestriction from '../home/restrictions/restrictionDialogs/EditRestriction';
+import { sleep } from '../../common';
 
 const propTypes = {
     // user: ImmutablePropTypes.map.isRequired //redux
@@ -74,6 +75,11 @@ export class HomeContainer extends Component {
             Promise.all(
                 [getMeetings(this.props.user.get('_id')),
                 getRestrictions(this.props.user.get('_id'))])
+                .then((meetings) => {
+                    return new Promise((resolve) => {
+                        sleep(1000, () => resolve(meetings));
+                    });
+                })
                 .then(res => {
                     const meetings = res[0].map(meeting => {
                         if (meeting.isDetermined) {

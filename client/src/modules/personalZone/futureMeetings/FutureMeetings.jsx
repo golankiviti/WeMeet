@@ -6,6 +6,7 @@ import FutureMeeting from './FutureMeeting';
 import styles from './futureMeetings.module.scss';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import classNames from 'classnames';
+import moment from 'moment';
 
 const propTypes = {
     meetings: ImmutablePropTypes.list.isRequired,
@@ -28,7 +29,7 @@ function FutureMeetings({ meetings, isBusy }) {
                 meetings.map(x => <FutureMeeting key={x.get('_id')}
                     id={x.get('_id')}
                     name={x.get('name')}
-                    date={`${new Date(x.get('fromDate')).toLocaleDateString()}-${new Date(x.get('toDate')).toLocaleDateString()}`} />
+                    date={`${moment(x.get('fromDate')).format('DD/MM/YYYY hh:mm:ss')} - ${moment(x.get('toDate')).format('DD/MM/YYYY hh:mm:ss')}`} />
                 )
             }
         </div>

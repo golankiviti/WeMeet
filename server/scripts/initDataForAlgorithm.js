@@ -381,6 +381,16 @@ let meetingsTmp = [{
 // connect to mongo for the saving
 return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
     .then(() => {
+        console.log('Initializing sequence:')
+        console.log('clearing db...')
+        return Promise.all([
+            users.remove({}),
+            preferences.remove({}),
+            restrictions.remove({}),
+            meetings.remove({})
+        ])
+    })
+    .then(() => {
         let savedUsers = [];
         // init some users
         console.log('init some users');
@@ -393,7 +403,7 @@ return connectToMongo(MONGO_URL, MONGO_PORT, MONGO_USERNAME, MONGO_PASSWORD)
                     });
             })
             .then(() => {
-                return _.sortBy(savedUsers, 'lastName');
+                return _.sortBy(savedUsers, '_id');
             })
     })
     .then((users) => {

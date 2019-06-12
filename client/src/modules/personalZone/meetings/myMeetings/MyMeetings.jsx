@@ -27,7 +27,7 @@ export default class MyMeetings extends Component {
                         this.props.isBusy &&
                         <CircularProgress /> ||
                         meetings.size === 0 &&
-                        <div>לא קיימות פגישות ששובצו וממתינות לאישור.</div> ||
+                        <div>לא קיימות פגישות עתידיות.</div> ||
                         meetings.map(meeting => <Meeting meeting={meeting} />)
                     }
                 </CardContent>

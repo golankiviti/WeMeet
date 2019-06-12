@@ -6,6 +6,7 @@ import MeetingForApproval from './MeetingForApproval';
 import styles from './meetingsForApproval.module.scss';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import classNames from 'classnames';
+import moment from 'moment';
 
 const propTypes = {
     meetings: ImmutablePropTypes.list.isRequired,
@@ -30,7 +31,7 @@ function MeetingsForApproval({ meetings, onApprove, onDecline, isBusy }) {
                 meetings.map(x => <MeetingForApproval key={x.get('_id')}
                     id={x.get('_id')}
                     name={x.get('name')}
-                    date={new Date(x.get('actualDate')).toLocaleDateString()}
+                    date={moment(x.get('actualDate')).format('DD/MM/YYYY hh:mm:ss')}
                     onApprove={onApprove}
                     onDecline={onDecline} />
                 )
