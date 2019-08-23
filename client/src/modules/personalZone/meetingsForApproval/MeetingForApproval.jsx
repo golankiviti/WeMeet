@@ -13,8 +13,8 @@ const propTypes = {
     onDecline: PropTypes.func.isRequired
 }
 
-function MeetingForApproval({id, name, date, onApprove, onDecline}) {
-    const [dialogOpen, setDialogOpen ] = useState(false);
+function MeetingForApproval({ id, name, date, onApprove, onDecline }) {
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleApprove = useCallback(() => {
         onApprove(id);
@@ -33,16 +33,19 @@ function MeetingForApproval({id, name, date, onApprove, onDecline}) {
         <div className={styles.container}>
             <div>{`${name} - ${date}`}</div>
             <div className={styles.buttons}>
-                    <IconButton onClick={handleApprove}>
-                        <Icon fontSize='small'>done</Icon>
-                    </IconButton>
-                    <IconButton onClick={openDialog}>
-                        <Icon fontSize='small'>clear</Icon>
-                    </IconButton>
-                </div>
+                <IconButton>
+                    <Icon fontSize='small'>remove_red_eye</Icon>
+                </IconButton>
+                <IconButton onClick={handleApprove}>
+                    <Icon fontSize='small'>done</Icon>
+                </IconButton>
+                <IconButton onClick={openDialog}>
+                    <Icon fontSize='small'>clear</Icon>
+                </IconButton>
+            </div>
         </div>
         {
-            dialogOpen && <DeclineMeetingDialog onApprove={handleDecline} onDecline={closeDialog}/>
+            dialogOpen && <DeclineMeetingDialog onApprove={handleDecline} onDecline={closeDialog} />
         }
     </>
 }

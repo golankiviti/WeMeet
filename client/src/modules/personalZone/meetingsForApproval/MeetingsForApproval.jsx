@@ -31,7 +31,7 @@ function MeetingsForApproval({ meetings, onApprove, onDecline, isBusy }) {
                 meetings.map(x => <MeetingForApproval key={x.get('_id')}
                     id={x.get('_id')}
                     name={x.get('name')}
-                    date={moment(x.get('actualDate')).format('DD/MM/YYYY hh:mm:ss')}
+                    date={moment(x.get('actualDate')).format('hh:mm DD/MM/YYYY')}
                     onApprove={onApprove}
                     onDecline={onDecline} />
                 )
