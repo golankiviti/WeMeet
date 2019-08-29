@@ -115,6 +115,19 @@ function PersonalZone({
             <div className={styles.headerIcons}>
                 <div className={styles.headerIconItem}>
                     <div className={styles.iconAndLength}>
+                        <Icon>done</Icon>
+                        <div className={styles.length}>
+                            {
+                                myMeetings &&
+                                myMeetings.size
+                            }
+                        </div>
+                    </div>
+                    <div className={styles.text}>
+                        הפגישות שלי                    </div>
+                </div>
+                <div className={styles.headerIconItem}>
+                    <div className={styles.iconAndLength}>
                         <Icon>access_time</Icon>
                         <div className={styles.length}>
                             {
@@ -126,20 +139,6 @@ function PersonalZone({
                     <div className={styles.text}>
                         <div>פגישות הממתינות</div>
                         <div>לאישור</div>
-                    </div>
-                </div>
-                <div className={styles.headerIconItem}>
-                    <div className={styles.iconAndLength}>
-                        <Icon>done</Icon>
-                        <div className={styles.length}>
-                            {
-                                myMeetings &&
-                                myMeetings.size
-                            }
-                        </div>
-                    </div>
-                    <div className={styles.text}>
-                        פגישות עתידיות
                     </div>
                 </div>
                 <div className={styles.headerIconItem}>
@@ -161,11 +160,12 @@ function PersonalZone({
         </div>
         <div className={styles.cardsContainer}>
             <div className={rightContainerClasses}>
-                <MeetingsForApprovalContainer meetings={meetingsForApproval} isBusy={isMeetingsForApprovalBusy} />
+                <MyMeetings meetings={myMeetings} isBusy={isMyMeetingsBusy} />
+
                 <FutureMeetings meetings={futureMeetings} isBusy={isFutureMeetingsBusy} />
             </div>
             <div className={leftContainerClasses}>
-                <MyMeetings meetings={myMeetings} isBusy={isMyMeetingsBusy} />
+                <MeetingsForApprovalContainer meetings={meetingsForApproval} isBusy={isMeetingsForApprovalBusy} />
                 <LocationListContainer locations={locations} isBusy={isLocationsBusy} />
             </div>
         </div>
