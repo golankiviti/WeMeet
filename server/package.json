@@ -19,7 +19,7 @@
     "express-session": "^1.15.6",
     "genetic-js": "^0.1.14",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "mongoose": "^5.4.0",
